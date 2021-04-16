@@ -1,0 +1,32 @@
+main {
+    pointer-events: all;
+    .nav-list {
+      position: relative;
+      .nav-block {
+        width: 100px;
+        height: 80px;
+        line-height: 80px;
+        text-align: center;
+        background: rgba(57, 65, 77, 0.39);
+        color: rgb(144, 160, 174);
+        font-weight: 700;
+        &:hover {
+          cursor: pointer;
+          background: rgba(38, 38, 38, 0.85);
+          color: #bfbfbf;
+        }
+        &:focus {
+          outline: none;
+          border: 0;
+        }
+      }
+    }
+    .selected {
+      color: #ffffff !important;
+      background-color: rgba(0, 165, 255, 0.43) !important;
+  
+      &:hover {
+        background-color: rgba(0, 165, 255, 0.43) !important;
+      }
+    }
+  }

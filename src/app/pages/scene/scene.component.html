@@ -1,0 +1,7 @@
+<main>
+    <app-content-block title="场景切换">
+        <ng-container *ngFor="let scene of scenes; index as i">
+            <app-event-block [config]="scene"></app-event-block>
+        </ng-container>
+    </app-content-block>
+</main>
