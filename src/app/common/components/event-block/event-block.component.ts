@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { SceneConfigDto } from '../../dtos/scene.dto';
+import { VideoConfigDto } from '../../dtos/video.dto';
+import { WeatherConfigDto } from '../../dtos/weather.dto';
 
 @Component({
   selector: 'app-event-block',
@@ -8,7 +10,7 @@ import { SceneConfigDto } from '../../dtos/scene.dto';
 })
 export class EventBlockComponent implements OnInit {
 
-  @Input() config: SceneConfigDto = {};
+  @Input() config: SceneConfigDto | VideoConfigDto | WeatherConfigDto = {};
   constructor() { }
 
   ngOnInit(): void {
