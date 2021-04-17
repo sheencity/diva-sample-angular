@@ -6,83 +6,93 @@ import { DivaService } from 'src/app/common/services/diva.service';
 const seasons = plainToClass(SeasonConfigDto, [
   {
     title: '春',
-    value: 'spring',
+    value: '2021-03-21',
   },
   {
     title: '夏',
-    value: 'summer',
+    value: '2021-06-22',
   },
   {
     title: '秋',
-    value: 'autumn',
+    value: '2021-09-23',
   },
   {
     title: '冬',
-    value: 'winter',
+    value: '2021-12-21',
   },
-])
+]);
 
 const noons = plainToClass(NoonConfigDto, [
   {
     title: '早晨',
-    value: 'morning',
+    value: '1995-12-17T06:00:00',
   },
   {
     title: '中午',
-    value: 'noon',
+    value: '1995-12-17T12:00:00',
   },
   {
     title: '傍晚',
-    value: 'evening',
+    value: '1995-12-17T18:00:00',
   },
-])
+]);
 
 @Component({
   selector: 'app-date',
   templateUrl: './date.component.html',
-  styleUrls: ['./date.component.scss']
+  styleUrls: ['./date.component.scss'],
 })
 export class DateComponent implements OnInit {
-
   seasons = seasons;
   noons = noons;
 
   // 设置日期
-  private _date: Date;
-  
-  set date(v: Date) {
-    console.log('date is', v)
-    // 此处设置自定义事件
-    this._date = v
+  private _date: Date = new Date();
+
+  set date(v: string) {
+    console.log('date is', v);
+    const date = new Date(v);
+    this._diva.client.setDate(date);
+    this._date = date;
   }
   get date() {
-    return this._date;
+    const padding = (val: number) => (val < 10 ? `0${val}` : val.toString());
+    return `${this._date.getFullYear()}-${padding(
+      this._date.getMonth() + 1
+    )}-${padding(this._date.getDay())}`;
   }
 
   // 设置时间
-  private _time: Date;
-  
-  set time(v: Date) {
-    console.log('time is', v)
-    // 此处设置自定义时间 
-    this._time = v
+  private _time: Date = new Date();
+
+  set time(v: string) {
+    console.log('time is', v);
+    const date = new Date();
+    date.setHours(
+      ...(v.split(':').map((val) => parseInt(val, 10)) as [
+        hour: number,
+        second: number
+      ])
+    );
+    date.setSeconds(0, 0);
+    this._diva.client.setTime(date);
+
+    this._time = date;
   }
-  get time() {
-    return this._time;
+  get time(): string {
+    return `${this._time.getHours()}:${this._time.getMinutes()}`;
   }
 
-  constructor(private _diva: DivaService) { }
+  constructor(private _diva: DivaService) {}
 
   switchSeason(season: SeasonConfigDto) {
-    console.log({season});
-    // 此处设置预设四季
+    console.log({ season });
+    this._diva.client.setDate(new Date(season.value));
   }
 
   switchNoon(noon: SeasonConfigDto) {
-    console.log({noon});
-    // 此处设置预设时间
+    console.log({ noon });
+    this._diva.client.setTime(new Date(noon.value));
   }
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }
