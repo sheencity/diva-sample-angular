@@ -1,15 +1,19 @@
 <main>
-  <app-content-block caption="预设(四季早晚)">
-    <div class="date-block">
-      <div class="date-select">
-        <span class="date-title">日期</span>
-        <input type="date" [(ngModel)]="defalutDate" />
-      </div>
-      <div class="date-select date-time">
-        <span>时间</span>
-        <input type="time" [(ngModel)]="defalutTime" />
-      </div>
-    </div>
+  <app-content-block caption="预设四季)">
+    <ng-container *ngFor="let season of seasons; index as i">
+      <app-event-block
+        (click)="switchSeason(season)"
+        [config]="season"
+      ></app-event-block>
+    </ng-container>
+  </app-content-block>
+  <app-content-block caption="预设时间)">
+    <ng-container *ngFor="let noon of noons; index as i">
+      <app-event-block
+        (click)="switchNoon(noon)"
+        [config]="noon"
+      ></app-event-block>
+    </ng-container>
   </app-content-block>
   <app-content-block caption="时间与日期">
     <div class="date-block">

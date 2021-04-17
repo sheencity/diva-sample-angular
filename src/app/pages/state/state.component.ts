@@ -77,6 +77,7 @@ export class StateComponent implements OnInit {
     const id = this.equipments[i].id;
     const type = $event.value;
     console.log(id, type);
+    // 此处设置渲染状态
     this._diva.client.request('SetRenderStatus', {
       id,
       type,
