@@ -10,18 +10,19 @@ import { NavComponent } from './common/components/nav/nav.component';
 import { ContentBlockComponent } from './common/components/content-block/content-block.component';
 import { EventBlockComponent } from './common/components/event-block/event-block.component';
 import { DropDownComponent } from './common/components/dropdown.component/dropdown.component';
+import { SwitcherComponent } from './common/components/switcher/switcher.component';
 
+import { GlobalComponent } from './pages/global/global.component';
 import { SceneComponent } from './pages/scene/scene.component';
 import { VideoComponent } from './pages/video/video.component';
 import { WeatherComponent } from './pages/weather/weather.component';
 import { DateComponent } from './pages/date/date.component';
-import { StateComponent } from './pages/state/state.component';
-import { CustomizeComponent } from './pages/customize/customize.component';
-import { GlobalComponent } from './pages/global/global.component';
 import { FloorComponent } from './pages/floor/floor.component';
+import { StateComponent } from './pages/state/state.component';
+import { OverlayComponent } from './pages/overlay/overlay.component';
 import { MonitorComponent } from './pages/monitor/monitor.component';
 import { LampComponent } from './pages/lamp/lamp.component';
-import { OverlayComponent } from './pages/overlay/overlay.component';
+import { CustomizeComponent } from './pages/customize/customize.component';
 
 const COMPONENTS = [
   AppComponent,
@@ -30,6 +31,7 @@ const COMPONENTS = [
   ContentBlockComponent,
   EventBlockComponent,
   DropDownComponent,
+  SwitcherComponent,
 ];
 const PAGES = [
   GlobalComponent,
@@ -46,12 +48,8 @@ const PAGES = [
 ];
 
 @NgModule({
-  declarations: [...COMPONENTS, ...PAGES, FloorComponent, MonitorComponent, LampComponent, OverlayComponent],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-  ],
+  declarations: [...COMPONENTS, ...PAGES],
+  imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],
   bootstrap: [AppComponent],
 })

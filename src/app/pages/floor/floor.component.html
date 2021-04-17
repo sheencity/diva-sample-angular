@@ -1,1 +1,41 @@
-<p>floor works!</p>
+<main>
+  <app-content-block caption="楼层展示">
+    <div class="switch-block">
+      <div class="switch-item">
+        <app-switcher [(ngModel)]="explode" [label]="'炸开'"></app-switcher>
+      </div>
+    </div>
+  </app-content-block>
+  <app-content-block caption="楼层展示">
+    <div class="switch-block">
+      <div class="switch-item">
+        <app-switcher
+          [(ngModel)]="gradation"
+          [label]="'分层聚焦'"
+        ></app-switcher>
+      </div>
+    </div>
+    <div class="drop-block" style="z-index: 104;">
+      <div class="drop-item">
+        <span>聚焦楼层</span>
+        <div>
+          <app-dropdown
+            [options]="options"
+            [(ngModel)]="selectedFloor"
+            [disabled]="!gradation"
+          ></app-dropdown>
+          <span style="margin-left: 4px;">层</span>
+        </div>
+      </div>
+    </div>
+    <div class="switch-block">
+        <div class="switch-item">
+          <app-switcher
+            [(ngModel)]="pipe"
+            [label]="'显示管线'"
+            [disabled]="!gradation"
+          ></app-switcher>
+        </div>
+      </div>
+  </app-content-block>
+</main>

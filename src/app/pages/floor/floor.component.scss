@@ -1,0 +1,40 @@
+main {
+    pointer-events: all;
+    .switch-block {
+        width: 240px;
+        padding: 20px;
+        margin-top: 8px;
+        box-sizing: border-box;
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(8px);
+        .switch-item {
+            width: 100%;
+            app-switcher {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    }
+    .drop-block {
+        width: 100%;
+        padding: 18px 20px;
+        margin-top: 8px;
+        box-sizing: border-box;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(8px);
+        .drop-item {
+          height: 24px;
+          display: flex;
+          justify-content: space-between;
+          span {
+            line-height: 24px;
+            font-weight: bold;
+            color: #fff;
+          }
+          app-dropdown {
+            width: 57px;
+          }
+        }
+      }
+}

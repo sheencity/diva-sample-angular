@@ -1,8 +1,8 @@
 <main>
     <app-content-block caption="设备状态">
         <ng-container *ngFor="let equipment of equipments; index as i">
-            <div class="equi-block" [style.z-index]="active === i ? 104 : unset" (click)="onClick(i)">
-                <div class="equi-item">
+            <div class="drop-block" [style.z-index]="active === i ? 104 : unset" (click)="onClick(i)">
+                <div class="drop-item">
                     <span>{{equipment.title}}</span>
                     <app-dropdown (select)="onChange(i, $event)" [options]="options" [(ngModel)]="equipment.selected"></app-dropdown>
                 </div>
