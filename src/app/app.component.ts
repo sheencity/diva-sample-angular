@@ -11,9 +11,8 @@ export class AppComponent {
   @ViewChild('backendContainer', { read: ElementRef }) backendContainer?: ElementRef;
   constructor(private _divaSer: DivaService) {}
   public ngAfterViewInit() {
-    const container = document.getElementById('container') as HTMLElement;
     if (this.backendContainer) {
-      this._divaSer.init(container)
+      this._divaSer.init(this.backendContainer.nativeElement)
     }
   }
 }
