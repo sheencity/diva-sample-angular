@@ -9,39 +9,39 @@ const scenes = plainToClass(SceneConfigDto, [
     index: 1,
   },
   {
-    title: '楼梯细节',
+    title: '主楼鸟瞰',
     index: 1,
   },
   {
-    title: '场景名称1',
+    title: '主楼',
     index: 2,
   },
   {
-    title: '场景名称1',
+    title: '显示管线',
     index: 3,
   },
   {
-    title: '场景名称1',
+    title: '电梯演示',
     index: 4,
   },
   {
-    title: '场景名称1',
+    title: '夜晚显示管线',
     index: 5,
   },
   {
-    title: '场景名称1',
+    title: '夜晚隐藏管线',
     index: 6,
   },
   {
-    title: '场景名称1',
+    title: '炸开场景',
     index: 7,
   },
   {
-    title: '场景名称1',
+    title: '四季演示',
     index: 8,
   },
   {
-    title: '场景名称1',
+    title: '四季演示关闭',
     index: 9,
   },
 ]);
@@ -57,7 +57,7 @@ export class SceneComponent implements OnInit {
 
   switchScene(scene: SceneConfigDto) {
     console.log({scene});
-    this._diva.client?.applyScene(scene.index);
+    this._diva.client?.applyScene(scene.title);
   }
 
   ngOnInit(): void {
