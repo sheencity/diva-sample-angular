@@ -1,0 +1,43 @@
+main {
+    pointer-events: all;
+    .date-block {
+        width: 240px;
+        margin-top: 8px;
+        padding: 12px 20px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(8px);
+        .date-select {
+            display: flex;
+            justify-content: space-between;
+            span {
+                font-weight: bold;
+                line-height: 24px;
+                color: #fff;
+            }
+            input {
+                width: 108px;
+                height: 24px;
+                padding: 6px;
+                box-sizing: border-box;
+                background: rgba(0, 0, 0, 0.3);
+                color: #fff;
+                font-size: 12px;
+                font-weight: 500;
+                border: none;
+                border-radius: 2px;
+                outline: none;
+                user-select: none;
+            }
+            ::-webkit-calendar-picker-indicator {
+                filter: invert(1);
+            }
+        }
+        .date-time {
+            margin-top: 8px;
+        }
+    }
+}

@@ -6,7 +6,7 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./content-block.component.scss']
 })
 export class ContentBlockComponent implements OnInit {
-  @Input() title: string = '';
+  @Input() caption: string;
 
   constructor() { }
 

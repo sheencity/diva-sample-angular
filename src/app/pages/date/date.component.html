@@ -1,1 +1,26 @@
-<p>date works!</p>
+<main>
+  <app-content-block caption="预设(四季早晚)">
+    <div class="date-block">
+      <div class="date-select">
+        <span class="date-title">日期</span>
+        <input type="date" [(ngModel)]="defalutDate" />
+      </div>
+      <div class="date-select date-time">
+        <span>时间</span>
+        <input type="time" [(ngModel)]="defalutTime" />
+      </div>
+    </div>
+  </app-content-block>
+  <app-content-block caption="时间与日期">
+    <div class="date-block">
+      <div class="date-select">
+        <span class="date-title">日期</span>
+        <input type="date" [(ngModel)]="date" />
+      </div>
+      <div class="date-select date-time">
+        <span>时间</span>
+        <input type="time" [(ngModel)]="time" />
+      </div>
+    </div>
+  </app-content-block>
+</main>
