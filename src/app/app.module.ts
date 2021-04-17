@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms'
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -9,6 +9,7 @@ import { HeaderComponent } from './common/components/header/header.component';
 import { NavComponent } from './common/components/nav/nav.component';
 import { ContentBlockComponent } from './common/components/content-block/content-block.component';
 import { EventBlockComponent } from './common/components/event-block/event-block.component';
+import { DropDownComponent } from './common/components/dropdown.component/dropdown.component';
 
 import { SceneComponent } from './pages/scene/scene.component';
 import { VideoComponent } from './pages/video/video.component';
@@ -26,6 +27,7 @@ const COMPONENTS = [
   NavComponent,
   ContentBlockComponent,
   EventBlockComponent,
+  DropDownComponent,
 ];
 const PAGES = [
   SceneComponent,
@@ -40,11 +42,12 @@ const PAGES = [
 ];
 
 @NgModule({
-  declarations: [
-    ...COMPONENTS,
-    ...PAGES,
+  declarations: [...COMPONENTS, ...PAGES],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
   ],
-  imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],
   bootstrap: [AppComponent],
 })

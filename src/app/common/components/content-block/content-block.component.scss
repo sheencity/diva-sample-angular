@@ -13,6 +13,8 @@ main {
         }
     }
     .content {
+        display: flex;
+        flex-direction: column;
         // max-height: 680px;
         // overflow-y: scroll;
     }

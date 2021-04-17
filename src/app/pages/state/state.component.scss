@@ -1,0 +1,26 @@
+main {
+  pointer-events: all;
+  .equi-block {
+    width: 100%;
+    padding: 18px 20px;
+    margin-top: 8px;
+    box-sizing: border-box;
+    // position: relative;
+    // z-index: 101;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    .equi-item {
+      height: 24px;
+      display: flex;
+      justify-content: space-between;
+      span {
+        line-height: 24px;
+        font-weight: bold;
+        color: #fff;
+      }
+      app-dropdown {
+        width: 57px;
+      }
+    }
+  }
+}
