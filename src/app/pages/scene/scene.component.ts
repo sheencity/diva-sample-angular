@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SceneConfigDto } from 'src/app/common/dtos/scene.dto';
 
 const scenes = [
   {
@@ -41,6 +42,10 @@ const scenes = [
 export class SceneComponent implements OnInit {
   public scenes = scenes;
   constructor() {}
+
+  switchScene(scene: SceneConfigDto) {
+    console.log({scene});
+  }
 
   ngOnInit(): void {}
 }
