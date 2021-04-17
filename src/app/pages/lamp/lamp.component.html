@@ -1,1 +1,19 @@
-<p>lamp works!</p>
+<main>
+  <app-content-block caption="灯光控制">
+    <div class="switch-block">
+      <div class="switch-item">
+        <app-switcher [(ngModel)]="corridor" [label]="'楼道灯'"></app-switcher>
+      </div>
+    </div>
+    <div class="switch-block">
+      <div class="switch-item">
+        <app-switcher [(ngModel)]="emergency" [label]="'应急灯'"></app-switcher>
+      </div>
+    </div>
+    <div class="switch-block">
+      <div class="switch-item">
+        <app-switcher [(ngModel)]="road" [label]="'路灯'"></app-switcher>
+      </div>
+    </div>
+  </app-content-block>
+</main>
