@@ -7,24 +7,28 @@
       ></app-event-block>
     </ng-container>
   </app-content-block>
-  <app-content-block caption="预设时间" style="margin-top: 20px;">
-    <ng-container *ngFor="let noon of noons; index as i">
-      <app-event-block
-        (click)="switchNoon(noon)"
-        [config]="noon"
-      ></app-event-block>
-    </ng-container>
-  </app-content-block>
-  <app-content-block caption="自定义" style="margin-top: 20px;">
-    <div class="date-block">
-      <div class="date-select">
-        <span class="date-title">日期</span>
-        <input type="date" [(ngModel)]="date" />
+  <div style="margin-top: 20px;">
+    <app-content-block caption="预设时间">
+      <ng-container *ngFor="let noon of noons; index as i">
+        <app-event-block
+          (click)="switchNoon(noon)"
+          [config]="noon"
+        ></app-event-block>
+      </ng-container>
+    </app-content-block>
+  </div>
+  <div style="margin-top: 20px;">
+    <app-content-block caption="自定义">
+      <div class="date-block">
+        <div class="date-select">
+          <span class="date-title">日期</span>
+          <input type="date" [(ngModel)]="date" />
+        </div>
+        <div class="date-select date-time">
+          <span>时间</span>
+          <input type="time" [(ngModel)]="time" />
+        </div>
       </div>
-      <div class="date-select date-time">
-        <span>时间</span>
-        <input type="time" [(ngModel)]="time" />
-      </div>
-    </div>
-  </app-content-block>
+    </app-content-block>
+  </div>
 </main>
