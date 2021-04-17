@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Diva } from '@sheencity/diva-sdk';
-
-type Awaited<T> = T extends Promise<infer U> ? U : never;
+import { Diva, DivaClient } from '@sheencity/diva-sdk';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DivaService {
-  client?: Awaited<ReturnType<Diva['init']>>;
+  client?: DivaClient;
 
   constructor() {}
 

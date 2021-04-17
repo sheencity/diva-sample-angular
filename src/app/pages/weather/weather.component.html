@@ -1,7 +1,7 @@
 <main>
     <app-content-block caption="天气演示">
         <ng-container *ngFor="let weather of weathers; index as i">
-            <app-event-block [config]="weather"></app-event-block>
+            <app-event-block (click)="switchWeather(weather)" [config]="weather"></app-event-block>
         </ng-container>
     </app-content-block>
 </main>
