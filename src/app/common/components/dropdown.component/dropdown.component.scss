@@ -96,6 +96,14 @@
     background-color: #333 !important;
   }
 }
+.option::-webkit-scrollbar {
+  width: 3px;
+}
+.option::-webkit-scrollbar-thumb {
+  width: 3px;
+  border-radius: 2px;
+  background-color: rgba(255, 255, 255, 0.3);
+}
 
 .option {
   li {

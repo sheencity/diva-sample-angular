@@ -42,7 +42,6 @@ export class DropDownComponent implements ControlValueAccessor {
   /** 选中某项，发出事件 */
   public menuClick(item: DropdownData) {
     this.selectedItem = item;
-    console.log('data is', item);
     this.select.next(item)
     this.hideOptions = true;
   }
