@@ -16,10 +16,12 @@ import { VideoComponent } from './pages/video/video.component';
 import { WeatherComponent } from './pages/weather/weather.component';
 import { DateComponent } from './pages/date/date.component';
 import { StateComponent } from './pages/state/state.component';
-import { PoiComponent } from './pages/poi/poi.component';
 import { CustomizeComponent } from './pages/customize/customize.component';
-import { BasicComponent } from './pages/basic/basic.component';
 import { GlobalComponent } from './pages/global/global.component';
+import { FloorComponent } from './pages/floor/floor.component';
+import { MonitorComponent } from './pages/monitor/monitor.component';
+import { LampComponent } from './pages/lamp/lamp.component';
+import { OverlayComponent } from './pages/overlay/overlay.component';
 
 const COMPONENTS = [
   AppComponent,
@@ -30,19 +32,21 @@ const COMPONENTS = [
   DropDownComponent,
 ];
 const PAGES = [
+  GlobalComponent,
   SceneComponent,
   VideoComponent,
   WeatherComponent,
   DateComponent,
+  FloorComponent,
   StateComponent,
-  PoiComponent,
+  OverlayComponent,
+  MonitorComponent,
+  LampComponent,
   CustomizeComponent,
-  BasicComponent,
-  GlobalComponent,
 ];
 
 @NgModule({
-  declarations: [...COMPONENTS, ...PAGES],
+  declarations: [...COMPONENTS, ...PAGES, FloorComponent, MonitorComponent, LampComponent, OverlayComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
