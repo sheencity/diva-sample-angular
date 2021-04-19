@@ -7,18 +7,22 @@ const seasons = plainToClass(SeasonConfigDto, [
   {
     title: '春',
     value: '2021-03-21',
+    name: 'spring',
   },
   {
     title: '夏',
     value: '2021-06-22',
+    name: 'summer',
   },
   {
     title: '秋',
     value: '2021-09-23',
+    name: 'autumn',
   },
   {
     title: '冬',
     value: '2021-12-21',
+    name: 'winter',
   },
 ]);
 
@@ -26,14 +30,17 @@ const noons = plainToClass(NoonConfigDto, [
   {
     title: '早晨',
     value: '1995-12-17T07:00:00',
+    name: 'morning',
   },
   {
     title: '中午',
     value: '1995-12-17T12:00:00',
+    name: 'noon',
   },
   {
     title: '傍晚',
     value: '1995-12-17T18:00:00',
+    name: 'afternoon',
   },
 ]);
 
@@ -96,6 +103,9 @@ export class DateComponent implements OnInit, OnDestroy {
   }
   ngOnInit(): void {
     this._diva.client?.applyScene('日期时间');
+  }
+  iconBind(name: string) {
+    return `assets/icon/date/${name}.png`;
   }
   // 销毁钩子
   ngOnDestroy(): void {}

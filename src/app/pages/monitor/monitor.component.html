@@ -18,7 +18,9 @@
             <span [class.selected]="selectedMonitorIndex === i">{{
               monitorEqui.title
             }}</span>
-            <div class="refresh-icon" (click)="refresh(monitorEqui)"></div>
+            <div class="refresh-icon" (click)="refresh(monitorEqui)">
+              <img src="assets/icon/monitor/refresh.png" />
+            </div>
           </div>
           <input [(ngModel)]="monitorEqui.url" />
         </div>

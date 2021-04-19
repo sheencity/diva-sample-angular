@@ -3,7 +3,9 @@
         <ng-container *ngFor="let weather of weathers; index as i">
             <div class="content" (click)="switchWeather(weather)">
                 <div class="title">{{weather.title}}</div>
-                <div class="icon"></div>
+                <div class="icon">
+                    <img [src]="iconBind(weather.typeName)" />
+                </div>
             </div>
         </ng-container>
     </app-content-block>
