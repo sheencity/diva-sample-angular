@@ -25,7 +25,7 @@ const seasons = plainToClass(SeasonConfigDto, [
 const noons = plainToClass(NoonConfigDto, [
   {
     title: '早晨',
-    value: '1995-12-17T06:00:00',
+    value: '1995-12-17T07:00:00',
   },
   {
     title: '中午',
