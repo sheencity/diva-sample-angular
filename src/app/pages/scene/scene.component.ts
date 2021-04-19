@@ -61,6 +61,6 @@ export class SceneComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._diva.client?.applyScene(1);
+    this._diva.client?.applyScene('场景切换');
   }
 }
