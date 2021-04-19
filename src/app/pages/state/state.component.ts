@@ -69,7 +69,15 @@ export class StateComponent implements OnInit, OnDestroy {
     return { ...equipment, selected };
   }
 
-  onClick(equi: EquipmentConfigDto, i: number) {
+  async onClick(equi: EquipmentConfigDto, i: number) {
+    // const [model] = await this._diva.client.getEntitiesByName(this.equipments[i].id)
+    // if(!model) return
+    // const equipmentId = model.id
+    this._diva.client.request('Focus', {
+      id: this.equipments[i].id,
+      distance: 1000.0,
+      pitch: 30.0,
+    });
     this.active = i;
     console.log('equi', equi);
     // 此处设置设备的聚焦状态
@@ -88,6 +96,7 @@ export class StateComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // console.log(this.equipments);
+    this._diva.client?.applyScene('状态演示');
   }
 
   // 销毁钩子
