@@ -5,7 +5,8 @@ import {
   OnInit,
 } from '@angular/core';
 import { DropdownData } from 'src/app/common/dtos/dropdown-data.interface';
-import { Overlay, POIIcon } from 'src/app/common/dtos/overlay.dto';
+import { LabelDto, Overlay, POIDto, POIIcon } from 'src/app/common/dtos/overlay.dto';
+import { LocalStorageService } from 'src/app/common/services/localStorage.service';
 
 @Component({
   selector: 'app-overlay',
@@ -13,6 +14,8 @@ import { Overlay, POIIcon } from 'src/app/common/dtos/overlay.dto';
   styleUrls: ['./overlay.component.scss'],
 })
 export class OverlayComponent implements OnInit {
+  // 覆盖物列表
+  public overlays: (POIDto | LabelDto)[] = []
   // 种类
   private _selectedType: DropdownData = {
     value: Overlay.POI,
@@ -71,43 +74,50 @@ export class OverlayComponent implements OnInit {
   iconOptions = [{ value: POIIcon.Camera, placeholder: '摄像头' }];
   constructor(
     private _cdr: ChangeDetectorRef,
-    private _elementRef: ElementRef<any>
+    private _elementRef: ElementRef<any>,
+    private _store: LocalStorageService,
   ) {}
 
   create() {
     if (this.selectedType.value === Overlay.POI) {
-      const poiConfig = {
-        corrdinateX: this.corrdinateX,
-        corrdinateY: this.corrdinateY,
-        corrdinateZ: this.corrdinateZ,
-        content: this.content,
-        type: this.selectedIcon.value,
-        color: this.color,
-        scale: this.scale,
-        opacity: this.opacity,
-      };
-      console.log('poiConfig', poiConfig);
+      const POI = new POIDto()
+      POI.icon = this.selectedIcon.value as POIIcon;
+      POI.corrdinateX = this.corrdinateX,
+      POI.corrdinateY = this.corrdinateY,
+      POI.corrdinateZ = this.corrdinateZ,
+      POI.content = this.content,
+      POI.color = this.color,
+      POI.scale = this.scale,
+      POI.opacity = this.opacity,
+      console.log('poiConfig', POI);
+      this._store.storeOverlay(POI);
     } else {
-      const labelConfig = {
-        corrdinateX: this.corrdinateX,
-        corrdinateY: this.corrdinateY,
-        corrdinateZ: this.corrdinateZ,
-        title: this.title,
-        content: this.content,
-        color: this.color,
-        scale: this.scale,
-        opacity: this.opacity,
-        border: this.border,
-        orderColor: this.borderColor,
-      };
-      console.log('labelConfig', labelConfig);
+      const Label = new LabelDto();
+      Label.corrdinateX = this.corrdinateX,
+      Label.corrdinateY = this.corrdinateY,
+      Label.corrdinateZ = this.corrdinateZ,
+      Label.title = this.title,
+      Label.content = this.content,
+      Label.color = this.color,
+      Label.scale = this.scale,
+      Label.opacity = this.opacity,
+      Label.border = this.border,
+      Label.borderColor = this.borderColor,
+      console.log('labelConfig', Label);
+      this._store.storeOverlay(Label);
     }
+    this.overlays = this._store.getAllOverlays();
     this.reset();
     // 此处设置创建 overlay 的参数
   }
 
+  delete(overlay: POIDto | LabelDto) {
+    this._store.deleteOverlay(overlay);
+    this.overlays = this._store.getAllOverlays();
+  }
+
   reset() {
-    this._selectedType = {
+    this._selectedIcon = {
       value: POIIcon.Camera,
       placeholder: '摄像头',
     };
@@ -166,5 +176,7 @@ export class OverlayComponent implements OnInit {
     refreshInputDom.value = value + '';
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.overlays = this._store.getAllOverlays();
+  }
 }
