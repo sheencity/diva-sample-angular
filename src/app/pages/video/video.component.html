@@ -1,10 +1,10 @@
 <main>
     <app-content-block caption="漫游路径">
         <ng-container *ngFor="let video of videos; index as i">
-            <div class="content" [class.selected]="selected === i" (click)="switchVideo(video, i)">
+            <div class="content" [class.selected]="selectedVideo === video.title" (click)="toggleVideo(video, i)">
                 <div class="title">{{video.title}}</div>
                 <div class="icon">
-                    <img [src]="'assets/icon/video/play.png'" />
+                    <img [src]="iconBind(video)" />
                 </div>
             </div>
         </ng-container>
