@@ -29,6 +29,7 @@ const lifts = plainToClass(LiftConfigDto, [
 })
 export class CustomizeComponent implements OnInit {
   active = 0;
+  selected: number = null;
   selectedLift = 0;
   lifts = lifts.map((lift) => this._addSelected(lift));
 
@@ -146,6 +147,7 @@ export class CustomizeComponent implements OnInit {
 
   activeLift(lift: LiftConfigDto, index: number) {
     this.active = index;
+    this.selected = index;
     console.log('lift is', lift);
     // 此处设置电梯聚焦
   }

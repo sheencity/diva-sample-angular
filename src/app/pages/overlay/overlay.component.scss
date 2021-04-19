@@ -112,7 +112,7 @@ main {
         button {
             cursor: pointer;
             width: 58px;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.1);
             line-height: 22px;
             text-align: center;
             color: #fff;
@@ -130,15 +130,16 @@ main {
     box-sizing: border-box;
     background-color: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(8px);
+    cursor: pointer;
     .overlay-item {
         width: 100%;
         height: 24px;
         display: flex;
         justify-content: space-between;
+        color: #bfbfbf;
         span {
             line-height: 24px;
             font-weight: bold;
-            color: #fff;
         }
         .overlay-info {
             display: flex;
@@ -150,6 +151,9 @@ main {
                 height: 24px;
             }
         }
+    }
+    .selected {
+      color: #fff;
     }
   }
 }

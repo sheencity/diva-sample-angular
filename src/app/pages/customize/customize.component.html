@@ -6,7 +6,7 @@
         class="drop-block"
         [style.z-index]="active === i ? 104 : unset"
       >
-        <div class="drop-item">
+        <div class="drop-item" [class.selected]="selected === i">
           <span>{{ lift.title }}</span>
           <div>
             <app-dropdown

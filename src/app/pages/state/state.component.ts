@@ -36,6 +36,7 @@ const equipments = plainToClass(EquipmentConfigDto, [
   styleUrls: ['./state.component.scss'],
 })
 export class StateComponent implements OnInit, OnDestroy {
+  selected: number = null;
   active: number;
   equipments = equipments.map((equipment) => this.addSelected(equipment));
   constructor(private _diva: DivaService) {}
@@ -73,12 +74,13 @@ export class StateComponent implements OnInit, OnDestroy {
     // const [model] = await this._diva.client.getEntitiesByName(this.equipments[i].id)
     // if(!model) return
     // const equipmentId = model.id
+    this.active = i;
+    this.selected = i;
     this._diva.client.request('Focus', {
       id: this.equipments[i].id,
       distance: 1000.0,
       pitch: 30.0,
     });
-    this.active = i;
     console.log('equi', equi);
     // 此处设置设备的聚焦状态
   }

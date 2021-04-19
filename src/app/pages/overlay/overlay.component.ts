@@ -64,6 +64,8 @@ export class OverlayComponent implements OnInit {
   public border = 0.0;
   // 边框颜色
   public borderColor = '#ffffff';
+  // 选中覆盖物的id
+  public selectedId: string = null;
 
   // 种类配置
   typeOptions = [
@@ -131,6 +133,10 @@ export class OverlayComponent implements OnInit {
     this.opacity = 0.0;
     this.border = 0.0;
     this.borderColor = '#ffffff';
+  }
+
+  selectOverlay(overlay: POIDto | LabelDto) {
+    this.selectedId = overlay.id;
   }
 
   onInputScale() {
