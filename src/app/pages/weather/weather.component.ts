@@ -67,7 +67,9 @@ export class WeatherComponent implements OnInit, OnDestroy {
     return `assets/icon/weather/${weatherName}.png`;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this._diva.client.applyScene('四季演示')
+  }
 
   // 销毁钩子
   ngOnDestroy(): void {}

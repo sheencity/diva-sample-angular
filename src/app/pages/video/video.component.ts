@@ -4,19 +4,19 @@ import { DivaService } from 'src/app/common/services/diva.service';
 
 const videos = [
   {
-    title: '视频名称1',
+    title: '轨1',
   },
   {
-    title: '视频名称2',
+    title: '轨2',
   },
   {
-    title: '视频名称3',
+    title: '轨3',
   },
   {
-    title: '视频名称4',
+    title: '轨4',
   },
   {
-    title: '视频名称5',
+    title: '轨5',
   },
   {
     title: '视频名称6',
@@ -60,12 +60,12 @@ export class VideoComponent implements OnInit, OnDestroy {
     } 
     if (!this.isPlaying && this.selectedVideo === video.title) {
       this.isPlaying = true;
-      this._diva.client.request('PlayCameraTrack', {});
+      this._diva.client.request('PlayCameraTrack', undefined);
       return;
     }
     if (this.isPlaying && this.selectedVideo === video.title) {
       this.isPlaying = false;
-      this._diva.client.request('PauseCameraTrack', {});
+      this._diva.client.request('PauseCameraTrack', undefined);
       return;
     }
     if (this.isPlaying && this.selectedVideo !== video.title) {
@@ -90,7 +90,7 @@ export class VideoComponent implements OnInit, OnDestroy {
   // 销毁钩子
   ngOnDestroy(): void {
     if (this.isPlaying) {
-      this._diva.client.request('StopCameraTrack', {});
+      this._diva.client.request('StopCameraTrack', undefined);
     }
   }
 }
