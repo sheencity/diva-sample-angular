@@ -111,6 +111,9 @@ export class FloorComponent implements OnInit, OnDestroy {
 
   public set selectedFloor(v: DropdownData) {
     console.log('层数是', Number(v.placeholder));
+    if (!this.gradation) {
+      return;
+    }
     if (this._gradation) {
       this.FoucsFloor(Number(v.placeholder));
       // const model =  this.getModel(v.value)
@@ -135,6 +138,9 @@ export class FloorComponent implements OnInit, OnDestroy {
   private _pipe = false;
   public set pipe(v: boolean) {
     console.log('pipe', v);
+    if (!this.gradation) {
+      return;
+    }
     // 此处设置显示管线
     this._pipe = v;
     if (this._gradation && v) {
