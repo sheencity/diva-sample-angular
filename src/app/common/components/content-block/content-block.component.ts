@@ -7,6 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class ContentBlockComponent implements OnInit {
   @Input() caption: string;
+  @Input() width = false;
 
   constructor() { }
 

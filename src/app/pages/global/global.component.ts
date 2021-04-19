@@ -43,7 +43,7 @@ export class GlobalComponent implements OnInit {
 
   options = [
     { value: 'false', placeholder: '飞行' },
-    { value: 'true', placeholder: '第三人称' },
+    { value: 'true', placeholder: '人视' },
   ];
 
   constructor() { }
