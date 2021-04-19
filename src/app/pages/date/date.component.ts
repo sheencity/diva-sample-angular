@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { plainToClass } from 'class-transformer';
 import { NoonConfigDto, SeasonConfigDto } from 'src/app/common/dtos/data.dto';
 import { DivaService } from 'src/app/common/services/diva.service';
@@ -42,7 +42,7 @@ const noons = plainToClass(NoonConfigDto, [
   templateUrl: './date.component.html',
   styleUrls: ['./date.component.scss'],
 })
-export class DateComponent implements OnInit {
+export class DateComponent implements OnInit, OnDestroy {
   seasons = seasons;
   noons = noons;
 
@@ -95,4 +95,6 @@ export class DateComponent implements OnInit {
     this._diva.client.setTime(new Date(noon.value));
   }
   ngOnInit(): void {}
+  // 销毁钩子
+  ngOnDestroy(): void {}
 }

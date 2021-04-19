@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { WeatherName } from '@sheencity/diva-sdk';
-// import type { Diva } from '@sheencity/diva-sdk';
 import { plainToClass } from 'class-transformer';
 import { WeatherConfigDto } from 'src/app/common/dtos/weather.dto';
 import { DivaService } from 'src/app/common/services/diva.service';
@@ -53,7 +52,7 @@ const weathers = plainToClass(WeatherConfigDto, [
   templateUrl: './weather.component.html',
   styleUrls: ['./weather.component.scss'],
 })
-export class WeatherComponent implements OnInit {
+export class WeatherComponent implements OnInit, OnDestroy {
   public weathers = weathers;
 
   constructor(private _diva: DivaService) {}
@@ -65,4 +64,7 @@ export class WeatherComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  // 销毁钩子
+  ngOnDestroy(): void {}
 }

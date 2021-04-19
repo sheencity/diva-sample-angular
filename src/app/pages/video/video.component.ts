@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { VideoConfigDto } from 'src/app/common/dtos/video.dto';
 
 const videos = [
   {
@@ -36,15 +37,22 @@ const videos = [
 @Component({
   selector: 'app-video',
   templateUrl: './video.component.html',
-  styleUrls: ['./video.component.scss']
+  styleUrls: ['./video.component.scss'],
 })
-export class VideoComponent implements OnInit {
-
+export class VideoComponent implements OnInit, OnDestroy {
   public videos = videos;
 
-  constructor() { }
+  public selected: number = null;
 
-  ngOnInit(): void {
+  constructor() {}
+
+  switchVideo(video: VideoConfigDto, i: number) {
+    this.selected = i;
+    console.log('video is', video);
   }
 
+  ngOnInit(): void {}
+
+  // 销毁钩子
+  ngOnDestroy(): void {}
 }

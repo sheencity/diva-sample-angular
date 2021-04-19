@@ -1,23 +1,23 @@
 <main>
   <app-content-block caption="预设四季">
     <ng-container *ngFor="let season of seasons; index as i">
-      <app-event-block
-        (click)="switchSeason(season)"
-        [config]="season"
-      ></app-event-block>
+      <div class="content" (click)="switchSeason(season)">
+        <div class="title">{{ season.title }}</div>
+        <div class="icon"></div>
+      </div>
     </ng-container>
   </app-content-block>
-  <div style="margin-top: 20px;">
+  <div style="margin-top: 20px">
     <app-content-block caption="预设时间">
       <ng-container *ngFor="let noon of noons; index as i">
-        <app-event-block
-          (click)="switchNoon(noon)"
-          [config]="noon"
-        ></app-event-block>
+        <div class="content" (click)="switchNoon(noon)">
+          <div class="title">{{ noon.title }}</div>
+          <div class="icon"></div>
+        </div>
       </ng-container>
     </app-content-block>
   </div>
-  <div style="margin-top: 20px;">
+  <div style="margin-top: 20px">
     <app-content-block caption="自定义">
       <div class="date-block">
         <div class="date-select">

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { plainToClass } from 'class-transformer';
 import { DivaService } from 'src/app/common/services/diva.service';
 import { DropdownData } from 'src/app/common/dtos/dropdown-data.interface';
@@ -10,7 +10,7 @@ import { element } from 'protractor';
   templateUrl: './floor.component.html',
   styleUrls: ['./floor.component.scss'],
 })
-export class FloorComponent implements OnInit {
+export class FloorComponent implements OnInit, OnDestroy {
   // 炸开
   private _explode = false;
   public set explode(v: boolean) {
@@ -143,4 +143,6 @@ export class FloorComponent implements OnInit {
   ngOnInit(): void {
     this._diva.client?.applyScene('楼层展示');
   }
+   // 销毁钩子
+   ngOnDestroy(): void {}
 }

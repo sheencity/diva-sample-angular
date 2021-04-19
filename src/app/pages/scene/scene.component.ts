@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { plainToClass } from 'class-transformer';
 import { SceneConfigDto } from 'src/app/common/dtos/scene.dto';
 import { DivaService } from 'src/app/common/services/diva.service';
@@ -51,16 +51,19 @@ const scenes = plainToClass(SceneConfigDto, [
   templateUrl: './scene.component.html',
   styleUrls: ['./scene.component.scss'],
 })
-export class SceneComponent implements OnInit {
+export class SceneComponent implements OnInit, OnDestroy {
   public scenes = scenes;
   constructor(private _diva: DivaService) {}
 
   switchScene(scene: SceneConfigDto) {
-    console.log({scene});
+    console.log({ scene });
     this._diva.client?.applyScene(scene.title);
   }
 
   ngOnInit(): void {
     this._diva.client?.applyScene('场景切换');
   }
+
+  // 销毁钩子
+  ngOnDestroy(): void {}
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { plainToClass } from 'class-transformer';
 import { DropdownData } from 'src/app/common/dtos/dropdown-data.interface';
 import {
@@ -35,7 +35,7 @@ const equipments = plainToClass(EquipmentConfigDto, [
   templateUrl: './state.component.html',
   styleUrls: ['./state.component.scss'],
 })
-export class StateComponent implements OnInit {
+export class StateComponent implements OnInit, OnDestroy {
   active: number;
   equipments = equipments.map((equipment) => this.addSelected(equipment));
   constructor(private _diva: DivaService) {}
@@ -69,8 +69,10 @@ export class StateComponent implements OnInit {
     return { ...equipment, selected };
   }
 
-  onClick(i: number) {
+  onClick(equi: EquipmentConfigDto, i: number) {
     this.active = i;
+    console.log('equi', equi);
+    // 此处设置设备的聚焦状态
   }
 
   onChange(i: number, $event: DropdownData) {
@@ -81,10 +83,13 @@ export class StateComponent implements OnInit {
     this._diva.client.request('SetRenderStatus', {
       id,
       type,
-    })
+    });
   }
 
   ngOnInit(): void {
     // console.log(this.equipments);
   }
+
+  // 销毁钩子
+  ngOnDestroy(): void {}
 }
