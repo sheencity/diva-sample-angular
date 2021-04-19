@@ -19,8 +19,8 @@ export class FloorComponent implements OnInit, OnDestroy {
     if (v) {
       this._diva.client.request('ExplodeByGroup', {
         groupName: '场景模型/主楼拆分',
-        spacing: 1000,
-        floorHeight: 300,
+        spacing: 300,
+        floorHeight: 290,
         duration: 5,
       });
     } else {
@@ -38,6 +38,13 @@ export class FloorComponent implements OnInit, OnDestroy {
   private _gradation = false;
   public set gradation(v: boolean) {
     console.log('gradation', v);
+    let pathArray = [0,1,2]
+    pathArray.forEach( i => {
+      this._diva.client.request('SetPathVisibility',{
+          index: i,
+          isVisible: !v
+      })
+    })
     this._gradation = v;
   }
   public get gradation() {
@@ -61,9 +68,26 @@ export class FloorComponent implements OnInit, OnDestroy {
     const floorToHide = this.options.filter(
       (val) => +val.placeholder !== floor
     );
+
+    const pipeline = await Promise.all(
+      this.options.map(async (v) => this.getModel(v.pipeLineName))
+    );
+
     const models = await Promise.all(
       this.options.map(async (v) => this.getModel(v.value))
     );
+
+    const pipelineToHide = pipeline.filter(
+      (f) => f.name !== this.options.find((o) => +o.placeholder === floor).pipeLineName
+    );
+    const pipelineToFoucs = pipeline.filter(
+      (f) => f.name === this.options.find((o) => +o.placeholder === floor).pipeLineName
+    );
+
+    console.log('-----------------------------')
+    console.log({pipelineToFoucs})
+    console.log('-----------------------------')
+
     const modelToHide = models.filter(
       (f) => f.name !== this.options.find((o) => +o.placeholder === floor).value
     );
@@ -87,6 +111,8 @@ export class FloorComponent implements OnInit, OnDestroy {
       focus(modelToFoucs[0]),
       setVisibility(modelToHide, false),
       setVisibility(modelToFoucs, true),
+      setVisibility(pipelineToHide, false),
+      setVisibility(pipelineToFoucs, this._pipe ? true : false),
     ]);
   }
 
@@ -118,24 +144,38 @@ export class FloorComponent implements OnInit, OnDestroy {
     console.log('pipe', v);
     // 此处设置显示管线
     this._pipe = v;
+    if (this._gradation && v) {
+      this.FoucsFloor(Number(this._selectedFloor.placeholder));
+      // const model =  this.getModel(v.value)
+
+      // model.then((m) => {
+      //   if(!m) return
+      //   this._diva.client.request("Focus", {
+      //     id: m.id,
+      //     distance: 5000.0,
+      //     pitch: 30.0,
+      //   });
+      // })
+    }
   }
   public get pipe() {
     return this._pipe;
   }
 
   options = [
-    { placeholder: '1', value: '一层-1_1' },
-    { placeholder: '2', value: '二层(1)-1_1' },
-    { placeholder: '3', value: '三楼-1_5' },
-    { placeholder: '4', value: '标准层(1)-1_11' },
-    { placeholder: '5', value: '标准层(1)-1_12' },
-    { placeholder: '6', value: '标准层(1)-1_15' },
-    { placeholder: '7', value: '标准层(1)-1_16' },
-    { placeholder: '8', value: '标准层(1)-1_9' },
-    { placeholder: '9', value: '标准层(1)-1_10' },
-    { placeholder: '10', value: '标准层(1)-1_14' },
-    { placeholder: '11', value: '标准层(1)-1_17' },
-    { placeholder: '12', value: '标准层(1)-1_13' },
+    { placeholder: '1', value: '一层-1_1', pipeLineName: '一层管线' },
+    { placeholder: '2', value: '二层(1)-1_1', pipeLineName: '二层管线' },
+    { placeholder: '3', value: '三楼-1_5', pipeLineName: '三层管线' },
+    { placeholder: '4', value: '标准层(1)-1_11', pipeLineName: '四层管线' },
+    { placeholder: '5', value: '标准层(1)-1_12', pipeLineName: '五层管线' },
+    { placeholder: '6', value: '标准层(1)-1_15', pipeLineName: '六层管线' },
+    { placeholder: '7', value: '标准层(1)-1_16', pipeLineName: '七层管线' },
+    { placeholder: '8', value: '标准层(1)-1_9', pipeLineName: '八层管线' },
+    { placeholder: '9', value: '标准层(1)-1_10', pipeLineName: '九层管线' },
+    { placeholder: '10', value: '标准层(1)-1_14', pipeLineName: '十层管线' },
+    { placeholder: '11', value: '标准层(1)-1_17', pipeLineName: '十一层管线' },
+    { placeholder: '12', value: '标准层(1)-1_13', pipeLineName: '十二层管线' },
+    { placeholder: '13', value: '顶楼_12', pipeLineName: '顶层管线' },
   ];
 
   constructor(private _diva: DivaService) {}
