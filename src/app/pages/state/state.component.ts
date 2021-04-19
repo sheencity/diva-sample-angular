@@ -9,23 +9,19 @@ import { DivaService } from 'src/app/common/services/diva.service';
 
 const equipments = plainToClass(EquipmentConfigDto, [
   {
-    title: '1号设备',
-    id: '1',
+    title: '一层-1_1',
     state: EquipmentState.Default,
   },
   {
-    title: '2号设备',
-    id: '2',
+    title: '二层(1)-1_1',
     state: EquipmentState.Alarm,
   },
   {
     title: '1号设备',
-    id: '3',
-    state: EquipmentState.Translucence,
+    state: EquipmentState.Translucent,
   },
   {
     title: '1号设备',
-    id: '4',
     state: EquipmentState.Hidden,
   },
 ]);
@@ -36,6 +32,7 @@ const equipments = plainToClass(EquipmentConfigDto, [
   styleUrls: ['./state.component.scss'],
 })
 export class StateComponent implements OnInit, OnDestroy {
+  selectedEqui: any = null;
   selected: number = null;
   active: number;
   equipments = equipments.map((equipment) => this.addSelected(equipment));
@@ -44,7 +41,7 @@ export class StateComponent implements OnInit, OnDestroy {
   options = [
     { value: EquipmentState.Default, placeholder: '默认' },
     { value: EquipmentState.Alarm, placeholder: '报警' },
-    { value: EquipmentState.Translucence, placeholder: '半透' },
+    { value: EquipmentState.Translucent, placeholder: '半透' },
     { value: EquipmentState.Hidden, placeholder: '隐藏' },
   ];
 
@@ -57,8 +54,8 @@ export class StateComponent implements OnInit, OnDestroy {
       case EquipmentState.Alarm:
         selected = { value: EquipmentState.Alarm, placeholder: '报警' };
         break;
-      case EquipmentState.Translucence:
-        selected = { value: EquipmentState.Translucence, placeholder: '半透' };
+      case EquipmentState.Translucent:
+        selected = { value: EquipmentState.Translucent, placeholder: '半透' };
         break;
       case EquipmentState.Hidden:
         selected = { value: EquipmentState.Hidden, placeholder: '隐藏' };
@@ -71,11 +68,13 @@ export class StateComponent implements OnInit, OnDestroy {
   }
 
   async onClick(equi: EquipmentConfigDto, i: number) {
-    const [model] = await this._diva.client.getEntitiesByName(this.equipments[i].title)
-    if(!model) return
-    const equipmentId = model.id
     this.active = i;
     this.selected = i;
+    const [model] = await this._diva.client.getEntitiesByName(this.equipments[i].title);
+    // console.log('model is', model);
+    if(!model) return
+    this.selectedEqui = model;
+    const equipmentId = model.id
     this._diva.client.request('Focus', {
       id: equipmentId,
       distance: 1000.0,
@@ -90,16 +89,14 @@ export class StateComponent implements OnInit, OnDestroy {
     if(!model) return
     const id = model.id
     const type = $event.value;
-    console.log(id, type);
     // 此处设置渲染状态
     this._diva.client.request('SetRenderStatus', {
-      id,
+      id: this.selectedEqui.id,
       type,
     });
   }
 
   ngOnInit(): void {
-    // console.log(this.equipments);
     this._diva.client?.applyScene('状态演示');
   }
 
