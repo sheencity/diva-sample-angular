@@ -38,13 +38,6 @@ export class FloorComponent implements OnInit, OnDestroy {
   private _gradation = false;
   public set gradation(v: boolean) {
     console.log('gradation', v);
-    let pathArray = [0,1,2]
-    pathArray.forEach( i => {
-      this._diva.client.request('SetPathVisibility',{
-          index: i,
-          isVisible: !v
-      })
-    })
     this._gradation = v;
   }
   public get gradation() {
@@ -78,15 +71,15 @@ export class FloorComponent implements OnInit, OnDestroy {
     );
 
     const pipelineToHide = pipeline.filter(
-      (f) => f.name !== this.options.find((o) => +o.placeholder === floor).pipeLineName
+      (f) =>
+        f.name !==
+        this.options.find((o) => +o.placeholder === floor).pipeLineName
     );
     const pipelineToFoucs = pipeline.filter(
-      (f) => f.name === this.options.find((o) => +o.placeholder === floor).pipeLineName
+      (f) =>
+        f.name ===
+        this.options.find((o) => +o.placeholder === floor).pipeLineName
     );
-
-    console.log('-----------------------------')
-    console.log({pipelineToFoucs})
-    console.log('-----------------------------')
 
     const modelToHide = models.filter(
       (f) => f.name !== this.options.find((o) => +o.placeholder === floor).value
@@ -180,9 +173,28 @@ export class FloorComponent implements OnInit, OnDestroy {
 
   constructor(private _diva: DivaService) {}
 
+  private SetPathVisibility(v: boolean) {
+    const pathIndexArray = [0, 1, 2, 3, 4];
+
+    const requestBatch = pathIndexArray.map((i) => {
+      return {
+        methor: 'SetPathVisibility',
+        params: {
+          index: i,
+          visible: v,
+        },
+      };
+    });
+
+    this._diva.client.batchRequest(requestBatch);
+  }
+
   ngOnInit(): void {
     this._diva.client?.applyScene('楼层展示');
+    this.SetPathVisibility(false)
   }
-   // 销毁钩子
-   ngOnDestroy(): void {}
+  // 销毁钩子
+  ngOnDestroy(): void {
+    this.SetPathVisibility(true)
+  }
 }
