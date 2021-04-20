@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { plainToClass } from 'class-transformer';
 import { NoonConfigDto, SeasonConfigDto } from 'src/app/common/dtos/data.dto';
+import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
 
 const seasons = plainToClass(SeasonConfigDto, [
@@ -60,6 +61,7 @@ export class DateComponent implements OnInit, OnDestroy {
     console.log('date is', v);
     const date = new Date(v);
     this._diva.client.setDate(date);
+    this._data.changeCode(`client.setDate(new Date(${date.toISOString()}))`);
     this._date = date;
   }
   get date() {
@@ -83,29 +85,34 @@ export class DateComponent implements OnInit, OnDestroy {
     );
     date.setSeconds(0, 0);
     this._diva.client.setTime(date);
-
+    this._data.changeCode(`client.setTime(new Date(${date.toISOString()}))`);
     this._time = date;
   }
   get time(): string {
     return `${this._time.getHours()}:${this._time.getMinutes()}`;
   }
 
-  constructor(private _diva: DivaService) {}
+  constructor(private _diva: DivaService, private _data: DataService) {}
 
   switchSeason(season: SeasonConfigDto) {
     console.log({ season });
     this._diva.client.setDate(new Date(season.value));
+    this._data.changeCode(`client.setDate(new Date(${season.value}))`);
   }
 
   switchNoon(noon: SeasonConfigDto) {
     console.log({ noon });
     this._diva.client.setTime(new Date(noon.value));
-  }
-  iconBind(name: string) {
-    return `assets/icon/date/${name}.png`;
+    this._data.changeCode(`client.setTime(new Date(${noon.value}))`);
   }
   ngOnInit(): void {
     this._diva.client?.applyScene('日期时间');
+    if (this._diva.client?.applyScene) {
+      this._data.changeCode(`client.applyScene('日期时间')`);
+    }
+  }
+  iconBind(name: string) {
+    return `assets/icon/date/${name}.png`;
   }
   // 销毁钩子
   ngOnDestroy(): void {}

@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { VideoConfigDto } from 'src/app/common/dtos/video.dto';
+import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
 
 const videos = [
@@ -47,7 +48,7 @@ export class VideoComponent implements OnInit, OnDestroy {
 
   public isPlaying = false;
 
-  constructor(private _diva: DivaService) {}
+  constructor(private _diva: DivaService, public _data: DataService) {}
 
   toggleVideo(video: VideoConfigDto) {
     if (!this.isPlaying && this.selectedVideo !== video.title) {
@@ -56,16 +57,19 @@ export class VideoComponent implements OnInit, OnDestroy {
       this._diva.client.request('PlayCameraTrack', {
         name: video.title,
       })
+      this._data.changeCode(`client.PlayCameraTrack({name: '${video.title}'})`);
       return;
     } 
     if (!this.isPlaying && this.selectedVideo === video.title) {
       this.isPlaying = true;
       this._diva.client.request('PlayCameraTrack', undefined);
+      this._data.changeCode(`client.PlayCameraTrack(undefined)`);
       return;
     }
     if (this.isPlaying && this.selectedVideo === video.title) {
       this.isPlaying = false;
       this._diva.client.request('PauseCameraTrack', undefined);
+      this._data.changeCode(`client.PauseCameraTrack(undefined)`);
       return;
     }
     if (this.isPlaying && this.selectedVideo !== video.title) {
@@ -73,6 +77,7 @@ export class VideoComponent implements OnInit, OnDestroy {
       this._diva.client.request('PlayCameraTrack', {
         name: video.title,
       })
+      this._data.changeCode(`client.PlayCameraTrack({name: '${video.title}'})`);
       return;
     }
   }
@@ -91,6 +96,7 @@ export class VideoComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.isPlaying) {
       this._diva.client.request('StopCameraTrack', undefined);
+      this._data.changeCode(`client.StopCameraTrack(undefined)`);
     }
   }
 }

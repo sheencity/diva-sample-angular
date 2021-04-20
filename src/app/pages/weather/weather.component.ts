@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { WeatherName } from '@sheencity/diva-sdk';
 import { plainToClass } from 'class-transformer';
 import { WeatherConfigDto } from 'src/app/common/dtos/weather.dto';
+import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
 
 const weathers = plainToClass(WeatherConfigDto, [
@@ -55,12 +56,15 @@ const weathers = plainToClass(WeatherConfigDto, [
 export class WeatherComponent implements OnInit, OnDestroy {
   public weathers = weathers;
 
-  constructor(private _diva: DivaService) {}
+  constructor(private _diva: DivaService, private _data: DataService) {}
 
   switchWeather(weather: WeatherConfigDto) {
     console.log({ weather });
     if (!weather.typeName) return;
     this._diva.client?.setWether(weather.typeName);
+    if (this._diva.client?.setWether) {
+      this._data.changeCode(`client.setWether('${weather.typeName}')`);
+    }
   }
 
   iconBind(weatherName: string) {
@@ -68,7 +72,8 @@ export class WeatherComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this._diva.client.applyScene('四季演示')
+    this._diva.client.applyScene('四季演示');
+    this._data.changeCode(`client.applyScene('四季演示')`);
   }
 
   // 销毁钩子

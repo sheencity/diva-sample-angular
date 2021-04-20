@@ -4,6 +4,7 @@ import { DivaService } from 'src/app/common/services/diva.service';
 import { DropdownData } from 'src/app/common/dtos/dropdown-data.interface';
 import { Model } from '@sheencity/diva-sdk';
 import { element } from 'protractor';
+import { DataService } from 'src/app/common/services/data.service';
 
 @Component({
   selector: 'app-floor',
@@ -23,10 +24,12 @@ export class FloorComponent implements OnInit, OnDestroy {
         floorHeight: 290,
         duration: 5,
       });
+      this._data.changeCode(`client.ExplodeByGroup({groupName: '场景模型/主楼拆分', spacing: 300, floorHeight: 290, duration: 5})`);
     } else {
       this._diva.client.request('AggregateByGroup', {
         groupName: '场景模型/主楼拆分',
       });
+      this._data.changeCode(`client.AggregateByGroup({groupName: '场景模型/主楼拆分'})`);
     }
     this._explode = v;
   }
@@ -52,6 +55,7 @@ export class FloorComponent implements OnInit, OnDestroy {
 
   private async getModel(name: string) {
     const [model] = await this._diva.client.getEntitiesByName<Model>(name);
+    this._data.changeCode(`client.getEntitiesByName<Model>('${name}')`);
     return model;
   }
 
@@ -87,19 +91,22 @@ export class FloorComponent implements OnInit, OnDestroy {
     const modelToFoucs = models.filter(
       (f) => f.name === this.options.find((o) => +o.placeholder === floor).value
     );
-    const focus = async (model: Model) =>
+    const focus = async (model: Model) => {
       this._diva.client.request('Focus', {
         id: model.id,
         distance: 5000.0,
         pitch: 30.0,
       });
+      this._data.changeCode(`client.Focus({ids: ${model.id}, distance: 5000.0, pitch: 30.0})`);
+    }
     // cosnt show = async (models: Model[]) =>{}
-    const setVisibility = async (models: Model[], visible: boolean) =>
+    const setVisibility = async (models: Model[], visible: boolean) => {
       this._diva.client.request('SetVisibility', {
         ids: models.map((m) => m.id),
         visible,
       });
-
+      this._data.changeCode(`client.SetVisibility({ids: ${models.map((m) => m.id)}, visible: ${visible}})`);
+    }
     return Promise.all([
       focus(modelToFoucs[0]),
       setVisibility(modelToHide, false),
@@ -177,7 +184,7 @@ export class FloorComponent implements OnInit, OnDestroy {
     { placeholder: '13', value: '顶楼_12', pipeLineName: '顶层管线' },
   ];
 
-  constructor(private _diva: DivaService) {}
+  constructor(private _diva: DivaService, private _data: DataService) {}
 
   private SetPathVisibility(v: boolean) {
     const pathIndexArray = [0, 1, 2, 3, 4];
@@ -193,10 +200,15 @@ export class FloorComponent implements OnInit, OnDestroy {
     });
 
     this._diva.client.batchRequest(requestBatch);
+    const code = requestBatch.map(c => `\t{method: '${c.method}', params: {index: ${c.params.index}, visible: ${c.params.visible}}}`)
+    this._data.changeCode(`client.batchRequest([\n${code.join(',\n')}\n])`);
   }
 
   ngOnInit(): void {
     this._diva.client?.applyScene('楼层展示');
+    if (this._diva.client?.applyScene) {
+      this._data.changeCode(`client.applyScene('楼层展示')`);
+    }
     this.SetPathVisibility(false)
   }
   // 销毁钩子

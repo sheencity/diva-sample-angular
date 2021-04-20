@@ -68,6 +68,7 @@ export class CustomizeComponent implements OnInit {
     console.log('diffStep', value, this.currentLift[i], diffStep, Math.abs(diffStep));
     console.log('selectLift is', lift);
     const [model] = await this._diva.client.getEntitiesByName<Model>(lift.title);
+    this._data.changeCode(`client.getEntitiesByName<Model>('${lift.title}')`)
     const controller = new ElevatorController({
       landings: {
         f1: [-9022.01171875, -39078.75390625, 987],
@@ -90,7 +91,8 @@ export class CustomizeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._diva.client.applyScene('电梯演示')
+    this._diva.client.applyScene('电梯演示');
+    this._data.changeCode(`client.applyScene('电梯演示')`);
     this.currentLift = this._data.currentLift;
     this.lifts = lifts.map((lift, index) => this._addSelected(lift, index));
   }

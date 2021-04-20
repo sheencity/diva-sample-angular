@@ -15,6 +15,7 @@ export class GlobalComponent implements OnInit, OnDestroy {
     this._compass = v;
     this._data.compass = v;
     this._diva.client.setCompass(v);
+    this._data.changeCode(`client.setCompass(${v})`);
   }
   public get compass() {
     return this._compass;
@@ -29,6 +30,10 @@ export class GlobalComponent implements OnInit, OnDestroy {
       direction: v ? 'clockwise' : 'stop',
       duration: 40,
     });
+    this._data.changeCode(`client.RotateAroundTheCenter({direction: ${v ? 'clockwise' : 'stop'}, duration: 40})`);
+    this._rotation = v;
+    this._data.rotation = v;
+    // 此处设置镜头旋转开关
   }
   public get rotation() {
     return this._rotation;
@@ -42,6 +47,8 @@ export class GlobalComponent implements OnInit, OnDestroy {
     this._diva.client.request('ActiveThirdPersonMode', {
       'active': v.value == 'true'
     })
+    this._data.changeCode(`client.ActiveThirdPersonMode({active: ${v.value == 'true'}})`);
+    this._selectedMode = v;
   }
   public get selectedMode() {
     return this._selectedMode;
