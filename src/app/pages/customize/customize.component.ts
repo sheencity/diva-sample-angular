@@ -1,24 +1,23 @@
 import { Component, OnInit } from '@angular/core';
+import { linear, Model } from '@sheencity/diva-sdk';
 import { plainToClass } from 'class-transformer';
 import { DropdownData } from 'src/app/common/dtos/dropdown-data.interface';
 import { LiftConfigDto } from 'src/app/common/dtos/lift.dto';
+import { DataService } from 'src/app/common/services/data.service';
+import { DivaService } from 'src/app/common/services/diva.service';
 
 const lifts = plainToClass(LiftConfigDto, [
   {
-    title: '1号梯',
-    floor: 2,
+    title: '一号梯',
   },
   {
-    title: '2号梯',
-    floor: 5,
+    title: '二号梯',
   },
   {
-    title: '3号梯',
-    floor: 7,
+    title: '三号梯',
   },
   {
-    title: '4号梯',
-    floor: -1,
+    title: '四号梯',
   },
 ]);
 
@@ -28,18 +27,16 @@ const lifts = plainToClass(LiftConfigDto, [
   styleUrls: ['./customize.component.scss'],
 })
 export class CustomizeComponent implements OnInit {
+  currentLift = [1, 1, 1, 1];
+  step = 330;
   active = 0;
-  selected: number = null;
-  selectedLift = 0;
-  lifts = lifts.map((lift) => this._addSelected(lift));
+  lifts: any;
 
   options = [
-    [
-      { value: '-2', placeholder: '-2' },
-      { value: '-1', placeholder: '-1' },
       { value: '1', placeholder: '1' },
       { value: '2', placeholder: '2' },
       { value: '3', placeholder: '3' },
+      { value: '4', placeholder: '4' },
       { value: '5', placeholder: '5' },
       { value: '6', placeholder: '6' },
       { value: '7', placeholder: '7' },
@@ -48,118 +45,48 @@ export class CustomizeComponent implements OnInit {
       { value: '10', placeholder: '10' },
       { value: '11', placeholder: '11' },
       { value: '12', placeholder: '12' },
-      { value: '15', placeholder: '15' },
-      { value: '16', placeholder: '16' },
-      { value: '17', placeholder: '17' },
-      { value: '19', placeholder: '19' },
-      { value: '20', placeholder: '20' },
-      { value: '21', placeholder: '21' },
-      { value: '22', placeholder: '22' },
-      { value: '23', placeholder: '23' },
-      { value: '25', placeholder: '25' },
-      { value: '26', placeholder: '26' },
-    ],
-    [
-      { value: '-3', placeholder: '-3' },
-      { value: '-2', placeholder: '-2' },
-      { value: '-1', placeholder: '-1' },
-      { value: '1', placeholder: '1' },
-      { value: '2', placeholder: '2' },
-      { value: '3', placeholder: '3' },
-      { value: '5', placeholder: '5' },
-      { value: '6', placeholder: '6' },
-      { value: '7', placeholder: '7' },
-      { value: '8', placeholder: '8' },
-      { value: '9', placeholder: '9' },
-      { value: '10', placeholder: '10' },
-      { value: '11', placeholder: '11' },
-      { value: '12', placeholder: '12' },
-      { value: '15', placeholder: '15' },
-      { value: '16', placeholder: '16' },
-      { value: '17', placeholder: '17' },
-      { value: '19', placeholder: '19' },
-      { value: '20', placeholder: '20' },
-      { value: '21', placeholder: '21' },
-      { value: '22', placeholder: '22' },
-      { value: '23', placeholder: '23' },
-      { value: '25', placeholder: '25' },
-      { value: '26', placeholder: '26' },
-    ],
-    [
-      { value: '-2', placeholder: '-2' },
-      { value: '-1', placeholder: '-1' },
-      { value: '1', placeholder: '1' },
-      { value: '2', placeholder: '2' },
-      { value: '3', placeholder: '3' },
-      { value: '5', placeholder: '5' },
-      { value: '6', placeholder: '6' },
-      { value: '7', placeholder: '7' },
-      { value: '8', placeholder: '8' },
-      { value: '9', placeholder: '9' },
-      { value: '10', placeholder: '10' },
-      { value: '11', placeholder: '11' },
-      { value: '12', placeholder: '12' },
-      { value: '15', placeholder: '15' },
-      { value: '16', placeholder: '16' },
-      { value: '17', placeholder: '17' },
-      { value: '19', placeholder: '19' },
-      { value: '20', placeholder: '20' },
-      { value: '21', placeholder: '21' },
-      { value: '22', placeholder: '22' },
-      { value: '23', placeholder: '23' },
-      { value: '25', placeholder: '25' },
-      { value: '26', placeholder: '26' },
-      { value: '27', placeholder: '27' },
-      { value: '28', placeholder: '28' },
-      { value: '29', placeholder: '29' },
-      { value: '30', placeholder: '30' },
-    ],
-    [
-      { value: '-1', placeholder: '-1' },
-      { value: '1', placeholder: '1' },
-      { value: '2', placeholder: '2' },
-      { value: '3', placeholder: '3' },
-      { value: '5', placeholder: '5' },
-      { value: '6', placeholder: '6' },
-      { value: '7', placeholder: '7' },
-      { value: '8', placeholder: '8' },
-      { value: '9', placeholder: '9' },
-      { value: '10', placeholder: '10' },
-      { value: '11', placeholder: '11' },
-      { value: '12', placeholder: '12' },
-      { value: '15', placeholder: '15' },
-      { value: '16', placeholder: '16' },
-      { value: '17', placeholder: '17' },
-      { value: '19', placeholder: '19' },
-      { value: '20', placeholder: '20' },
-      { value: '21', placeholder: '21' },
-    ],
+      { value: '13', placeholder: '13' },
   ];
-  constructor() {}
+  constructor(private _diva: DivaService, private _data: DataService) {}
 
-  private _addSelected(lift: LiftConfigDto) {
+  private _addSelected(lift: LiftConfigDto, i: number) {
     let selected = {
-      value: lift.floor.toString(),
-      placeholder: lift.floor.toString(),
+      value: this.currentLift[i].toString(),
+      placeholder: this.currentLift[i].toString(),
     } as DropdownData;
     return { ...lift, selected };
   }
 
-  activeLift(lift: LiftConfigDto, index: number) {
+  activeLift(index: number) {
     this.active = index;
-    this.selected = index;
-    console.log('lift is', lift);
-    // 此处设置电梯聚焦
   }
 
-  selectLift($event, i) {
+  async selectLift($event, i) {
     const lift = this.lifts[i];
     const value = Number($event.value);
-    console.log('selectLift is', lift, value);
-    // 此处设置电梯层数
+    const diffStep = value - this.currentLift[i];
+    console.log('diffStep', value, this.currentLift[i], diffStep, Math.abs(diffStep));
+    console.log('selectLift is', lift);
+    const [model] = await this._diva.client.getEntitiesByName<Model>(lift.title);
+    if(!model) return;
+    const coord = await model.getCoordinate()
+    console.log('coord is', coord, );
+    const duration = `${500 * Math.abs(diffStep)}ms` as `${number}ms`;
+    console.log('duration', duration);
+    await model.setCoordinate([coord.x, coord.y, 987 + this.step * (value -1)], {
+      duration,
+      timingFunction: linear,
+    })
+    this.currentLift[i] = value;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this._diva.client.applyScene('电梯演示')
+    this.currentLift = this._data.currentLift;
+    this.lifts = lifts.map((lift, index) => this._addSelected(lift, index));
+  }
   // 销毁钩子
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this._data.currentLift = this.currentLift;
+  }
 }
