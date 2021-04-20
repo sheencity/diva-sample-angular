@@ -6,7 +6,7 @@ export enum Overlay {
 }
 
 export enum POIIcon {
-  Camera = 'canmera',
+  Camera = 'camera',
 }
 export class OverlayDto {
   @Expose() public readonly id: string;

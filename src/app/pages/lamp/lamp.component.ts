@@ -86,10 +86,9 @@ export class LampComponent implements OnInit, OnDestroy {
     this.road02.bind(this.roadController2.signal);
     this.road03.bind(this.roadController3.signal);
     this.road04.bind(this.roadController4.signal);
-    // this.road01.signal = this.roadController1.signal;
-    // this.road02.signal = this.roadController2.signal;
-    // this.road03.signal = this.roadController3.signal;
-    // this.road04.signal = this.roadController4.signal;
+    // this.road01.addEventListener('click', (event) => {
+    //   console.log('event is', event)
+    // })
   }
 
   ngOnDestroy() {

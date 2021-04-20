@@ -3,7 +3,7 @@ import { Expose } from 'class-transformer';
 export enum EquipmentState {
     Default = 'default',
     Alarm = 'alarm',
-    Translucent = 'translucent',
+    Translucent = 'translucence',
     Hidden = 'hidden',
 }
 export class  EquipmentConfigDto {

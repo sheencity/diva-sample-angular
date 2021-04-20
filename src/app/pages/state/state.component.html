@@ -4,7 +4,7 @@
             <div class="drop-block" [style.z-index]="active === i ? 104 : unset" (click)="onClick(equipment, i)">
                 <div class="drop-item" [class.selected]="selected === i">
                     <span>{{equipment.title}}</span>
-                    <app-dropdown (select)="onChange($event)" [options]="options" [(ngModel)]="equipment.selected"></app-dropdown>
+                    <app-dropdown (select)="onChange(i, $event)" [options]="options" [(ngModel)]="equipment.selected"></app-dropdown>
                 </div>
             </div>
         </ng-container>

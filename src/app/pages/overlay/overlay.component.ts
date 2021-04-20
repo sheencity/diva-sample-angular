@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 import { DropdownData } from 'src/app/common/dtos/dropdown-data.interface';
 import { LabelDto, Overlay, POIDto, POIIcon } from 'src/app/common/dtos/overlay.dto';
+import { DivaService } from 'src/app/common/services/diva.service';
 import { LocalStorageService } from 'src/app/common/services/localStorage.service';
 
 @Component({
@@ -78,9 +79,10 @@ export class OverlayComponent implements OnInit {
     private _cdr: ChangeDetectorRef,
     private _elementRef: ElementRef<any>,
     private _store: LocalStorageService,
+    private _diva: DivaService,
   ) {}
 
-  create() {
+  async create() {
     if (this.selectedType.value === Overlay.POI) {
       const POI = new POIDto()
       POI.icon = this.selectedIcon.value as POIIcon;
@@ -92,6 +94,24 @@ export class OverlayComponent implements OnInit {
       POI.scale = this.scale,
       POI.opacity = this.opacity,
       console.log('poiConfig', POI);
+      const color = this.getRGB(POI.color);
+      await this._diva.client.request('CreateOverlay', {
+        id: POI.id,
+        type: POI.type,
+        coord: [POI.corrdinateX, POI.corrdinateY, POI.corrdinateZ],
+        property: {
+          label: POI.content,
+          icon: POI.icon,
+          color: {
+            r: color[0],
+            g: color[1],
+            b: color[2],
+          },
+          opacity: POI.opacity,
+          scale: POI.scale,
+        },
+        clusterEnable: true,
+      });
       this._store.storeOverlay(POI);
     } else {
       const Label = new LabelDto();
@@ -106,6 +126,32 @@ export class OverlayComponent implements OnInit {
       Label.border = this.border,
       Label.borderColor = this.borderColor,
       console.log('labelConfig', Label);
+      const color = this.getRGB(Label.color);
+      const borderColor = this.getRGB(Label.borderColor);
+      await this._diva.client.request('CreateOverlay', {
+        id: Label.id,
+        type: Label.type,
+        coord: [Label.corrdinateX, Label.corrdinateY, Label.corrdinateZ],
+        property: {
+          title: Label.title,
+          content: Label.content,
+          textAlign: 'left',
+          color: {
+            r: color[0],
+            g: color[1],
+            b: color[2],
+          },
+          opacity: Label.opacity,
+          borderColor: {
+            r: borderColor[0],
+            g: borderColor[1],
+            b: borderColor[2],
+          },
+          borderSize: Label.border,
+          scale: Label.scale,
+        },
+        clusterEnable: true,
+      })
       this._store.storeOverlay(Label);
     }
     this.overlays = this._store.getAllOverlays();
@@ -113,7 +159,8 @@ export class OverlayComponent implements OnInit {
     // 此处设置创建 overlay 的参数
   }
 
-  delete(overlay: POIDto | LabelDto) {
+  async delete(overlay: POIDto | LabelDto) {
+    await this._diva.client.request('DestroyOverlay', {id: overlay.id});
     this._store.deleteOverlay(overlay);
     this.overlays = this._store.getAllOverlays();
   }
@@ -135,8 +182,13 @@ export class OverlayComponent implements OnInit {
     this.borderColor = '#ffffff';
   }
 
-  selectOverlay(overlay: POIDto | LabelDto) {
+  async selectOverlay(overlay: POIDto | LabelDto) {
     this.selectedId = overlay.id;
+    await this._diva.client.request('Focus', {
+      id: overlay.id,
+      distance: 1000.0,
+      pitch: 30.0,
+    })
   }
 
   onInputScale() {
@@ -180,6 +232,14 @@ export class OverlayComponent implements OnInit {
     .querySelectorAll('.adjust')
     .item(index);
     refreshInputDom.value = value + '';
+  }
+
+  getRGB(rgb: string) {
+    const r = rgb.slice(1, 3);
+    const g = rgb.slice(3, 5);
+    const b = rgb.slice(5, 7);
+    const t = (ox: string) => eval(`0x${ox}`);
+    return [t(r), t(g), t(b)];
   }
 
   ngOnInit(): void {

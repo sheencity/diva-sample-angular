@@ -10,20 +10,20 @@ import { DivaService } from 'src/app/common/services/diva.service';
 
 const equipments = plainToClass(EquipmentConfigDto, [
   {
-    title: '一层-1_1',
+    title: '1号设备',
     state: EquipmentState.Default,
   },
   {
-    title: '二层(1)-1_1',
-    state: EquipmentState.Alarm,
+    title: '2号设备',
+    state: EquipmentState.Default,
   },
   {
-    title: '1号设备',
-    state: EquipmentState.Translucent,
+    title: '3号设备',
+    state: EquipmentState.Default,
   },
   {
-    title: '1号设备',
-    state: EquipmentState.Hidden,
+    title: '4号设备',
+    state: EquipmentState.Default,
   },
 ]);
 
@@ -109,5 +109,13 @@ export class StateComponent implements OnInit, OnDestroy {
   }
 
   // 销毁钩子
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this.equipments.forEach(async (equi) => {
+      const [model] = await this._diva.client.getEntitiesByName(equi.title)
+      this._diva.client.request('SetRenderStatus', {
+        id: model.id,
+        type: EquipmentState.Default,
+      });
+    })
+  }
 }
