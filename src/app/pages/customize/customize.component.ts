@@ -65,6 +65,7 @@ export class CustomizeComponent implements OnInit {
 
   async selectLift($event, i) {
     const value = Number($event.value);
+    console.log('controllers', this.controllers);
     this.controllers[i].land(`f${value}`);
     // this._data.changeCode(`client.getEntitiesByName<Model>('${lift.title}')`);
   }
@@ -99,7 +100,6 @@ export class CustomizeComponent implements OnInit {
       this.liftModels.push(lift);
       this.controllers.push(controller);
     }
-
   }
   // 销毁钩子
   ngOnDestroy(): void {
