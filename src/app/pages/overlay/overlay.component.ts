@@ -242,6 +242,10 @@ export class OverlayComponent implements OnInit {
     return [t(r), t(g), t(b)];
   }
 
+  onKeyDown($event) {
+    $event.stopPropagation();
+  }
+
   ngOnInit(): void {
     this.overlays = this._store.getAllOverlays();
   }

@@ -14,23 +14,23 @@
         <span>坐标</span>
         <div class="coordinate-items">
           <div class="coordinate-item">
-            <span>X</span><input [(ngModel)]="corrdinateX" type="number"/>
+            <span>X</span><input (keydown)="onKeyDown($event)" [(ngModel)]="corrdinateX" type="number"/>
           </div>
           <div class="coordinate-item">
-            <span>Y</span><input [(ngModel)]="corrdinateY" type="number" />
+            <span>Y</span><input (keydown)="onKeyDown($event)" [(ngModel)]="corrdinateY" type="number" />
           </div>
           <div class="coordinate-item">
-            <span>Z</span><input [(ngModel)]="corrdinateZ" type="number" />
+            <span>Z</span><input (keydown)="onKeyDown($event)" [(ngModel)]="corrdinateZ" type="number" />
           </div>
         </div>
       </div>
       <div class="input-item" *ngIf="selectedType.value === 'label'">
         <span>标题</span>
-        <input type="text" [(ngModel)]="title" placeholder="请输入文字" />
+        <input (keydown)="onKeyDown($event)" type="text" [(ngModel)]="title" placeholder="请输入文字" />
       </div>
       <div class="input-item" [style.height]="selectedType.value === 'poi' ? '24px' : '48px'">
         <span>内容</span>
-        <textarea cols="4" [(ngModel)]="content" placeholder="请输入文字"></textarea>
+        <textarea cols="4" (keydown)="onKeyDown($event)" [(ngModel)]="content" placeholder="请输入文字"></textarea>
       </div>
       <div class="drop-item" style="margin-top: 12px;" *ngIf="selectedType.value === 'poi'">
         <span>类型</span>
@@ -47,15 +47,15 @@
       </div>
       <div class="input-item">
         <span>缩放</span>
-        <input class="adjust" [(ngModel)]="scale" type="number" (input)="onInputScale()" />
+        <input class="adjust" (keydown)="onKeyDown($event)" [(ngModel)]="scale" type="number" (input)="onInputScale()" />
       </div>
       <div class="input-item">
         <span>不透明度</span>
-        <input class="adjust" [(ngModel)]="opacity" type="number" step="0.01" (input)="onInputOpacity()" />
+        <input class="adjust" (keydown)="onKeyDown($event)" [(ngModel)]="opacity" type="number" step="0.01" (input)="onInputOpacity()" />
       </div>
       <div class="input-item" *ngIf="selectedType.value === 'label'">
         <span>边框大小</span>
-        <input class="adjust" [(ngModel)]="border" type="number" step="0.01" (input)="onInputBorder()" />
+        <input class="adjust" (keydown)="onKeyDown($event)" [(ngModel)]="border" type="number" step="0.01" (input)="onInputBorder()" />
       </div>
       <div class="input-item" *ngIf="selectedType.value === 'label'">
         <span>边框颜色</span>
