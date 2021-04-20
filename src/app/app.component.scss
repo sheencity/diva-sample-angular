@@ -37,6 +37,18 @@
         .content {
             margin-right: 60px;
         }
+        .codeView {
+          position: absolute;
+          left: 60px;
+          bottom: 60px;
+          width: 1087px;
+          height: 92px;
+          box-sizing: border-box;
+          padding: 20px;
+          padding-right: 0;
+          background: rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(8px);
+        }
     }
   }
 }

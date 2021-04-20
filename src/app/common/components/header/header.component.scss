@@ -1,12 +1,13 @@
 .header {
-    width: 100%;
-    height: 170px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    height: 94px;
+    box-sizing: border-box;
+    margin: 54px 60px 0;
     .title {
       position: relative;
       z-index: 99;
-      margin: 54px 0 0 60px;
       span {
         color: #ffffff;
         font-weight: bold;
@@ -27,10 +28,17 @@
         line-height: 34px;
       }
     }
+    .exampleCode {
+      height: 20px;
+      margin-right: 24px;
+      app-switcher {
+        width: 117px;
+        pointer-events: all;
+      }
+    }
       .weather {
         position: relative;
         z-index: 99;
-        margin: 66px 60px 0 0;
         color: #ffffff;
         font-size: 16px;
         line-height: 19px;

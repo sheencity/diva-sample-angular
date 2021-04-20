@@ -23,11 +23,13 @@ import { OverlayComponent } from './pages/overlay/overlay.component';
 import { MonitorComponent } from './pages/monitor/monitor.component';
 import { LampComponent } from './pages/lamp/lamp.component';
 import { CustomizeComponent } from './pages/customize/customize.component';
+import { CodeViewComponent } from './common/components/code-view/code-view.component';
 
 const COMPONENTS = [
   AppComponent,
   HeaderComponent,
   NavComponent,
+  CodeViewComponent,
   ContentBlockComponent,
   EventBlockComponent,
   DropDownComponent,
