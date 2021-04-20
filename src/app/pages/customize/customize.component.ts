@@ -27,6 +27,8 @@ const lifts = plainToClass(LiftConfigDto, [
   styleUrls: ['./customize.component.scss'],
 })
 export class CustomizeComponent implements OnInit {
+  liftModels: Elevator[] = []
+  controllers:ElevatorController[] = [];
   currentLift = [1, 1, 1, 1];
   step = 299.7;
   active = 0;
@@ -62,32 +64,9 @@ export class CustomizeComponent implements OnInit {
   }
 
   async selectLift($event, i) {
-    const lift = this.lifts[i];
     const value = Number($event.value);
-    const diffStep = value - this.currentLift[i];
-    console.log('diffStep', value, this.currentLift[i], diffStep, Math.abs(diffStep));
-    console.log('selectLift is', lift);
-    const [model] = await this._diva.client.getEntitiesByName<Model>(lift.title);
-    this._data.changeCode(`client.getEntitiesByName<Model>('${lift.title}')`)
-    const controller = new ElevatorController({
-      landings: {
-        f1: [-9022.01171875, -39078.75390625, 987],
-        f2: [-9022.01171875, -39078.75390625, 987 + 300],
-      },
-      speed: 500,
-    });
-    const liftt = new Elevator({model, signal: controller.signal});
-    controller.land('f2');
-    // if(!model) return;
-    // const coord = await model.getCoordinate()
-    // console.log('coord is', coord, );
-    // // const duration = `${500 * Math.abs(diffStep)}ms` as `${number}ms`;
-    // console.log('duration', 500 * Math.abs(diffStep));
-    // await model.setCoordinate([coord.x, coord.y, 987 + this.step * (value -1)], {
-    //   duration: 500 * Math.abs(diffStep),
-    //   timingFunction: linear,
-    // })
-    // this.currentLift[i] = value;
+    this.controllers[i].land(`f${value}`);
+    this._data.changeCode(`client.getEntitiesByName<Model>('${lift.title}')`);
   }
 
   ngOnInit(): void {
@@ -95,6 +74,32 @@ export class CustomizeComponent implements OnInit {
     this._data.changeCode(`client.applyScene('电梯演示')`);
     this.currentLift = this._data.currentLift;
     this.lifts = lifts.map((lift, index) => this._addSelected(lift, index));
+    for (let i = 0; i < 4; i++) {
+      const [model] = await this._diva.client.getEntitiesByName<Model>(this.lifts[i].title);
+      const coord = await model.getCoordinate()
+      const controller = new ElevatorController({
+        landings: {
+          f1: [coord.x, coord.y, 987],
+          f2: [coord.x, coord.y, 987 + this.step],
+          f3: [coord.x, coord.y, 987 + this.step * 2],
+          f4: [coord.x, coord.y, 987 + this.step * 3],
+          f5: [coord.x, coord.y, 987 + this.step * 4],
+          f6: [coord.x, coord.y, 987 + this.step * 5],
+          f7: [coord.x, coord.y, 987 + this.step * 6],
+          f8: [coord.x, coord.y, 987 + this.step * 7],
+          f9: [coord.x, coord.y, 987 + this.step * 8],
+          f10: [coord.x, coord.y, 987 + this.step * 9],
+          f11: [coord.x, coord.y, 987 + this.step * 10],
+          f12: [coord.x, coord.y, 987 + this.step * 11],
+          f13: [coord.x, coord.y, 987 + this.step * 12],
+        },
+        speed: 500,
+      })
+      const lift = new Elevator({model, signal: controller.signal});
+      this.liftModels.push(lift);
+      this.controllers.push(controller);
+    }
+
   }
   // 销毁钩子
   ngOnDestroy(): void {
