@@ -27,7 +27,7 @@ export class GlobalComponent implements OnInit, OnDestroy {
     this._rotation = v;
     this._data.rotation = v;
     this._diva.client.request('RotateAroundTheCenter',{
-      direction: v ? 'clockwise' : 'stop',
+      direction: v ? 'anticlockwise' : 'stop',
       duration: 40,
     });
     this._data.changeCode(`client.RotateAroundTheCenter({direction: ${v ? 'clockwise' : 'stop'}, duration: 40})`);
@@ -65,6 +65,7 @@ export class GlobalComponent implements OnInit, OnDestroy {
     this._selectedMode = this._data.selectedMode;
     this._compass = this._data.compass;
     this._rotation = this._data.rotation;
+    this._diva.client.applyScene('全局配置');
   }
 
   // 销毁钩子
