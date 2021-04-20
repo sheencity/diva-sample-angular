@@ -28,7 +28,7 @@ const lifts = plainToClass(LiftConfigDto, [
 })
 export class CustomizeComponent implements OnInit {
   currentLift = [1, 1, 1, 1];
-  step = 330;
+  step = 299.7;
   active = 0;
   lifts: any;
 
@@ -71,10 +71,10 @@ export class CustomizeComponent implements OnInit {
     if(!model) return;
     const coord = await model.getCoordinate()
     console.log('coord is', coord, );
-    const duration = `${500 * Math.abs(diffStep)}ms` as `${number}ms`;
-    console.log('duration', duration);
+    // const duration = `${500 * Math.abs(diffStep)}ms` as `${number}ms`;
+    console.log('duration', 500 * Math.abs(diffStep));
     await model.setCoordinate([coord.x, coord.y, 987 + this.step * (value -1)], {
-      duration,
+      duration: 500 * Math.abs(diffStep),
       timingFunction: linear,
     })
     this.currentLift[i] = value;
