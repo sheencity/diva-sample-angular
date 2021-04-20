@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { linear, Model } from '@sheencity/diva-sdk';
+import { Elevator, ElevatorController, linear, Model } from '@sheencity/diva-sdk';
 import { plainToClass } from 'class-transformer';
 import { DropdownData } from 'src/app/common/dtos/dropdown-data.interface';
 import { LiftConfigDto } from 'src/app/common/dtos/lift.dto';
@@ -68,16 +68,25 @@ export class CustomizeComponent implements OnInit {
     console.log('diffStep', value, this.currentLift[i], diffStep, Math.abs(diffStep));
     console.log('selectLift is', lift);
     const [model] = await this._diva.client.getEntitiesByName<Model>(lift.title);
-    if(!model) return;
-    const coord = await model.getCoordinate()
-    console.log('coord is', coord, );
-    // const duration = `${500 * Math.abs(diffStep)}ms` as `${number}ms`;
-    console.log('duration', 500 * Math.abs(diffStep));
-    await model.setCoordinate([coord.x, coord.y, 987 + this.step * (value -1)], {
-      duration: 500 * Math.abs(diffStep),
-      timingFunction: linear,
-    })
-    this.currentLift[i] = value;
+    const controller = new ElevatorController({
+      landings: {
+        f1: [-9022.01171875, -39078.75390625, 987],
+        f2: [-9022.01171875, -39078.75390625, 987 + 300],
+      },
+      speed: 500,
+    });
+    const liftt = new Elevator({model, signal: controller.signal});
+    controller.land('f2');
+    // if(!model) return;
+    // const coord = await model.getCoordinate()
+    // console.log('coord is', coord, );
+    // // const duration = `${500 * Math.abs(diffStep)}ms` as `${number}ms`;
+    // console.log('duration', 500 * Math.abs(diffStep));
+    // await model.setCoordinate([coord.x, coord.y, 987 + this.step * (value -1)], {
+    //   duration: 500 * Math.abs(diffStep),
+    //   timingFunction: linear,
+    // })
+    // this.currentLift[i] = value;
   }
 
   ngOnInit(): void {

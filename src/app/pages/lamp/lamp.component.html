@@ -2,17 +2,22 @@
   <app-content-block caption="灯光控制">
     <div class="switch-block">
       <div class="switch-item">
-        <app-switcher [(ngModel)]="corridor" [label]="'楼道灯'"></app-switcher>
+        <app-switcher [(ngModel)]="road1" [label]="'路灯01'"></app-switcher>
       </div>
     </div>
     <div class="switch-block">
       <div class="switch-item">
-        <app-switcher [(ngModel)]="emergency" [label]="'应急灯'"></app-switcher>
+        <app-switcher [(ngModel)]="road2" [label]="'路灯02'"></app-switcher>
       </div>
     </div>
     <div class="switch-block">
       <div class="switch-item">
-        <app-switcher [(ngModel)]="road" [label]="'路灯'"></app-switcher>
+        <app-switcher [(ngModel)]="road3" [label]="'路灯03'"></app-switcher>
+      </div>
+    </div>
+    <div class="switch-block">
+      <div class="switch-item">
+        <app-switcher [(ngModel)]="road4" [label]="'路灯04'"></app-switcher>
       </div>
     </div>
   </app-content-block>

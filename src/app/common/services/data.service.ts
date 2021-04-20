@@ -9,5 +9,6 @@ export class DataService {
   public compass = false;
   public rotation = false;
   public currentLift = [1, 1, 1, 1];
+  public lampState = [false, false, false, false];
   public code = 'client.applyScene("场景切换")';
 }
