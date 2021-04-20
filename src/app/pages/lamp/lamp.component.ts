@@ -87,10 +87,10 @@ export class LampComponent implements OnInit, OnDestroy {
     this.road02 = (await this._diva.client.getEntitiesByName<Light>('路灯02'))[0];
     this.road03 = (await this._diva.client.getEntitiesByName<Light>('路灯03'))[0];
     this.road04 = (await this._diva.client.getEntitiesByName<Light>('路灯04'))[0];
-    this.road01.signal = this.roadController1.signal;
-    this.road02.signal = this.roadController2.signal;
-    this.road03.signal = this.roadController3.signal;
-    this.road04.signal = this.roadController4.signal;
+    // this.road01.signal = this.roadController1.signal;
+    // this.road02.signal = this.roadController2.signal;
+    // this.road03.signal = this.roadController3.signal;
+    // this.road04.signal = this.roadController4.signal;
   }
 
   ngOnDestroy() {
