@@ -26,6 +26,7 @@ main {
         box-sizing: border-box;
         background-color: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(8px);
+        cursor: pointer;
         .refresh-item {
             width: 100%;
             display: flex;
