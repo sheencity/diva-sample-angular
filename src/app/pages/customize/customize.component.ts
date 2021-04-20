@@ -66,10 +66,10 @@ export class CustomizeComponent implements OnInit {
   async selectLift($event, i) {
     const value = Number($event.value);
     this.controllers[i].land(`f${value}`);
-    this._data.changeCode(`client.getEntitiesByName<Model>('${lift.title}')`);
+    // this._data.changeCode(`client.getEntitiesByName<Model>('${lift.title}')`);
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this._diva.client.applyScene('电梯演示');
     this._data.changeCode(`client.applyScene('电梯演示')`);
     this.currentLift = this._data.currentLift;
