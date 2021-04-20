@@ -71,13 +71,13 @@ export class StateComponent implements OnInit, OnDestroy {
   }
 
   async onClick(equi: EquipmentConfigDto, i: number) {
-    // const [model] = await this._diva.client.getEntitiesByName(this.equipments[i].id)
-    // if(!model) return
-    // const equipmentId = model.id
+    const [model] = await this._diva.client.getEntitiesByName(this.equipments[i].title)
+    if(!model) return
+    const equipmentId = model.id
     this.active = i;
     this.selected = i;
     this._diva.client.request('Focus', {
-      id: this.equipments[i].id,
+      id: equipmentId,
       distance: 1000.0,
       pitch: 30.0,
     });
@@ -85,8 +85,10 @@ export class StateComponent implements OnInit, OnDestroy {
     // 此处设置设备的聚焦状态
   }
 
-  onChange(i: number, $event: DropdownData) {
-    const id = this.equipments[i].id;
+  async onChange(i: number, $event: DropdownData) {
+    const [model] = await this._diva.client.getEntitiesByName(this.equipments[i].title)
+    if(!model) return
+    const id = model.id
     const type = $event.value;
     console.log(id, type);
     // 此处设置渲染状态
