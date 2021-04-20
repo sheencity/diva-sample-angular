@@ -178,7 +178,7 @@ export class FloorComponent implements OnInit, OnDestroy {
 
     const requestBatch = pathIndexArray.map((i) => {
       return {
-        methor: 'SetPathVisibility',
+        method: 'SetPathVisibility',
         params: {
           index: i,
           visible: v,
