@@ -26,6 +26,11 @@ const seasons = plainToClass(SeasonConfigDto, [
     value: '2021-12-21',
     name: 'winter',
   },
+  {
+    title: '冬 (雪)',
+    value: '2021-12-21',
+    name: 'winterSnow',
+  },
 ]);
 
 const noons = plainToClass(NoonConfigDto, [
@@ -98,7 +103,7 @@ export class DateComponent implements OnInit, OnDestroy {
   async switchSeason(season: SeasonConfigDto) {
     console.log({ season });
     await this._diva.client.setDate(new Date(season.value));
-    if (season.name === 'winter') {
+    if (season.name === 'winterSnow') {
       await this._diva.client.setWether(WeatherName.Snow);
     } else {
       await this._diva.client.setWether(WeatherName.Default);
@@ -118,7 +123,7 @@ export class DateComponent implements OnInit, OnDestroy {
     }
   }
   iconBind(name: string) {
-    return `assets/icon/date/${name}.png`;
+    return name === 'winterSnow' ? 'assets/icon/date/winter.png' : `assets/icon/date/${name}.png`;
   }
   // 销毁钩子
   ngOnDestroy(): void {
