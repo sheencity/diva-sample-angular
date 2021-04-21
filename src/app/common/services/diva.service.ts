@@ -11,7 +11,7 @@ export class DivaService {
 
   async init(container: HTMLElement) {
     console.log({ container });
-    const uri = 'http://xiongan.corp.sheencity.com:8090';
+    const uri = 'http://wuhan.corp.sheencity.com:3000';
     const apiKey = 'ZWYwMTM2YmUtYzkxMi00OWQzLTlkZDEtODMxY2QzY2FkZmM4';
     console.log(uri, apiKey, container);
     const diva = new Diva({ container, apiKey, uri });
