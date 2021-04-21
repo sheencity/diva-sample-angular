@@ -33,4 +33,7 @@ export class SwitcherComponent implements ControlValueAccessor {
     this.change = fn;
   }
   public registerOnTouched(fn: any) {}
+  public onClick($event: Event) {
+    $event.stopPropagation();
+  }
 }
