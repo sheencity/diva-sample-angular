@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { WeatherName } from '@sheencity/diva-sdk';
 import { plainToClass } from 'class-transformer';
 import { NoonConfigDto, SeasonConfigDto } from 'src/app/common/dtos/data.dto';
 import { DataService } from 'src/app/common/services/data.service';
@@ -94,9 +95,14 @@ export class DateComponent implements OnInit, OnDestroy {
 
   constructor(private _diva: DivaService, private _data: DataService) {}
 
-  switchSeason(season: SeasonConfigDto) {
+  async switchSeason(season: SeasonConfigDto) {
     console.log({ season });
-    this._diva.client.setDate(new Date(season.value));
+    await this._diva.client.setDate(new Date(season.value));
+    if (season.name === 'winter') {
+      await this._diva.client.setWether(WeatherName.Snow);
+    } else {
+      await this._diva.client.setWether(WeatherName.Default);
+    }
     this._data.changeCode(`client.setDate(new Date(${season.value}))`);
   }
 
@@ -115,5 +121,7 @@ export class DateComponent implements OnInit, OnDestroy {
     return `assets/icon/date/${name}.png`;
   }
   // 销毁钩子
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this._diva.client.setWether(WeatherName.Default);
+  }
 }
