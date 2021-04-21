@@ -56,11 +56,11 @@ export class OverlayComponent implements OnInit {
   // 内容
   public content = '';
   // 颜色
-  public color = '#ffffff';
+  public color = '#000000';
   // 缩放
   public scale = 1.0;
   // 不透明度
-  public opacity = 0.0;
+  public opacity = 1.0;
   // 边框大小
   public border = 0.0;
   // 边框颜色
@@ -251,6 +251,10 @@ export class OverlayComponent implements OnInit {
       this.refreshInput(3, this.border);
       return;
     }
+  }
+
+  pickup() {
+    console.log('pickup')
   }
 
   refreshInput(index: number, value: number) {

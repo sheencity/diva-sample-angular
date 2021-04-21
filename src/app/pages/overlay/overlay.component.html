@@ -10,6 +10,10 @@
           ></app-dropdown>
         </div>
       </div>
+      <div class="btn-item">
+        <span>坐标拾取</span>
+        <button (click)="pickup()">拾取</button>
+      </div>
       <div class="input-item">
         <span>坐标</span>
         <div class="coordinate-items">
@@ -62,6 +66,7 @@
         <input [(ngModel)]="borderColor" type="color" />
       </div>
       <div class="btn-item">
+        <span></span>
         <button (click)="create()">创建</button>
       </div>
     </div>
