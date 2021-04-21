@@ -22,28 +22,28 @@ export class GlobalComponent implements OnInit, OnDestroy {
   }
 
   // 镜头旋转
-  private _rotation: boolean;
-  public set rotation(v: boolean) {
-    this._rotation = v;
-    this._data.rotation = v;
-    this._diva.client.request('RotateAroundTheCenter',{
-      direction: v ? 'anticlockwise' : 'stop',
-      duration: 40,
-    });
-    this._data.changeCode(`client.RotateAroundTheCenter({direction: ${v ? 'clockwise' : 'stop'}, duration: 40})`);
-    this._rotation = v;
-    this._data.rotation = v;
-    // 此处设置镜头旋转开关
-  }
-  public get rotation() {
-    return this._rotation;
-  }
+  // private _rotation: boolean;
+  // public set rotation(v: boolean) {
+  //   this._rotation = v;
+  //   this._data.rotation = v;
+  //   this._diva.client.request('RotateAroundTheCenter',{
+  //     direction: v ? 'anticlockwise' : 'stop',
+  //     duration: 40,
+  //   });
+  //   this._data.changeCode(`client.RotateAroundTheCenter({direction: ${v ? 'clockwise' : 'stop'}, duration: 40})`);
+  //   this._rotation = v;
+  //   this._data.rotation = v;
+  //   // 此处设置镜头旋转开关
+  // }
+  // public get rotation() {
+  //   return this._rotation;
+  // }
 
   // 模式
-  private _selectedMode: DropdownData;
+  private _selectedMode: DropdownData = { value: 'false', placeholder: '飞行' };
   public set selectedMode(v: DropdownData) {
     this._selectedMode = v;
-    this._data.selectedMode = v;
+    // this._data.selectedMode = v;
     this._diva.client.request('ActiveThirdPersonMode', {
       'active': v.value == 'true'
     })
@@ -62,15 +62,17 @@ export class GlobalComponent implements OnInit, OnDestroy {
   constructor(private _data: DataService, private _diva: DivaService) { }
 
   ngOnInit(): void {
-    this._selectedMode = this._data.selectedMode;
+    // this._selectedMode = this._data.selectedMode;
     this._compass = this._data.compass;
-    this._rotation = this._data.rotation;
+    // this._rotation = this._data.rotation;
     this._diva.client.applyScene('全局配置');
   }
 
   // 销毁钩子
   ngOnDestroy(): void {
-
+    this._diva.client.request('ActiveThirdPersonMode', {
+      active: false, 
+    })
   }
 
 }
