@@ -10,7 +10,7 @@ git clone https://sheencity-bj@dev.azure.com/sheencity-bj/psg/_git/subtree-test-
 
 ## 安装依赖
 
-安装依赖需要 `npm@v7.0.0` 以上，安装 `node` 之后，运行 `npm -v` 查看 `npm` 版本，若版本低于 `v7.0.0`, 运行 `npm install npm -g` 升级 `npm`,  `npm` 升级完之后再运行 `npm -v` 查看 `npm` 版本, `npm` 版本大于 `v7.0.0` 即可安装依赖。
+安装依赖需要 `npm@v7.0.0` 以上，安装 `node` 之后，运行 `npm -v` 查看 `npm` 版本，若 `npm` 版本大于 `v7.0.0`, 可直接安装依赖。若版本低于 `v7.0.0`, 运行 `npm install npm -g` 升级 `npm`,  `npm` 升级完之后再运行 `npm -v` 查看 `npm` 版本, `npm` 版本大于 `v7.0.0` 即可进行安装依赖操作。
 
 ```javascript
 npm install
