@@ -213,6 +213,9 @@ export class FloorComponent implements OnInit, OnDestroy {
   }
   // 销毁钩子
   ngOnDestroy(): void {
-    this.SetPathVisibility(true)
+    this._diva.client.request('AggregateByGroup', {
+      groupName: '场景模型/主楼拆分',
+    });
+    this.SetPathVisibility(true);
   }
 }
