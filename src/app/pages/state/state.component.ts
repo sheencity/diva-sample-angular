@@ -87,15 +87,15 @@ export class StateComponent implements OnInit, OnDestroy {
     // 此处设置设备的聚焦状态
   }
 
-  async onChange(i: number, $event: DropdownData) {
-    const [model] = await this._diva.client.getEntitiesByName(this.equipments[i].title)
-    this._data.changeCode(`client.getEntitiesByName('${this.equipments[i].title}')`);
+  async onChange(equi: EquipmentConfigDto, $event: DropdownData) {
+    const [model] = await this._diva.client.getEntitiesByName(equi.title)
+    this._data.changeCode(`client.getEntitiesByName('${equi.title}')`);
     if(!model) return
     const id = model.id
     const type = $event.value;
     // 此处设置渲染状态
     this._diva.client.request('SetRenderStatus', {
-      id: this.selectedEqui.id,
+      id,
       type,
     });
     this._data.changeCode(`client.SetRenderStatus({id: ${this.selectedEqui.id}, type: ${type}})`);
