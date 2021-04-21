@@ -50,44 +50,17 @@ export class VideoComponent implements OnInit, OnDestroy {
 
   constructor(private _diva: DivaService, public _data: DataService) {}
 
-  toggleVideo(video: VideoConfigDto) {
-    if (!this.isPlaying && this.selectedVideo !== video.title) {
-      this.isPlaying = true;
-      this.selectedVideo = video.title;
-      this._diva.client.request('PlayCameraTrack', {
-        name: video.title,
-      })
-      this._data.changeCode(`client.PlayCameraTrack({name: '${video.title}'})`);
-      return;
-    } 
-    if (!this.isPlaying && this.selectedVideo === video.title) {
-      this.isPlaying = true;
-      this._diva.client.request('PlayCameraTrack', undefined);
-      this._data.changeCode(`client.PlayCameraTrack(undefined)`);
-      return;
-    }
-    if (this.isPlaying && this.selectedVideo === video.title) {
-      this.isPlaying = false;
-      this._diva.client.request('PauseCameraTrack', undefined);
-      this._data.changeCode(`client.PauseCameraTrack(undefined)`);
-      return;
-    }
-    if (this.isPlaying && this.selectedVideo !== video.title) {
-      this.selectedVideo = video.title;
-      this._diva.client.request('PlayCameraTrack', {
-        name: video.title,
-      })
-      this._data.changeCode(`client.PlayCameraTrack({name: '${video.title}'})`);
-      return;
-    }
+  async toggleVideo(video: VideoConfigDto) {
+    this.selectedVideo = video.title;
+    await this._diva.client.request('StopCameraTrack');
+    await this._diva.client.request('PlayCameraTrack', {
+      name: video.title,
+    });
+    this._data.changeCode(`client.PlayCameraTrack(${video.title})`);
   }
 
   iconBind(video) {
-    if (this.isPlaying && this.selectedVideo === video.title) {
-      return 'assets/icon/video/pause.png';
-    } else {
-      return 'assets/icon/video/play.png';
-    }
+    return 'assets/icon/video/play.png';
   }
 
   ngOnInit(): void {}
@@ -95,8 +68,8 @@ export class VideoComponent implements OnInit, OnDestroy {
   // 销毁钩子
   ngOnDestroy(): void {
     if (this.isPlaying) {
-      this._diva.client.request('StopCameraTrack', undefined);
-      this._data.changeCode(`client.StopCameraTrack(undefined)`);
+      this._diva.client.request('StopCameraTrack');
+      this._data.changeCode(`client.StopCameraTrack()`);
     }
   }
 }
