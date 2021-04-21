@@ -7,6 +7,19 @@ export enum Overlay {
 
 export enum POIIcon {
   Camera = 'camera',
+  Location = 'location',
+  TrafficLight = 'trafficLight',
+  TrashCan = 'trashCan',
+  StreetLamp = 'streetLamp',
+  BusStation = 'busStation',
+  Exit = 'exit',
+  Restaurant = 'restaurant',
+  Parking = 'parking',
+  Dock = 'dock',
+  Subway = 'subway',
+  Supermarket = 'supermarket',
+  Mall = 'mall',
+  Toilet = 'toilet',
 }
 export class OverlayDto {
   @Expose() public readonly id: string;

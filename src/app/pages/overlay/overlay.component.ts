@@ -74,7 +74,22 @@ export class OverlayComponent implements OnInit {
     { value: Overlay.Label, placeholder: 'Label' },
   ];
   // 类型配置
-  iconOptions = [{ value: POIIcon.Camera, placeholder: '摄像头' }];
+  iconOptions = [
+    { value: POIIcon.Camera, placeholder: '摄像头' },
+    { value: POIIcon.Location, placeholder: '定位' },
+    { value: POIIcon.TrafficLight, placeholder: '红路灯' },
+    { value: POIIcon.TrashCan, placeholder: '垃圾桶' },
+    { value: POIIcon.StreetLamp, placeholder: '路灯' },
+    { value: POIIcon.BusStation, placeholder: '公交站' },
+    { value: POIIcon.Exit, placeholder: '出口' },
+    { value: POIIcon.Restaurant, placeholder: '餐饮' },
+    { value: POIIcon.Parking, placeholder: '停车场' },
+    { value: POIIcon.Dock, placeholder: '码头' },
+    { value: POIIcon.Subway, placeholder: '地铁' },
+    { value: POIIcon.Supermarket, placeholder: '超市' },
+    { value: POIIcon.Mall, placeholder: '商场' },
+    { value: POIIcon.Toilet, placeholder: '卫生间' },
+  ];
   constructor(
     private _cdr: ChangeDetectorRef,
     private _elementRef: ElementRef<any>,
@@ -112,6 +127,11 @@ export class OverlayComponent implements OnInit {
         },
         clusterEnable: true,
       });
+      await this._diva.client.request('Focus', {
+        id: POI.id,
+        distance: 1000.0,
+        pitch: 30.0,
+      })
       this._store.storeOverlay(POI);
     } else {
       const Label = new LabelDto();
@@ -152,6 +172,11 @@ export class OverlayComponent implements OnInit {
         },
         clusterEnable: true,
       })
+      await this._diva.client.request('Focus', {
+        id: Label.id,
+        distance: 1000.0,
+        pitch: 30.0,
+      })
       this._store.storeOverlay(Label);
     }
     this.overlays = this._store.getAllOverlays();
@@ -159,7 +184,8 @@ export class OverlayComponent implements OnInit {
     // 此处设置创建 overlay 的参数
   }
 
-  async delete(overlay: POIDto | LabelDto) {
+  async delete($event: Event, overlay: POIDto | LabelDto) {
+    $event.stopPropagation();
     await this._diva.client.request('DestroyOverlay', {id: overlay.id});
     this._store.deleteOverlay(overlay);
     this.overlays = this._store.getAllOverlays();
