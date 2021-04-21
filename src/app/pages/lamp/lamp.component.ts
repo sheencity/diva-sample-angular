@@ -67,6 +67,38 @@ export class LampComponent implements OnInit, OnDestroy {
 
   constructor(private _diva: DivaService, private _data: DataService) {}
 
+  onClick1() {
+    this._diva.client.request('Focus', {
+      id: this.road01.id,
+      distance: 1000.0,
+      pitch: 30.0,
+    })
+  }
+
+  onClick2() {
+    this._diva.client.request('Focus', {
+      id: this.road02.id,
+      distance: 1000.0,
+      pitch: 30.0,
+    })
+  }
+
+  onClick3() {
+    this._diva.client.request('Focus', {
+      id: this.road03.id,
+      distance: 1000.0,
+      pitch: 30.0,
+    })
+  }
+
+  onClick4() {
+    this._diva.client.request('Focus', {
+      id: this.road04.id,
+      distance: 1000.0,
+      pitch: 30.0,
+    })
+  }
+
   async ngOnInit() {
     this._diva.client.applyScene('灯光控制');
     this._data.changeCode(`client.applyScene('灯光控制')`);
