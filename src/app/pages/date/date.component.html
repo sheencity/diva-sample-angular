@@ -26,11 +26,11 @@
       <div class="date-block">
         <div class="date-select">
           <span class="date-title">日期</span>
-          <input type="date" [(ngModel)]="date" />
+          <input type="date" (change)="onDateChange($event)" [value]="date" />
         </div>
         <div class="date-select date-time">
           <span>时间</span>
-          <input type="time" [(ngModel)]="time" />
+          <input type="time" (change)="onTimeChange($event)" [value]="time" />
         </div>
       </div>
     </app-content-block>

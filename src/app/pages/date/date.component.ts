@@ -60,42 +60,24 @@ export class DateComponent implements OnInit, OnDestroy {
   seasons = seasons;
   noons = noons;
 
-  // 设置日期
-  private _date: Date = new Date();
+  public date: string;
 
-  set date(v: string) {
-    console.log('date is', v);
-    const date = new Date(v);
+  onDateChange($event: any) {
+    const date = new Date($event.target.value);
     this._diva.client.setDate(date);
-    this._data.changeCode(`client.setDate(new Date(${date.toISOString()}))`);
-    this._date = date;
-  }
-  get date() {
-    const padding = (val: number) => (val < 10 ? `0${val}` : val.toString());
-    return `${this._date.getFullYear()}-${padding(
-      this._date.getMonth() + 1
-    )}-${padding(this._date.getDay())}`;
   }
 
-  // 设置时间
-  private _time: Date = new Date();
+  public time: string;
 
-  set time(v: string) {
-    console.log('time is', v);
-    const date = new Date();
-    date.setHours(
-      ...(v.split(':').map((val) => parseInt(val, 10)) as [
+  onTimeChange($event: any) {
+    const time = new Date();
+    time.setHours(
+      ...($event.target.value.split(':').map((val) => parseInt(val, 10)) as [
         hour: number,
         second: number
       ])
     );
-    date.setSeconds(0, 0);
-    this._diva.client.setTime(date);
-    this._data.changeCode(`client.setTime(new Date(${date.toISOString()}))`);
-    this._time = date;
-  }
-  get time(): string {
-    return `${this._time.getHours()}:${this._time.getMinutes()}`;
+    this._diva.client.setTime(time);
   }
 
   constructor(private _diva: DivaService, private _data: DataService) {}
@@ -116,14 +98,34 @@ export class DateComponent implements OnInit, OnDestroy {
     this._diva.client.setTime(new Date(noon.value));
     this._data.changeCode(`client.setTime(new Date(${noon.value}))`);
   }
+  iconBind(name: string) {
+    return name === 'winterSnow'
+      ? 'assets/icon/date/winter.png'
+      : `assets/icon/date/${name}.png`;
+  }
+
+  getDate(type: string) {
+    const date = new Date();
+    if (type === 'date') {
+      return `${date.getFullYear()}-${this._format(date.getMonth() + 1)}-${this._format(date.getDate())}`;
+    } else if (type === 'time') {
+      return `${this._format(date.getHours())}:${this._format(date.getMinutes())}`;
+    }
+  }
+
+  private _format(v: number) {
+    return v < 10 ? `0${v}` : `${v}`;
+  }
+
   ngOnInit(): void {
+    this.date = this.getDate('date');
+    this.time = this.getDate('time');
+    this._diva.client.setDate(new Date());
+    this._diva.client.setTime(new Date());
     this._diva.client?.applyScene('日期时间');
     if (this._diva.client?.applyScene) {
       this._data.changeCode(`client.applyScene('日期时间')`);
     }
-  }
-  iconBind(name: string) {
-    return name === 'winterSnow' ? 'assets/icon/date/winter.png' : `assets/icon/date/${name}.png`;
   }
   // 销毁钩子
   ngOnDestroy(): void {
