@@ -1,27 +1,33 @@
-# DivaSdk
+# diva-sdk Demo
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.1.3.
+该项目为调用 diva-sdk 接口的案例
 
-## Development server
+## 下载
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+```javascript
+git clone https://sheencity-bj@dev.azure.com/sheencity-bj/psg/_git/subtree-test-b
+```
 
-## Code scaffolding
+## 安装依赖
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+安装依赖需要 `npm@v7.0.0` 以上，安装 `node` 之后，运行 `npm -v` 查看 `npm` 版本，若版本低于 `v7.0.0`, 运行 `npm install npm -g` 升级 `npm`,  `npm` 升级完之后再运行 `npm -v` 查看 `npm` 版本, `npm` 版本大于 `v7.0.0` 即可安装依赖。
 
-## Build
+```javascript
+npm install
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+## 运行项目
 
-## Running unit tests
+```javascript
+npm start
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+项目将运行在 `http://localhost:4200/`，修改任何源代码均会触发页面的重载。
 
-## Running end-to-end tests
+## 打包项目
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+```javascript
+npm build
+```
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+打包文件将存储在 `dist/` 目录中，可以通过添加 `--prod` 标记打包生产环境文件
