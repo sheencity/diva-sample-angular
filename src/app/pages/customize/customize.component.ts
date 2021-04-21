@@ -53,7 +53,6 @@ export class CustomizeComponent implements OnInit {
     { value: '10', placeholder: '10' },
     { value: '11', placeholder: '11' },
     { value: '12', placeholder: '12' },
-    { value: '13', placeholder: '13' },
   ];
   constructor(private _diva: DivaService, private _data: DataService) {}
 
