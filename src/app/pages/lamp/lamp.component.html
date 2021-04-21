@@ -1,24 +1,11 @@
 <main>
   <app-content-block caption="灯光控制">
-    <div class="switch-block">
-      <div class="switch-item">
-        <app-switcher (click)="onClick1()" [(ngModel)]="road1" [label]="'路灯01'"></app-switcher>
+    <ng-container *ngFor="let lightDec of lightDecs; index as i">
+      <div class="switch-block" (click)="onClick(i)">
+        <div class="switch-item">
+          <app-switcher (switch)="onSwitch($event, i)" [(ngModel)]="lightDec.state" [label]="lightDec.title"></app-switcher>
+        </div>
       </div>
-    </div>
-    <div class="switch-block">
-      <div class="switch-item">
-        <app-switcher (click)="onClick1()" [(ngModel)]="road2" [label]="'路灯02'"></app-switcher>
-      </div>
-    </div>
-    <div class="switch-block">
-      <div class="switch-item">
-        <app-switcher (click)="onClick1()" [(ngModel)]="road3" [label]="'路灯03'"></app-switcher>
-      </div>
-    </div>
-    <div class="switch-block">
-      <div class="switch-item">
-        <app-switcher (click)="onClick1()" [(ngModel)]="road4" [label]="'路灯04'"></app-switcher>
-      </div>
-    </div>
+    </ng-container>
   </app-content-block>
 </main>
