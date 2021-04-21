@@ -18,7 +18,7 @@ export class LampComponent implements OnInit, OnDestroy {
   public roadController3: DeviceController;
   public roadController4: DeviceController;
   // 路灯1设置
-  private _road1 = true;
+  private _road1 = false;
   public set road1(v: boolean) {
     if (!this.roadController1) return;
     // 此处设置路灯1开关
@@ -30,7 +30,7 @@ export class LampComponent implements OnInit, OnDestroy {
   }
 
   // 路灯2设置
-  private _road2 = true;
+  private _road2 = false;
   public set road2(v: boolean) {
     if (!this.roadController2) return;
     // 此处设置路灯2
@@ -42,7 +42,7 @@ export class LampComponent implements OnInit, OnDestroy {
   }
 
   // 路灯3设置
-  private _road3 = true;
+  private _road3 = false;
   public set road3(v: boolean) {
     if (!this.roadController3) return;
     // 此处设置路灯3开关
@@ -54,7 +54,7 @@ export class LampComponent implements OnInit, OnDestroy {
   }
 
   // 路灯4
-  private _road4 = true;
+  private _road4 = false;
   public set road4(v: boolean) {
     if (!this.roadController4) return;
     // 此处设置路灯4开关
@@ -86,6 +86,10 @@ export class LampComponent implements OnInit, OnDestroy {
     this.road02.bind(this.roadController2.signal);
     this.road03.bind(this.roadController3.signal);
     this.road04.bind(this.roadController4.signal);
+    this.roadController1.turnOff();
+    this.roadController2.turnOff();
+    this.roadController3.turnOff();
+    this.roadController4.turnOff();
     // this.road01.addEventListener('click', (event) => {
     //   console.log('event is', event)
     // })

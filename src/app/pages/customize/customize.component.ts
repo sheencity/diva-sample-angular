@@ -73,7 +73,6 @@ export class CustomizeComponent implements OnInit {
   async ngOnInit() {
     this._diva.client.applyScene('电梯演示');
     this._data.changeCode(`client.applyScene('电梯演示')`);
-    this.currentLift = this._data.currentLift;
     this.lifts = lifts.map((lift, index) => this._addSelected(lift, index));
     for (let i = 0; i < 4; i++) {
       const [model] = await this._diva.client.getEntitiesByName<Model>(this.lifts[i].title);
@@ -103,6 +102,5 @@ export class CustomizeComponent implements OnInit {
   }
   // 销毁钩子
   ngOnDestroy(): void {
-    this._data.currentLift = this.currentLift;
   }
 }
