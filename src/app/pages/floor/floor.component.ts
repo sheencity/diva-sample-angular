@@ -12,6 +12,10 @@ import { DataService } from 'src/app/common/services/data.service';
   styleUrls: ['./floor.component.scss'],
 })
 export class FloorComponent implements OnInit, OnDestroy {
+  // 所有楼层模型
+  models: Model[] = [];
+  // 所有管道模型
+  pipeModels: Model[] = [];
   // 炸开
   private _explode = false;
   public set explode(v: boolean) {
@@ -24,12 +28,16 @@ export class FloorComponent implements OnInit, OnDestroy {
         floorHeight: 290,
         duration: 5,
       });
-      this._data.changeCode(`client.ExplodeByGroup({groupName: '场景模型/主楼拆分', spacing: 300, floorHeight: 290, duration: 5})`);
+      this._data.changeCode(
+        `client.ExplodeByGroup({groupName: '场景模型/主楼拆分', spacing: 300, floorHeight: 290, duration: 5})`
+      );
     } else {
       this._diva.client.request('AggregateByGroup', {
         groupName: '场景模型/主楼拆分',
       });
-      this._data.changeCode(`client.AggregateByGroup({groupName: '场景模型/主楼拆分'})`);
+      this._data.changeCode(
+        `client.AggregateByGroup({groupName: '场景模型/主楼拆分'})`
+      );
     }
     this._explode = v;
   }
@@ -41,6 +49,12 @@ export class FloorComponent implements OnInit, OnDestroy {
   private _gradation = false;
   public set gradation(v: boolean) {
     console.log('gradation', v);
+    if (v) {
+      this._foucsFloor(Number(this.selectedFloor.placeholder));
+    } else {
+      this._setVisibility(this.models, true);
+      this._setVisibility(this.pipeModels, false);
+    }
     this._gradation = v;
   }
   public get gradation() {
@@ -52,87 +66,13 @@ export class FloorComponent implements OnInit, OnDestroy {
     placeholder: '1',
     value: '一层-1_1',
   };
-
-  private async getModel(name: string) {
-    const [model] = await this._diva.client.getEntitiesByName<Model>(name);
-    this._data.changeCode(`client.getEntitiesByName<Model>('${name}')`);
-    return model;
-  }
-
-  private async FoucsFloor(floor: Number) {
-    var ids: string[] = new Array();
-
-    const floorToHide = this.options.filter(
-      (val) => +val.placeholder !== floor
-    );
-
-    const pipeline = await Promise.all(
-      this.options.map(async (v) => this.getModel(v.pipeLineName))
-    );
-
-    const models = await Promise.all(
-      this.options.map(async (v) => this.getModel(v.value))
-    );
-
-    const pipelineToHide = pipeline.filter(
-      (f) =>
-        f.name !==
-        this.options.find((o) => +o.placeholder === floor).pipeLineName
-    );
-    const pipelineToFoucs = pipeline.filter(
-      (f) =>
-        f.name ===
-        this.options.find((o) => +o.placeholder === floor).pipeLineName
-    );
-
-    const modelToHide = models.filter(
-      (f) => f.name !== this.options.find((o) => +o.placeholder === floor).value
-    );
-    const modelToFoucs = models.filter(
-      (f) => f.name === this.options.find((o) => +o.placeholder === floor).value
-    );
-    const focus = async (model: Model) => {
-      this._diva.client.request('Focus', {
-        id: model.id,
-        distance: 5000.0,
-        pitch: 30.0,
-      });
-      this._data.changeCode(`client.Focus({ids: ${model.id}, distance: 5000.0, pitch: 30.0})`);
-    }
-    // cosnt show = async (models: Model[]) =>{}
-    const setVisibility = async (models: Model[], visible: boolean) => {
-      this._diva.client.request('SetVisibility', {
-        ids: models.map((m) => m.id),
-        visible,
-      });
-      this._data.changeCode(`client.SetVisibility({ids: ${models.map((m) => m.id)}, visible: ${visible}})`);
-    }
-    return Promise.all([
-      focus(modelToFoucs[0]),
-      setVisibility(modelToHide, false),
-      setVisibility(modelToFoucs, true),
-      setVisibility(pipelineToHide, false),
-      setVisibility(pipelineToFoucs, this._pipe ? true : false),
-    ]);
-  }
-
   public set selectedFloor(v: DropdownData) {
     console.log('层数是', Number(v.placeholder));
     if (!this.gradation) {
       return;
     }
     if (this._gradation) {
-      this.FoucsFloor(Number(v.placeholder));
-      // const model =  this.getModel(v.value)
-
-      // model.then((m) => {
-      //   if(!m) return
-      //   this._diva.client.request("Focus", {
-      //     id: m.id,
-      //     distance: 5000.0,
-      //     pitch: 30.0,
-      //   });
-      // })
+      this._foucsFloor(Number(v.placeholder));
     }
     // 此处设置层数
     this._selectedFloor = v;
@@ -150,18 +90,13 @@ export class FloorComponent implements OnInit, OnDestroy {
     }
     // 此处设置显示管线
     this._pipe = v;
+    const currentPipe = this.pipeModels.filter(
+      (pipeModel) => pipeModel.name === this.options[Number(this.selectedFloor.placeholder)].pipeLineName
+    );
     if (this._gradation && v) {
-      this.FoucsFloor(Number(this._selectedFloor.placeholder));
-      // const model =  this.getModel(v.value)
-
-      // model.then((m) => {
-      //   if(!m) return
-      //   this._diva.client.request("Focus", {
-      //     id: m.id,
-      //     distance: 5000.0,
-      //     pitch: 30.0,
-      //   });
-      // })
+      this._setVisibility(currentPipe, true);
+    } else {
+      this._setVisibility(currentPipe, false);
     }
   }
   public get pipe() {
@@ -184,6 +119,48 @@ export class FloorComponent implements OnInit, OnDestroy {
     { placeholder: '13', value: '顶楼_12', pipeLineName: '顶层管线' },
   ];
 
+  private async _foucsFloor(floor: number) {
+    const modelToFocus = this.models.filter(
+      (model) => model.name === this.options[floor].value
+    );
+    const modelToHide = this.models.filter(
+      (model) => model.name !== this.options[floor].value
+    );
+    const pipeToShow = this.pipeModels.filter(
+      (pipeModel) => pipeModel.name === this.options[floor].pipeLineName
+    );
+    const pipeToHide = this.pipeModels.filter(
+      (pipeModel) => pipeModel.name !== this.options[floor].pipeLineName
+    );
+
+    await this._focus(modelToFocus[0]);
+    await this._setVisibility(modelToFocus, true);
+    await this._setVisibility(modelToHide, false);
+    await this._setVisibility(pipeToHide, false),
+    await this._setVisibility(pipeToShow, this.pipe ? true : false);
+  }
+
+  // 聚焦方法
+  private async _focus(model: Model) {
+    await this._diva.client.request('Focus', {
+      id: model.id,
+      distance: 5000.0,
+      pitch: 30.0,
+    });
+  }
+  // 显示隐藏方法
+  private async _setVisibility(models: Model[], visible: boolean) {
+    this._diva.client.request('SetVisibility', {
+      ids: [...models.map((model) => model.id)],
+      visible,
+    });
+  }
+  // 获取模型方法
+  private async _getModel(name: string) {
+    const [model] = await this._diva.client.getEntitiesByName<Model>(name);
+    return model;
+  }
+
   constructor(private _diva: DivaService, private _data: DataService) {}
 
   private SetPathVisibility(v: boolean) {
@@ -200,22 +177,33 @@ export class FloorComponent implements OnInit, OnDestroy {
     });
 
     this._diva.client.batchRequest(requestBatch);
-    const code = requestBatch.map(c => `\t{method: '${c.method}', params: {index: ${c.params.index}, visible: ${c.params.visible}}}`)
+    const code = requestBatch.map(
+      (c) =>
+        `\t{method: '${c.method}', params: {index: ${c.params.index}, visible: ${c.params.visible}}}`
+    );
     this._data.changeCode(`client.batchRequest([\n${code.join(',\n')}\n])`);
   }
 
-  ngOnInit(): void {
-    this._diva.client?.applyScene('楼层展示');
+  async ngOnInit() {
+    await this._diva.client?.applyScene('楼层展示');
+    this.options.forEach(async (opation) => {
+      const model = await this._getModel(opation.value);
+      const pipeModel = await this._getModel(opation.pipeLineName);
+      this.models.push(model);
+      this.pipeModels.push(pipeModel);
+    });
     if (this._diva.client?.applyScene) {
       this._data.changeCode(`client.applyScene('楼层展示')`);
     }
-    this.SetPathVisibility(false)
+    this.SetPathVisibility(false);
   }
   // 销毁钩子
-  ngOnDestroy(): void {
-    this._diva.client.request('AggregateByGroup', {
+  async ngOnDestroy() {
+    await this._diva.client.request('AggregateByGroup', {
       groupName: '场景模型/主楼拆分',
     });
+    await this._setVisibility(this.models, true);
+    await this._setVisibility(this.pipeModels, false);
     this.SetPathVisibility(true);
   }
 }
