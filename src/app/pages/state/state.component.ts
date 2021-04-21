@@ -101,6 +101,11 @@ export class StateComponent implements OnInit, OnDestroy {
     this._data.changeCode(`client.SetRenderStatus({id: ${this.selectedEqui.id}, type: ${type}})`);
   }
 
+  onDropdownClick($event: Event, index: number) {
+    $event.stopPropagation();
+    this.active = index;
+  }
+
   ngOnInit(): void {
     this._diva.client?.applyScene('状态演示');
     if (this._diva.client?.applyScene) {
