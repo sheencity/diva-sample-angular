@@ -209,9 +209,9 @@ export class OverlayComponent implements OnInit {
     this.corrdinateZ = 0.0;
     this.title = '';
     this.content = '';
-    this.color = '#ffffff';
+    this.color = '#000000';
     this.scale = 1.0;
-    this.opacity = 0.0;
+    this.opacity = 1.0;
     this.border = 0.0;
     this.borderColor = '#ffffff';
   }
