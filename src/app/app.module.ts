@@ -24,7 +24,6 @@ import { MonitorComponent } from './pages/monitor/monitor.component';
 import { LampComponent } from './pages/lamp/lamp.component';
 import { CustomizeComponent } from './pages/customize/customize.component';
 import { CodeViewComponent } from './common/components/code-view/code-view.component';
-import { AirConditionerComponent } from './pages/air-conditioner/air-conditioner.component';
 
 const COMPONENTS = [
   AppComponent,
@@ -48,7 +47,6 @@ const PAGES = [
   MonitorComponent,
   LampComponent,
   CustomizeComponent,
-  AirConditionerComponent,
 ];
 
 @NgModule({
