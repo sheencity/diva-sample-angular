@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { DeviceController, Light } from '@sheencity/diva-sdk';
+import { DeviceController, Device } from '@sheencity/diva-sdk';
 import { plainToClass } from 'class-transformer';
 import { LightDec } from 'src/app/common/dtos/light.model';
 import { DataService } from 'src/app/common/services/data.service';
@@ -31,7 +31,7 @@ const lightDecs = plainToClass(LightDec, [
 })
 export class LampComponent implements OnInit, OnDestroy {
   public lightDecs: LightDec[] = [];
-  public lights: Light[] = [];
+  public lights: Device[] = [];
   public lightControllers: DeviceController[] = [];
 
   onSwitch($event: boolean, index: number) {
@@ -59,7 +59,7 @@ export class LampComponent implements OnInit, OnDestroy {
     this.lightDecs.forEach((lightDec) => lightDec.state = false);
     this.lightDecs.forEach(async (lightDec) => {
       const lightController = new DeviceController();
-      const [light] = await this._diva.client.getEntitiesByName<Light>(lightDec.title);
+      const [light] = await this._diva.client.getEntitiesByName<Device>(lightDec.title);
       light.bind(lightController.signal);
       lightController.turnOff();
       this.lights.push(light);

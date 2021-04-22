@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { DeviceController, Light } from '@sheencity/diva-sdk';
+import { DeviceController, Device } from '@sheencity/diva-sdk';
 import { plainToClass } from 'class-transformer';
 import { LightDec } from 'src/app/common/dtos/light.model';
 import { DataService } from 'src/app/common/services/data.service';
@@ -32,7 +32,7 @@ const airDecs = plainToClass(LightDec, [
 export class AirConditionerComponent implements OnInit, OnDestroy {
 
   public airDecs: LightDec[] = [];
-  public airs: Light[] = [];
+  public airs: Device[] = [];
   public airControllers: DeviceController[] = [];
 
   constructor(private _diva: DivaService, private _data: DataService) { }
@@ -61,7 +61,7 @@ export class AirConditionerComponent implements OnInit, OnDestroy {
     this.airDecs.forEach((airDec) => airDec.state = false);
     this.airDecs.forEach(async (airDec) => {
       const airController = new DeviceController();
-      const [air] = await this._diva.client.getEntitiesByName<Light>(airDec.title);
+      const [air] = await this._diva.client.getEntitiesByName<Device>(airDec.title);
       air.bind(airController.signal);
       airController.turnOff();
       this.airs.push(air);
