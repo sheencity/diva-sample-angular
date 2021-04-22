@@ -65,10 +65,10 @@ export class SceneComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this._diva.client?.applyScene('场景切换');
-    if (this._diva.client?.applyScene) {
-      this._data.changeCode(`client.applyScene('场景切换')`);
-    }
+    // this._diva.client?.applyScene('场景切换');
+    // if (this._diva.client?.applyScene) {
+    //   this._data.changeCode(`client.applyScene('场景切换')`);
+    // }
   }
 
   // 销毁钩子

@@ -72,8 +72,8 @@ export class WeatherComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this._diva.client.applyScene('四季演示');
-    this._data.changeCode(`client.applyScene('四季演示')`);
+    this._diva.client.applyScene('半鸟瞰');
+    this._data.changeCode(`client.applyScene('半鸟瞰')`);
   }
 
   // 销毁钩子

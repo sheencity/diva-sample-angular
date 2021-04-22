@@ -10,35 +10,23 @@ import { DivaService } from 'src/app/common/services/diva.service';
 
 const monitors = plainToClass(MonitorConfigDto, [
   {
-    title: '监控设备1号',
+    title: '测试设备01',
     url: 'rtmp://rtmp01open.ys7.com/openlive/53e8792aa1e540ddb693afb20aaa9517.hd',
   },
   {
-    title: '监控设备2号',
+    title: '测试设备02',
     url: 'rtmp://rtmp01open.ys7.com/openlive/53e8792aa1e540ddb693afb20aaa9517.hd',
   },
   {
-    title: '监控设备3号',
-    url: 'rtmp://rtmp01open.ys7.com/openlive/53e8792aa1e540ddb693afb20aaa9517.hd',
-  },
-  {
-    title: '监控设备4号',
-    url: 'rtmp://rtmp01open.ys7.com/openlive/53e8792aa1e540ddb693afb20aaa9517.hd',
-  },
-  {
-    title: '弹窗1号设备',
+    title: '测试设备03',
     url: 'https://www.sheencity.com',
   },
   {
-    title: '弹窗2号设备',
+    title: '测试设备04',
     url: 'https://www.sheencity.com',
   },
   {
-    title: '弹窗3号设备',
-    url: 'https://www.sheencity.com',
-  },
-  {
-    title: '弹窗4号设备',
+    title: '测试设备05',
     url: 'https://www.sheencity.com',
   },
 ]);
@@ -50,9 +38,9 @@ const monitors = plainToClass(MonitorConfigDto, [
 })
 export class MonitorComponent implements OnInit, OnDestroy {
   // 监控设备
-  monitors = monitors.slice(0, 4);
+  monitors = monitors.slice(0, 2);
   // 弹窗设备
-  monitorEquis = monitors.slice(4, 8);
+  monitorEquis = monitors.slice(2, 5);
   // 设备模型列表
   monitorModels: Model[] = [];
   // 事件句柄列表

@@ -1,5 +1,5 @@
 <main>
-  <app-content-block caption="监控设备">
+  <app-content-block caption="监控视频演示">
     <ng-container *ngFor="let monitor of monitors; index as i">
       <div class="content-block" (click)="selectMonitor(monitor, i, false)">
         <div class="content-item">
@@ -11,7 +11,7 @@
     </ng-container>
   </app-content-block>
   <div style="margin-top: 20px;">
-    <app-content-block caption="设备信息">
+    <app-content-block caption="设备弹窗演示">
       <ng-container *ngFor="let monitorEqui of monitorEquis; index as i">
         <div class="refresh-block" (click)="selectMonitor(monitor, i, true)">
           <div class="refresh-item">

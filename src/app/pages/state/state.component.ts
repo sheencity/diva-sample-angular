@@ -10,19 +10,19 @@ import { DivaService } from 'src/app/common/services/diva.service';
 
 const equipments = plainToClass(EquipmentConfigDto, [
   {
-    title: '1号设备',
+    title: '空调',
     state: EquipmentState.Default,
   },
   {
-    title: '2号设备',
+    title: '电视机',
     state: EquipmentState.Default,
   },
   {
-    title: '3号设备',
+    title: '路由器',
     state: EquipmentState.Default,
   },
   {
-    title: '4号设备',
+    title: '冰箱',
     state: EquipmentState.Default,
   },
 ]);

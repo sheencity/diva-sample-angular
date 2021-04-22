@@ -65,13 +65,13 @@ export class GlobalComponent implements OnInit, OnDestroy {
     // this._selectedMode = this._data.selectedMode;
     this._compass = this._data.compass;
     // this._rotation = this._data.rotation;
-    this._diva.client.applyScene('全局配置');
+    this._diva.client.applyScene('半鸟瞰');
   }
 
   // 销毁钩子
   ngOnDestroy(): void {
     this._diva.client.request('ActiveThirdPersonMode', {
-      active: false, 
+      active: false,
     })
   }
 

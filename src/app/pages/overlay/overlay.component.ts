@@ -346,7 +346,11 @@ export class OverlayComponent implements OnInit {
     $event.stopPropagation();
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.overlays = this._store.getAllOverlays();
+    await this._diva.client?.applyScene('覆盖物');
+    if (this._diva.client?.applyScene) {
+      this._data.changeCode(`client.applyScene('覆盖物')`);
+    }
   }
 }
