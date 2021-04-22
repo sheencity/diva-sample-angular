@@ -10,19 +10,19 @@ import { DivaService } from 'src/app/common/services/diva.service';
 const monitors = plainToClass(MonitorConfigDto, [
   {
     title: '监控设备1号',
-    url: 'https://vod.sheencity.com/1b290a633b6641e98d861684d6865947/b311b7d4a6b846c795a5ae82f5f0ac14-960f017f69a2b1268ee4bc71d286cf45-ld.mp4',
+    url: 'rtmp://rtmp01open.ys7.com/openlive/53e8792aa1e540ddb693afb20aaa9517.hd',
   },
   {
     title: '监控设备2号',
-    url: 'https://vod.sheencity.com/1b290a633b6641e98d861684d6865947/b311b7d4a6b846c795a5ae82f5f0ac14-960f017f69a2b1268ee4bc71d286cf45-ld.mp4',
+    url: 'rtmp://rtmp01open.ys7.com/openlive/53e8792aa1e540ddb693afb20aaa9517.hd',
   },
   {
     title: '监控设备3号',
-    url: 'https://vod.sheencity.com/1b290a633b6641e98d861684d6865947/b311b7d4a6b846c795a5ae82f5f0ac14-960f017f69a2b1268ee4bc71d286cf45-ld.mp4',
+    url: 'rtmp://rtmp01open.ys7.com/openlive/53e8792aa1e540ddb693afb20aaa9517.hd',
   },
   {
     title: '监控设备4号',
-    url: 'https://vod.sheencity.com/1b290a633b6641e98d861684d6865947/b311b7d4a6b846c795a5ae82f5f0ac14-960f017f69a2b1268ee4bc71d286cf45-ld.mp4',
+    url: 'rtmp://rtmp01open.ys7.com/openlive/53e8792aa1e540ddb693afb20aaa9517.hd',
   },
   {
     title: '弹窗1号设备',
