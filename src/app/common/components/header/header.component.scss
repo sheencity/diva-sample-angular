@@ -1,67 +1,74 @@
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 94px;
-    box-sizing: border-box;
-    margin: 54px 60px 0;
-    .title {
-      position: relative;
-      z-index: 99;
-      span {
-        color: #ffffff;
-        font-weight: bold;
-        writing-mode: horizontal-tb;
-        letter-spacing: 0px;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        opacity: 1;
-      }
-      .cn {
-        font-size: 48px;
-        line-height: 58px;
-        letter-spacing: 6px;
-      }
-      .en {
-        font-family: 'Roboto';
-        font-size: 26px;
-        line-height: 34px;
-      }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 94px;
+  box-sizing: border-box;
+  margin: 54px 60px 0;
+  .title {
+    position: relative;
+    z-index: 99;
+    div {
+      width: 912px;
+      color: #ffffff;
+      font-weight: bold;
+      writing-mode: horizontal-tb;
+      letter-spacing: 0px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      opacity: 1;
     }
+    .cn {
+      font-size: 48px;
+      line-height: 58px;
+      text-align: justify;
+      text-align-last: justify;
+    }
+    .en {
+      font-family: "Roboto";
+      font-size: 26px;
+      line-height: 34px;
+    }
+  }
+  .info {
+    position: relative;
+    z-index: 99;
+    display: flex;
     .exampleCode {
-      height: 20px;
+      height: 43px;
+      line-height: 43px;
       margin-right: 24px;
       app-switcher {
         width: 117px;
         pointer-events: all;
       }
     }
-      .weather {
-        position: relative;
-        z-index: 99;
-        color: #ffffff;
-        font-size: 16px;
-        line-height: 19px;
-        font-weight: normal;
-        font-family: arial, Arial, sans-serif;
-        writing-mode: horizontal-tb;
-        letter-spacing: 0px;
-        text-overflow: unset;
-        white-space: unset;
-        .weather-info {
-          display: flex;
-          justify-content: flex-end;
-          img {
-            margin-right: 5px;
-          }
-        }
-        .date {
-          text-align: right;
-          font-weight: normal;
-          font-family: "Microsoft Yahei";
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
+    .weather {
+      color: #ffffff;
+      font-size: 16px;
+      line-height: 19px;
+      font-weight: normal;
+      font-family: arial, Arial, sans-serif;
+      writing-mode: horizontal-tb;
+      letter-spacing: 0px;
+      text-overflow: unset;
+      white-space: unset;
+      .weather-info {
+        display: flex;
+        justify-content: flex-end;
+        img {
+          margin-right: 5px;
         }
       }
+      .date {
+        margin-top: 6px;
+        text-align: right;
+        font-weight: normal;
+        font-family: "Microsoft Yahei";
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
   }
+}
