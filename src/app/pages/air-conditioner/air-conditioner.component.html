@@ -1,0 +1,11 @@
+<main>
+    <app-content-block caption="空调控制">
+      <ng-container *ngFor="let airDec of airDecs; index as i">
+        <div class="switch-block" (click)="onClick(i)">
+          <div class="switch-item">
+            <app-switcher (switch)="onSwitch($event, i)" [(ngModel)]="airDec.state" [label]="airDec.title"></app-switcher>
+          </div>
+        </div>
+      </ng-container>
+    </app-content-block>
+  </main>

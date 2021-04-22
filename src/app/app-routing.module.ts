@@ -11,6 +11,7 @@ import { OverlayComponent } from './pages/overlay/overlay.component';
 import { MonitorComponent } from './pages/monitor/monitor.component';
 import { LampComponent } from './pages/lamp/lamp.component';
 import { CustomizeComponent } from './pages/customize/customize.component';
+import { AirConditionerComponent } from './pages/air-conditioner/air-conditioner.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'global', pathMatch: 'full' },
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: 'monitor', component: MonitorComponent },
   { path: 'lamp', component: LampComponent },
   { path: 'customize', component: CustomizeComponent },
+  { path: 'airConditioner', component: AirConditionerComponent },
 ];
 
 @NgModule({
