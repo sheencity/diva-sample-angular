@@ -91,7 +91,7 @@ export class FloorComponent implements OnInit, OnDestroy {
     // 此处设置显示管线
     this._pipe = v;
     const currentPipe = this.pipeModels.filter(
-      (pipeModel) => pipeModel.name === this.options[Number(this.selectedFloor.placeholder)].pipeLineName
+      (pipeModel) => pipeModel.name === this.options[Number(this.selectedFloor.placeholder) - 1].pipeLineName
     );
     if (this._gradation && v) {
       this._setVisibility(currentPipe, true);
@@ -121,16 +121,16 @@ export class FloorComponent implements OnInit, OnDestroy {
 
   private async _foucsFloor(floor: number) {
     const modelToFocus = this.models.filter(
-      (model) => model.name === this.options[floor].value
+      (model) => model.name === this.options[floor - 1].value
     );
     const modelToHide = this.models.filter(
-      (model) => model.name !== this.options[floor].value
+      (model) => model.name !== this.options[floor - 1].value
     );
     const pipeToShow = this.pipeModels.filter(
-      (pipeModel) => pipeModel.name === this.options[floor].pipeLineName
+      (pipeModel) => pipeModel.name === this.options[floor - 1].pipeLineName
     );
     const pipeToHide = this.pipeModels.filter(
-      (pipeModel) => pipeModel.name !== this.options[floor].pipeLineName
+      (pipeModel) => pipeModel.name !== this.options[floor - 1].pipeLineName
     );
 
     await this._focus(modelToFocus[0]);
