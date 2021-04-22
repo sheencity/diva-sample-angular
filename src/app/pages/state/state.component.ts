@@ -33,6 +33,7 @@ const equipments = plainToClass(EquipmentConfigDto, [
   styleUrls: ['./state.component.scss'],
 })
 export class StateComponent implements OnInit, OnDestroy {
+  isSelectDefault = false;
   selectedEqui: any = null;
   selected: number = null;
   active: number;
@@ -69,6 +70,7 @@ export class StateComponent implements OnInit, OnDestroy {
   }
 
   async onClick(equi: EquipmentConfigDto, i: number) {
+    if (this.isSelectDefault) return;
     this.active = i;
     this.selected = i;
     const [model] = await this._diva.client.getEntitiesByName(this.equipments[i].title);
@@ -88,6 +90,12 @@ export class StateComponent implements OnInit, OnDestroy {
   }
 
   async onChange(equi: EquipmentConfigDto, $event: DropdownData) {
+    if ($event.value === 'default') {
+      this.isSelectDefault = true;
+      setTimeout(() => {
+        this.isSelectDefault = false;
+      }, 500);
+    }
     const [model] = await this._diva.client.getEntitiesByName(equi.title)
     this._data.changeCode(`client.getEntitiesByName('${equi.title}')`);
     if(!model) return
@@ -98,7 +106,7 @@ export class StateComponent implements OnInit, OnDestroy {
       id,
       type,
     });
-    this._data.changeCode(`client.SetRenderStatus({id: ${this.selectedEqui.id}, type: ${type}})`);
+    this._data.changeCode(`client.SetRenderStatus({id: 'modelID', type: ${type}})`);
   }
 
   onDropdownClick($event: Event, index: number) {

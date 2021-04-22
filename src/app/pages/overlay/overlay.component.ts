@@ -253,8 +253,13 @@ export class OverlayComponent implements OnInit {
     }
   }
 
-  pickup() {
-    console.log('pickup')
+  async pickup() {
+    // const event1 = await this._diva.client.request('AddGlobalEventListener', {event: 'click'});
+    // console.log(event1);
+    // this._diva.client.request('DispatchGlobalEvent', {
+    //   event: 'clicik',
+    //   worldPosition: 
+    // })
   }
 
   refreshInput(index: number, value: number) {
