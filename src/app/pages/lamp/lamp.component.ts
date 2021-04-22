@@ -68,5 +68,6 @@ export class LampComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.lightControllers.forEach((lightController) => lightController.turnOff());
   }
 }
