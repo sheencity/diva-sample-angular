@@ -13,6 +13,7 @@ import {
   POIDto,
   POIIcon,
 } from 'src/app/common/dtos/overlay.dto';
+import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
 import { LocalStorageService } from 'src/app/common/services/localStorage.service';
 
@@ -102,21 +103,22 @@ export class OverlayComponent implements OnInit {
     private _elementRef: ElementRef<any>,
     private _store: LocalStorageService,
     private _diva: DivaService,
-    private _rd2: Renderer2
+    private _rd2: Renderer2,
+    private _data: DataService
   ) {}
 
   async create() {
     if (this.selectedType.value === Overlay.POI) {
       const POI = new POIDto();
       POI.icon = this.selectedIcon.value as POIIcon;
-      POI.corrdinateX = this.corrdinateX,
-      POI.corrdinateY = this.corrdinateY,
-      POI.corrdinateZ = this.corrdinateZ,
-      POI.content = this.content,
-      POI.color = this.color,
-      POI.scale = this.scale,
-      POI.opacity = this.opacity,
-      console.log('poiConfig', POI);
+      (POI.corrdinateX = this.corrdinateX),
+        (POI.corrdinateY = this.corrdinateY),
+        (POI.corrdinateZ = this.corrdinateZ),
+        (POI.content = this.content),
+        (POI.color = this.color),
+        (POI.scale = this.scale),
+        (POI.opacity = this.opacity),
+        console.log('poiConfig', POI);
       const color = this.getRGB(POI.color);
       await this._diva.client.request('CreateOverlay', {
         id: POI.id,
@@ -141,19 +143,38 @@ export class OverlayComponent implements OnInit {
         pitch: 30.0,
       });
       this._store.storeOverlay(POI);
+      this._data.changeCode(
+        `client.CreateOverlay({\n
+          id: '${POI.id}', \n
+          type: '${POI.type}',\n
+          coord: ['${POI.corrdinateX}', '${POI.corrdinateY}', '${POI.corrdinateZ}'],\n
+          property: {\n
+            label: '${POI.content}',\n
+            icon: '${POI.icon}',\n
+            color: {\n
+              r: ${color[0]},\n
+              g: ${color[1]},\n
+              b: ${color[2]},\n
+            },\n
+            opacity: ${POI.opacity},\n
+            scale: ${POI.scale},\n
+          },\n
+          clusterEnable: true,\n
+        })`
+      );
     } else {
       const Label = new LabelDto();
-      Label.corrdinateX = this.corrdinateX,
-      Label.corrdinateY = this.corrdinateY,
-      Label.corrdinateZ = this.corrdinateZ,
-      Label.title = this.title,
-      Label.content = this.content,
-      Label.color = this.color,
-      Label.scale = this.scale,
-      Label.opacity = this.opacity,
-      Label.border = this.border,
-      Label.borderColor = this.borderColor,
-      console.log('labelConfig', Label);
+      (Label.corrdinateX = this.corrdinateX),
+        (Label.corrdinateY = this.corrdinateY),
+        (Label.corrdinateZ = this.corrdinateZ),
+        (Label.title = this.title),
+        (Label.content = this.content),
+        (Label.color = this.color),
+        (Label.scale = this.scale),
+        (Label.opacity = this.opacity),
+        (Label.border = this.border),
+        (Label.borderColor = this.borderColor),
+        console.log('labelConfig', Label);
       const color = this.getRGB(Label.color);
       const borderColor = this.getRGB(Label.borderColor);
       await this._diva.client.request('CreateOverlay', {
@@ -186,6 +207,32 @@ export class OverlayComponent implements OnInit {
         pitch: 30.0,
       });
       this._store.storeOverlay(Label);
+      this._data.changeCode(
+        `client.CreateOverlay({\n
+          id: '${Label.id}',\n
+          type: '${Label.type}',\n
+          coord: ['${Label.corrdinateX}', '${Label.corrdinateY}', '${Label.corrdinateZ}'],\n
+          property: {\n
+            title: '${Label.title}',\n
+            content: '${Label.content}',\n
+            textAlign: 'left',\n
+            color: {\n
+              r: ${color[0]},\n
+              g: ${color[1]},\n
+              b: ${color[2]},\n
+            },\n
+            opacity: ${Label.opacity},\n
+            borderColor: {\n
+              r: ${borderColor[0]},\n
+              g: ${borderColor[1]},\n
+              b: ${borderColor[2]},\n
+            },\n
+            borderSize: ${Label.border},\n
+            scale: ${Label.scale},\n
+          },\n
+          clusterEnable: true,\n
+        })`
+      );
     }
     this.overlays = this._store.getAllOverlays();
     this.reset();
@@ -195,6 +242,7 @@ export class OverlayComponent implements OnInit {
   async delete($event: Event, overlay: POIDto | LabelDto) {
     $event.stopPropagation();
     await this._diva.client.request('DestroyOverlay', { id: overlay.id });
+    this._data.changeCode(`client.DestroyOverlay('${overlay.id}')`);
     this._store.deleteOverlay(overlay);
     this.overlays = this._store.getAllOverlays();
   }
@@ -223,6 +271,12 @@ export class OverlayComponent implements OnInit {
       distance: 1000.0,
       pitch: 30.0,
     });
+    this._data.changeCode(`
+      client.Focus({\n
+        id: '${overlay.id}',\n
+        distance: 1000.0,\n
+        pitch: 30.0,\n
+      })`);
   }
 
   onInputScale() {
