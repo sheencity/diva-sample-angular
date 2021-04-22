@@ -72,7 +72,7 @@ export class CustomizeComponent implements OnInit {
     const value = Number($event.value);
     console.log('controllers', this.controllers);
     this.controllers[i].land(`f${value}`);
-    // this._data.changeCode(`client.getEntitiesByName<Model>('${lift.title}')`);
+    this._data.changeCode(`lift${i+1}.controller('f${value}')`);
   }
 
   async ngOnInit() {

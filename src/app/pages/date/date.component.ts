@@ -65,6 +65,7 @@ export class DateComponent implements OnInit, OnDestroy {
   onDateChange($event: any) {
     const date = new Date($event.target.value);
     this._diva.client.setDate(date);
+    this._data.changeCode(`client.setDate(new Date('${date}'))`);
   }
 
   public time: string;
@@ -78,6 +79,7 @@ export class DateComponent implements OnInit, OnDestroy {
       ])
     );
     this._diva.client.setTime(time);
+    this._data.changeCode(`client.setTime(new Date('${time}'))`);
   }
 
   constructor(private _diva: DivaService, private _data: DataService) {}
@@ -90,7 +92,11 @@ export class DateComponent implements OnInit, OnDestroy {
     } else {
       await this._diva.client.setWether(WeatherName.Default);
     }
-    this._data.changeCode(`client.setDate(new Date(${season.value}))`);
+    if (season.name === 'winterSnow') {
+      this._data.changeCode(`client.setDate(new Date('${season.value}'));\nclient.setWeather('snow')`);
+    } else {
+      this._data.changeCode(`client.setDate(new Date('${season.value}'))`);
+    }
   }
 
   switchNoon(noon: SeasonConfigDto) {

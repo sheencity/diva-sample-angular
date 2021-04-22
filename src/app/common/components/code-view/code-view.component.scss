@@ -12,6 +12,7 @@ p {
     overflow: auto;
     text-align: justify;
     white-space: pre-wrap;
+    pointer-events: all;
 }
 ::-webkit-scrollbar {
     background-color: transparent;

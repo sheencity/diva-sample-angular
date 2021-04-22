@@ -147,6 +147,7 @@ export class FloorComponent implements OnInit, OnDestroy {
       distance: 5000.0,
       pitch: 30.0,
     });
+    this._data.changeCode(`client.Focus('Model.id', distance: 5000, pitch: 30)`);
   }
   // 显示隐藏方法
   private async _setVisibility(models: Model[], visible: boolean) {
@@ -154,6 +155,7 @@ export class FloorComponent implements OnInit, OnDestroy {
       ids: [...models.map((model) => model.id)],
       visible,
     });
+    this._data.changeCode(`client.SetVisibility(${[...models.map((model) => model.id)]}, ${visible})`);
   }
   // 获取模型方法
   private async _getModel(name: string) {

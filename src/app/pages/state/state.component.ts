@@ -74,7 +74,6 @@ export class StateComponent implements OnInit, OnDestroy {
     this.active = i;
     this.selected = i;
     const [model] = await this._diva.client.getEntitiesByName(this.equipments[i].title);
-    this._data.changeCode(`client.getEntitiesByName('${this.equipments[i].title}')`);
     // console.log('model is', model);
     if(!model) return
     this.selectedEqui = model;
@@ -84,7 +83,7 @@ export class StateComponent implements OnInit, OnDestroy {
       distance: 1000.0,
       pitch: 30.0,
     });
-    this._data.changeCode(`client.Focus({id: ${this.equipments[i].id}, distance: 1000.0, pitch: 30.0})`);
+    this._data.changeCode(`client.Focus({id: '${equipmentId}', distance: 1000.0, pitch: 30.0})`);
     console.log('equi', equi);
     // 此处设置设备的聚焦状态
   }
@@ -97,7 +96,6 @@ export class StateComponent implements OnInit, OnDestroy {
       }, 500);
     }
     const [model] = await this._diva.client.getEntitiesByName(equi.title)
-    this._data.changeCode(`client.getEntitiesByName('${equi.title}')`);
     if(!model) return
     const id = model.id
     const type = $event.value;
@@ -106,7 +104,7 @@ export class StateComponent implements OnInit, OnDestroy {
       id,
       type,
     });
-    this._data.changeCode(`client.SetRenderStatus({id: 'modelID', type: ${type}})`);
+    this._data.changeCode(`client.SetRenderStatus({id: '${id}', type: ${type}})`);
   }
 
   onDropdownClick($event: Event, index: number) {
