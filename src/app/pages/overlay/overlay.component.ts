@@ -3,9 +3,16 @@ import {
   Component,
   ElementRef,
   OnInit,
+  Renderer2,
 } from '@angular/core';
+import { Vector3 } from '@sheencity/diva-sdk';
 import { DropdownData } from 'src/app/common/dtos/dropdown-data.interface';
-import { LabelDto, Overlay, POIDto, POIIcon } from 'src/app/common/dtos/overlay.dto';
+import {
+  LabelDto,
+  Overlay,
+  POIDto,
+  POIIcon,
+} from 'src/app/common/dtos/overlay.dto';
 import { DivaService } from 'src/app/common/services/diva.service';
 import { LocalStorageService } from 'src/app/common/services/localStorage.service';
 
@@ -16,7 +23,7 @@ import { LocalStorageService } from 'src/app/common/services/localStorage.servic
 })
 export class OverlayComponent implements OnInit {
   // 覆盖物列表
-  public overlays: (POIDto | LabelDto)[] = []
+  public overlays: (POIDto | LabelDto)[] = [];
   // 种类
   private _selectedType: DropdownData = {
     value: Overlay.POI,
@@ -95,11 +102,12 @@ export class OverlayComponent implements OnInit {
     private _elementRef: ElementRef<any>,
     private _store: LocalStorageService,
     private _diva: DivaService,
+    private _rd2: Renderer2
   ) {}
 
   async create() {
     if (this.selectedType.value === Overlay.POI) {
-      const POI = new POIDto()
+      const POI = new POIDto();
       POI.icon = this.selectedIcon.value as POIIcon;
       POI.corrdinateX = this.corrdinateX,
       POI.corrdinateY = this.corrdinateY,
@@ -131,7 +139,7 @@ export class OverlayComponent implements OnInit {
         id: POI.id,
         distance: 1000.0,
         pitch: 30.0,
-      })
+      });
       this._store.storeOverlay(POI);
     } else {
       const Label = new LabelDto();
@@ -171,12 +179,12 @@ export class OverlayComponent implements OnInit {
           scale: Label.scale,
         },
         clusterEnable: true,
-      })
+      });
       await this._diva.client.request('Focus', {
         id: Label.id,
         distance: 1000.0,
         pitch: 30.0,
-      })
+      });
       this._store.storeOverlay(Label);
     }
     this.overlays = this._store.getAllOverlays();
@@ -186,7 +194,7 @@ export class OverlayComponent implements OnInit {
 
   async delete($event: Event, overlay: POIDto | LabelDto) {
     $event.stopPropagation();
-    await this._diva.client.request('DestroyOverlay', {id: overlay.id});
+    await this._diva.client.request('DestroyOverlay', { id: overlay.id });
     this._store.deleteOverlay(overlay);
     this.overlays = this._store.getAllOverlays();
   }
@@ -214,7 +222,7 @@ export class OverlayComponent implements OnInit {
       id: overlay.id,
       distance: 1000.0,
       pitch: 30.0,
-    })
+    });
   }
 
   onInputScale() {
@@ -254,18 +262,21 @@ export class OverlayComponent implements OnInit {
   }
 
   async pickup() {
-    // const event1 = await this._diva.client.request('AddGlobalEventListener', {event: 'click'});
-    // console.log(event1);
-    // this._diva.client.request('DispatchGlobalEvent', {
-    //   event: 'clicik',
-    //   worldPosition: 
-    // })
+    const handler = (event) => {
+      const wordPosition = event.worldPosition as Vector3;
+      this.corrdinateX = wordPosition.x;
+      this.corrdinateY = wordPosition.y;
+      this.corrdinateZ = wordPosition.z;
+      this._rd2.setStyle(document.body, 'cursor', 'default');
+    };
+    await this._diva.client.addEventListener('click', handler, { once: true });
+    this._rd2.setStyle(document.body, 'cursor', 'crosshair');
   }
 
   refreshInput(index: number, value: number) {
     const refreshInputDom = this._elementRef.nativeElement
-    .querySelectorAll('.adjust')
-    .item(index);
+      .querySelectorAll('.adjust')
+      .item(index);
     refreshInputDom.value = value + '';
   }
 
