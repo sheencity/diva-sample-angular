@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {
+  Device,
+  DeviceController,
   Elevator,
   ElevatorController,
   linear,
@@ -9,6 +11,7 @@ import {
 import { plainToClass } from 'class-transformer';
 import { DropdownData } from 'src/app/common/dtos/dropdown-data.interface';
 import { LiftConfigDto } from 'src/app/common/dtos/lift.dto';
+import { LightDec } from 'src/app/common/dtos/light.model';
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
 
@@ -27,6 +30,25 @@ const lifts = plainToClass(LiftConfigDto, [
   },
 ]);
 
+const airDecs = plainToClass(LightDec, [
+  {
+    title: '空调01',
+    state: false,
+  },
+  {
+    title: '空调02',
+    state: false,
+  },
+  {
+    title: '空调03',
+    state: false,
+  },
+  {
+    title: '空调04',
+    state: false,
+  },
+])
+
 @Component({
   selector: 'app-customize',
   templateUrl: './customize.component.html',
@@ -39,6 +61,11 @@ export class CustomizeComponent implements OnInit {
   step = 299.7;
   active = 0;
   lifts: any;
+
+  // 空调数据
+  public airDecs: LightDec[] = [];
+  public airs: Device[] = [];
+  public airControllers: DeviceController[] = [];
 
   options = [
     { value: '1', placeholder: '1' },
@@ -75,10 +102,29 @@ export class CustomizeComponent implements OnInit {
     this._data.changeCode(`lift${i+1}.controller('f${value}')`);
   }
 
+  onSwitch($event: boolean, index: number) {
+    if (this.airControllers.length === 0) return;
+    $event ? this.airControllers[index].turnOn() : this.airControllers[index].turnOff();
+    this._data.changeCode(`client.${$event ? 'TurnOnTheLight' : 'TurnOffTheLight'}(${this.airs[index].id})`)
+    console.log($event, index);
+  }
+
+  async onClick(index: number) {
+    if (!this.airs[index]) return;
+    await this._diva.client.request('Focus', {
+      id: this.airs[index].id,
+      distance: 1000.0,
+      pitch: 30.0,
+    })
+    this._data.changeCode(`client.Focus(${this.airs[index].id})`);
+  }
+
   async ngOnInit() {
     this._diva.client.applyScene('电梯演示');
     this._data.changeCode(`client.applyScene('电梯演示')`);
     this.lifts = lifts.map((lift, index) => this._addSelected(lift, index));
+    this.airDecs = airDecs;
+    this.airDecs.forEach((airDec) => airDec.state = false);
     for (let i = 0; i < 4; i++) {
       const [model] = await this._diva.client.getEntitiesByName<Model>(
         this.lifts[i].title
@@ -106,7 +152,17 @@ export class CustomizeComponent implements OnInit {
       this.liftModels.push(lift);
       this.controllers.push(controller);
     }
+    this.airDecs.forEach(async (airDec) => {
+      const airController = new DeviceController();
+      const [air] = await this._diva.client.getEntitiesByName<Device>(airDec.title);
+      air.bind(airController.signal);
+      airController.turnOff();
+      this.airs.push(air);
+      this.airControllers.push(airController);
+    })
   }
   // 销毁钩子
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this.airControllers.forEach((airController) => airController.turnOff());
+  }
 }
