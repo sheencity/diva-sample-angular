@@ -56,7 +56,6 @@ export class AirConditionerComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this._diva.client.applyScene('空调控制');
-    this._data.changeCode(`client.applyScene('空调控制')`);
     this.airDecs = airDecs;
     this.airDecs.forEach((airDec) => airDec.state = false);
     this.airDecs.forEach(async (airDec) => {
@@ -67,6 +66,7 @@ export class AirConditionerComponent implements OnInit, OnDestroy {
       this.airs.push(air);
       this.airControllers.push(airController);
     })
+    setTimeout(() => {this._data.changeCode(`client.applyScene('空调控制')`)}, 0);
   }
 
   ngOnDestroy() {

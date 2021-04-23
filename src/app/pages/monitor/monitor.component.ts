@@ -87,7 +87,7 @@ export class MonitorComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this._diva.client.applyScene('监控设备')
-    for (let i=0; i < 8; i++) {
+    for (let i=0; i < 4; i++) {
       let model: Model;
       let url: string;
       if (i < 2) {
@@ -111,6 +111,7 @@ export class MonitorComponent implements OnInit, OnDestroy {
       model.addEventListener('click', handle)
       this.monitorModels.push(model);
       this.monitorHandlers.push(handle);
+      setTimeout(() => {this._data.changeCode(`client.applyScene('监控设备')`)}, 0);
     }
   }
 

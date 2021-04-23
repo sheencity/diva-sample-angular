@@ -54,7 +54,6 @@ export class LampComponent implements OnInit, OnDestroy {
   }
   async ngOnInit() {
     this._diva.client.applyScene('灯光控制');
-    this._data.changeCode(`client.applyScene('灯光控制')`);
     this.lightDecs = lightDecs;
     this.lightDecs.forEach((lightDec) => lightDec.state = true);
     this.lightDecs.forEach(async (lightDec) => {
@@ -65,6 +64,7 @@ export class LampComponent implements OnInit, OnDestroy {
       this.lights.push(light);
       this.lightControllers.push(lightController);
     })
+    setTimeout(() => {this._data.changeCode(`client.applyScene('灯光控制')`)}, 0);
   }
 
   ngOnDestroy() {

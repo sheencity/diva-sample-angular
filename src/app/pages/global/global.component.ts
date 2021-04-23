@@ -65,8 +65,8 @@ export class GlobalComponent implements OnInit, OnDestroy {
     // this._selectedMode = this._data.selectedMode;
     this._compass = this._data.compass;
     // this._rotation = this._data.rotation;
-    await this._diva.client.applyScene('天气控制');
-    this._data.changeCode(`client.applyScene('全局配置')`);
+    await this._diva.client.applyScene('全局配置');
+    setTimeout(() => {this._data.changeCode(`client.applyScene('全局配置')`)}, 0);
   }
 
   // 销毁钩子
