@@ -18,7 +18,7 @@ const seasons = plainToClass(SeasonConfigDto, [
   },
   {
     title: '秋',
-    value: '2021-09-23',
+    value: '2021-11-01',
     name: 'autumn',
   },
   {
@@ -101,6 +101,8 @@ export class DateComponent implements OnInit, OnDestroy {
       this._data.changeCode(
         `client.setDate(new Date('${season.value}'));\nclient.setWeather('snow')`
       );
+    } else if (season.name === 'autumn') {
+      this._data.changeCode(`client.setDate(new Date('2021-09-23'))`);
     } else {
       this._data.changeCode(`client.setDate(new Date('${season.value}'))`);
     }
@@ -143,9 +145,9 @@ client.setTime(morning);`
     this.time = this.getDate('time');
     this._diva.client.setDate(new Date());
     this._diva.client.setTime(new Date());
-    this._diva.client?.applyScene('半鸟瞰');
+    this._diva.client?.applyScene('日期时间');
     if (this._diva.client?.applyScene) {
-      this._data.changeCode(`client.applyScene('半鸟瞰')`);
+      this._data.changeCode(`client.applyScene('日期时间')`);
     }
   }
   // 销毁钩子
