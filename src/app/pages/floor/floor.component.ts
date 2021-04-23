@@ -157,16 +157,18 @@ export class FloorComponent implements OnInit, OnDestroy {
     this._data.changeCode(`model.focus()`);
   }
   // 显示隐藏方法
-  private _setVisibility(models: Model[], visible: boolean) {
+  private _setVisibility(models: Model[], visible: boolean, leave = false) {
     this._diva.client.request('SetVisibility', {
       ids: [...models.map((model) => model.id)],
       visible,
     });
-    this._data.changeCode(
-      `client.setVisibility(${[
-        ...models.map((model) => `'${model.id}'`),
-      ]}, ${visible})`
-    );
+    if (!leave) {
+      this._data.changeCode(
+        `client.setVisibility(${[
+          ...models.map((model) => `'${model.id}'`),
+        ]}, ${visible})`
+      );
+    }
   }
   // 获取模型方法
   private async _getModel(name: string) {
@@ -214,8 +216,8 @@ export class FloorComponent implements OnInit, OnDestroy {
     await this._diva.client.request('AggregateByGroup', {
       groupName: '场景模型/主楼拆分',
     });
-    await this._setVisibility(this.models, true);
-    await this._setVisibility(this.pipeModels, false);
+    await this._setVisibility(this.models, true, true);
+    await this._setVisibility(this.pipeModels, false, true);
     this.SetPathVisibility(true);
   }
 }
