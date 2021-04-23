@@ -64,23 +64,23 @@ main {
         text-align: right;
         &::-webkit-outer-spin-button,
         &::-webkit-inner-spin-button {
-            -webkit-appearance: none;
+          -webkit-appearance: none;
         }
       }
       input[type="text"] {
         width: 194px;
         &::placeholder {
-            color: #fff;
-            font-size: 12px;
-            font-weight: normal;
+          color: #fff;
+          font-size: 12px;
+          font-weight: normal;
         }
         // text-align: right;
       }
       input[type="color"] {
-        background-color: #fff;  
+        background-color: #fff;
         padding: 2px;
         &::-webkit-color-swatch {
-            border: none;
+          border: none;
         }
       }
       textarea {
@@ -94,12 +94,12 @@ main {
         background: rgba(0, 0, 0, 0.3);
         color: #fff;
         font-size: 12px;
-        font-family: '微软雅黑';
+        font-family: "微软雅黑";
         resize: none;
         &::placeholder {
-            color: #fff;
-            font-size: 12px;
-            font-weight: normal;
+          color: #fff;
+          font-size: 12px;
+          font-weight: normal;
         }
       }
       textarea::-webkit-scrollbar {
@@ -112,28 +112,28 @@ main {
       }
     }
     .btn-item {
-        width: 100%;
-        height: 24px;
-        display: flex;
-        margin-top: 12px;
-        justify-content: space-between;
-        span {
-          line-height: 24px;
-          font-weight: bold;
-          color: #fff;
-        }
-        button {
-            cursor: pointer;
-            width: 58px;
-            background: rgba(255, 255, 255, 0.1);
-            line-height: 22px;
-            text-align: center;
-            color: #fff;
-            font-size: 12px;
-            border: 1px solid #fff;
-            outline: none;
-            border-radius: 2px;
-        }
+      width: 100%;
+      height: 24px;
+      display: flex;
+      margin-top: 12px;
+      justify-content: space-between;
+      span {
+        line-height: 24px;
+        font-weight: bold;
+        color: #fff;
+      }
+      button {
+        cursor: pointer;
+        width: 58px;
+        background: rgba(255, 255, 255, 0.1);
+        line-height: 22px;
+        text-align: center;
+        color: #fff;
+        font-size: 12px;
+        border: 1px solid #fff;
+        outline: none;
+        border-radius: 2px;
+      }
     }
   }
   .overlay-list {
@@ -145,28 +145,47 @@ main {
     backdrop-filter: blur(8px);
     cursor: pointer;
     .overlay-item {
-        width: 100%;
-        height: 24px;
+      width: 100%;
+      height: 24px;
+      display: flex;
+      justify-content: space-between;
+      color: #fff;
+      span {
+        line-height: 24px;
+        font-weight: bold;
+      }
+      .overlay-info {
         display: flex;
         justify-content: space-between;
-        color: #fff;
-        span {
-            line-height: 24px;
-            font-weight: bold;
+        .overlay-delete {
+          cursor: pointer;
+          margin-left: 12px;
+          width: 24px;
+          height: 24px;
         }
-        .overlay-info {
-            display: flex;
-            justify-content: space-between;
-            .overlay-delete {
-                cursor: pointer;
-                margin-left: 12px;
-                width: 24px;
-                height: 24px;
-            }
-        }
+      }
     }
     .selected {
       color: #fff;
     }
+  }
+  .scroll {
+    width: 300px;
+    max-height: 400px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+  .scroll::-webkit-scrollbar {
+    background-color: transparent;
+    width: 14px;
+  }
+  .scroll::-webkit-scrollbar-button {
+    display: none;
+  }
+  .scroll::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    background-clip: padding-box;
+    border: 4px solid transparent;
+    border-radius: 7px;
   }
 }

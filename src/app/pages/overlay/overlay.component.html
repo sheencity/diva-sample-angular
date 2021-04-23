@@ -73,19 +73,21 @@
   </app-content-block>
   <div style="margin-top: 20px;">
     <app-content-block width="true" caption="覆盖物列表">
-        <ng-container *ngFor="let overlay of overlays; index as i">
-            <div class="overlay-list" (click)="selectOverlay(overlay)">
-                <div class="overlay-item" [class.selected]="selectedId === overlay.id">
-                    <span>{{overlay.type === 'poi' ? overlay.content : overlay.title}}</span>
-                    <div class="overlay-info">
-                        <span>{{overlay.type === 'poi' ? 'POI' : '标签'}}</span>
-                        <div class="overlay-delete" (click)="delete($event, overlay)">
-                          <img src="assets/icon/overlay/delete.png" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </ng-container>
+        <div class="scroll">
+          <ng-container *ngFor="let overlay of overlays; index as i">
+              <div class="overlay-list" (click)="selectOverlay(overlay)">
+                  <div class="overlay-item" [class.selected]="selectedId === overlay.id">
+                      <span>{{overlay.type === 'poi' ? overlay.content : overlay.title}}</span>
+                      <div class="overlay-info">
+                          <span>{{overlay.type === 'poi' ? 'POI' : '标签'}}</span>
+                          <div class="overlay-delete" (click)="delete($event, overlay)">
+                            <img src="assets/icon/overlay/delete.png" />
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </ng-container>
+        </div>
     </app-content-block>
   </div>
 </main>
