@@ -7,19 +7,19 @@ import { DivaService } from 'src/app/common/services/diva.service';
 
 const airDecs = plainToClass(LightDec, [
   {
-    title: '空调01',
+    title: '测试空调01',
     state: false,
   },
   {
-    title: '空调02',
+    title: '测试空调02',
     state: false,
   },
   {
-    title: '空调03',
+    title: '测试空调03',
     state: false,
   },
   {
-    title: '空调04',
+    title: '测试空调04',
     state: false,
   },
 ])

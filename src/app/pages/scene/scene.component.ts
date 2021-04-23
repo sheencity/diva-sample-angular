@@ -6,43 +6,43 @@ import { DivaService } from 'src/app/common/services/diva.service';
 
 const scenes = plainToClass(SceneConfigDto, [
   {
-    title: '全局鸟瞰',
+    title: '测试场景01',
+    index: 0,
+  },
+  {
+    title: '测试场景02',
     index: 1,
   },
   {
-    title: '主楼鸟瞰',
-    index: 1,
-  },
-  {
-    title: '主楼',
+    title: '测试场景03',
     index: 2,
   },
   {
-    title: '显示管线',
+    title: '测试场景04',
     index: 3,
   },
   {
-    title: '电梯演示',
+    title: '测试场景05',
     index: 4,
   },
   {
-    title: '夜晚显示管线',
+    title: '测试场景06',
     index: 5,
   },
   {
-    title: '夜晚隐藏管线',
+    title: '测试场景07',
     index: 6,
   },
   {
-    title: '炸开场景',
+    title: '测试场景08',
     index: 7,
   },
   {
-    title: '四季演示',
+    title: '测试场景09',
     index: 8,
   },
   {
-    title: '四季演示关闭',
+    title: '测试场景10',
     index: 9,
   },
 ]);
@@ -58,7 +58,7 @@ export class SceneComponent implements OnInit, OnDestroy {
 
   switchScene(scene: SceneConfigDto) {
     console.log({ scene });
-    this._diva.client?.applyScene(scene.title);
+    this._diva.client?.applyScene(scene.index);
     if (this._diva.client?.applyScene) {
       this._data.changeCode(`client.applyScene('${scene.title}')`);
     }

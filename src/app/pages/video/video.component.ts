@@ -5,34 +5,34 @@ import { DivaService } from 'src/app/common/services/diva.service';
 
 const videos = [
   {
-    title: '轨1',
+    title: '测试路径01',
   },
   {
-    title: '轨2',
+    title: '测试路径02',
   },
   {
-    title: '轨3',
+    title: '测试路径03',
   },
   {
-    title: '轨4',
+    title: '测试路径04',
   },
   {
-    title: '轨5',
+    title: '测试路径05',
   },
   {
-    title: '视频名称6',
+    title: '测试路径06',
   },
   {
-    title: '视频名称7',
+    title: '测试路径07',
   },
   {
-    title: '视频名称8',
+    title: '测试路径08',
   },
   {
-    title: '视频名称9',
+    title: '测试路径09',
   },
   {
-    title: '视频名称10',
+    title: '测试路径10',
   },
 ];
 
