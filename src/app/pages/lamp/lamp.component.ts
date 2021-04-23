@@ -56,7 +56,7 @@ export class LampComponent implements OnInit, OnDestroy {
     this._diva.client.applyScene('灯光控制');
     this._data.changeCode(`client.applyScene('灯光控制')`);
     this.lightDecs = lightDecs;
-    this.lightDecs.forEach((lightDec) => lightDec.state = false);
+    this.lightDecs.forEach((lightDec) => lightDec.state = true);
     this.lightDecs.forEach(async (lightDec) => {
       const lightController = new DeviceController();
       const [light] = await this._diva.client.getEntitiesByName<Device>(lightDec.title);
