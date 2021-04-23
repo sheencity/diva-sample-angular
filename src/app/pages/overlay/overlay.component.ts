@@ -241,10 +241,10 @@ export class OverlayComponent implements OnInit {
 
   async delete($event: Event, overlay: POIDto | LabelDto) {
     $event.stopPropagation();
-    await this._diva.client.request('DestroyOverlay', { id: overlay.id });
-    this._data.changeCode(`client.DestroyOverlay('${overlay.id}')`);
     this._store.deleteOverlay(overlay);
     this.overlays = this._store.getAllOverlays();
+    await this._diva.client.request('DestroyOverlay', { id: overlay.id });
+    this._data.changeCode(`client.DestroyOverlay('${overlay.id}')`);
   }
 
   reset() {
