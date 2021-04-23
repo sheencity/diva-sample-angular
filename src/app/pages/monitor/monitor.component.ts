@@ -25,10 +25,6 @@ const monitors = plainToClass(MonitorConfigDto, [
     title: '测试设备04',
     url: 'https://www.sheencity.com',
   },
-  {
-    title: '测试设备05',
-    url: 'https://www.sheencity.com',
-  },
 ]);
 
 @Component({
@@ -40,7 +36,7 @@ export class MonitorComponent implements OnInit, OnDestroy {
   // 监控设备
   monitors = monitors.slice(0, 2);
   // 弹窗设备
-  monitorEquis = monitors.slice(2, 5);
+  monitorEquis = monitors.slice(2, 4);
   // 设备模型列表
   monitorModels: Model[] = [];
   // 事件句柄列表
@@ -50,7 +46,7 @@ export class MonitorComponent implements OnInit, OnDestroy {
   constructor(private _diva: DivaService, private _data: DataService) {}
 
   async selectMonitor(monitor: MonitorConfigDto, index: number, isPop: boolean) {
-      index = isPop ? index + 4 : index;
+      index = isPop ? index + 2 : index;
       try {
         if (this.selectedMonitorIndex >= 0) {
           await this._diva.client.request('DestroyWebWidget', {id: this.monitorModels[this.selectedMonitorIndex].id});
@@ -67,7 +63,7 @@ export class MonitorComponent implements OnInit, OnDestroy {
   }
 
   async refresh(monitorEqui: MonitorEquiConfigDto, index: number) {
-    index = index + 4;
+    index = index + 2;
     console.log('monitorEqui is', monitorEqui, index);
     try {
       await this._diva.client.request('DestroyWebWidget', {id: this.monitorModels[index].id});
@@ -94,12 +90,12 @@ export class MonitorComponent implements OnInit, OnDestroy {
     for (let i=0; i < 8; i++) {
       let model: Model;
       let url: string;
-      if (i < 4) {
+      if (i < 2) {
         model = (await this._diva.client.getEntitiesByName<Model>(this.monitors[i].title))[0];
         url = this.monitors[i].url;
       } else {
-        model = (await this._diva.client.getEntitiesByName<Model>(this.monitorEquis[i - 4].title))[0];
-        url = this.monitorEquis[i - 4].url;
+        model = (await this._diva.client.getEntitiesByName<Model>(this.monitorEquis[i - 2].title))[0];
+        url = this.monitorEquis[i - 2].url;
       }
       const handle = () => {
         this._diva.client.request('CreateWebWidget', {
