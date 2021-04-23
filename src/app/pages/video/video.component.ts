@@ -73,7 +73,12 @@ export class VideoComponent implements OnInit, OnDestroy {
     return 'assets/icon/video/play.png';
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this._diva.client?.applyScene('半鸟瞰');
+    if (this._diva.client?.applyScene) {
+      this._data.changeCode(`client.applyScene('半鸟瞰')`);
+    }
+  }
 
   // 销毁钩子
   ngOnDestroy(): void {

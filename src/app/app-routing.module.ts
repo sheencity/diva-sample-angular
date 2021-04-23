@@ -14,7 +14,7 @@ import { CustomizeComponent } from './pages/customize/customize.component';
 import { AirConditionerComponent } from './pages/air-conditioner/air-conditioner.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'global', pathMatch: 'full' },
+  { path: '', redirectTo: 'scene', pathMatch: 'full' },
   { path: 'global', component: GlobalComponent },
   { path: 'scene', component: SceneComponent },
   { path: 'video', component: VideoComponent },
