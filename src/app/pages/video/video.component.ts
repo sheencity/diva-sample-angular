@@ -66,7 +66,7 @@ export class VideoComponent implements OnInit, OnDestroy {
     await this._diva.client.request('PlayCameraTrackByIndex', {
       index: video.index,
     });
-    this._data.changeCode(`client.PlayCameraTrack(${video.title})`);
+    this._data.changeCode(`client.playCameraTrack('${video.title}')`);
   }
 
   iconBind(video) {

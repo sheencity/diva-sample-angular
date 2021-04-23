@@ -32,21 +32,26 @@ const seasons = plainToClass(SeasonConfigDto, [
     name: 'winterSnow',
   },
 ]);
+const getTime = (hour: number, min: number) => {
+  const now = new Date();
+  now.setHours(hour, min, 0, 0);
+  return now;
+};
 
 const noons = plainToClass(NoonConfigDto, [
   {
     title: '早晨',
-    value: '1995-12-17T08:00:00',
+    value: 8,
     name: 'morning',
   },
   {
     title: '中午',
-    value: '1995-12-17T12:00:00',
+    value: 12,
     name: 'noon',
   },
   {
     title: '傍晚',
-    value: '1995-12-17T17:00:00',
+    value: 15,
     name: 'afternoon',
   },
 ]);
@@ -93,16 +98,22 @@ export class DateComponent implements OnInit, OnDestroy {
       await this._diva.client.setWether(WeatherName.Default);
     }
     if (season.name === 'winterSnow') {
-      this._data.changeCode(`client.setDate(new Date('${season.value}'));\nclient.setWeather('snow')`);
+      this._data.changeCode(
+        `client.setDate(new Date('${season.value}'));\nclient.setWeather('snow')`
+      );
     } else {
       this._data.changeCode(`client.setDate(new Date('${season.value}'))`);
     }
   }
 
-  switchNoon(noon: SeasonConfigDto) {
+  switchNoon(noon: NoonConfigDto) {
     console.log({ noon });
-    this._diva.client.setTime(new Date(noon.value));
-    this._data.changeCode(`client.setTime(new Date(${noon.value}))`);
+    this._diva.client.setTime(getTime(noon.value, 0));
+    this._data.changeCode(
+      `const now = new Date();
+const morning = (now.setHours(${noon.value}), now);
+client.setTime(morning);`
+    );
   }
   iconBind(name: string) {
     return name === 'winterSnow'
@@ -113,9 +124,13 @@ export class DateComponent implements OnInit, OnDestroy {
   getDate(type: string) {
     const date = new Date();
     if (type === 'date') {
-      return `${date.getFullYear()}-${this._format(date.getMonth() + 1)}-${this._format(date.getDate())}`;
+      return `${date.getFullYear()}-${this._format(
+        date.getMonth() + 1
+      )}-${this._format(date.getDate())}`;
     } else if (type === 'time') {
-      return `${this._format(date.getHours())}:${this._format(date.getMinutes())}`;
+      return `${this._format(date.getHours())}:${this._format(
+        date.getMinutes()
+      )}`;
     }
   }
 

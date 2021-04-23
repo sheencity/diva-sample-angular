@@ -37,7 +37,7 @@ export class LampComponent implements OnInit, OnDestroy {
   onSwitch($event: boolean, index: number) {
     if (this.lightControllers.length === 0) return;
     $event ? this.lightControllers[index].turnOn() : this.lightControllers[index].turnOff();
-    this._data.changeCode(`client.${$event ? 'TurnOnTheLight' : 'TurnOffTheLight'}(${this.lights[index].id})`)
+    this._data.changeCode(`device.${$event ? 'turnOn()' : 'turnOff()'}`)
     console.log($event, index);
   }
 
@@ -50,7 +50,7 @@ export class LampComponent implements OnInit, OnDestroy {
       distance: 1000.0,
       pitch: 30.0,
     })
-    this._data.changeCode(`client.Focus(${this.lights[index].id})`);
+    this._data.changeCode(`model.focus()`);
   }
   async ngOnInit() {
     this._diva.client.applyScene('灯光控制');

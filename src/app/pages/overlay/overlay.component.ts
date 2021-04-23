@@ -144,23 +144,9 @@ export class OverlayComponent implements OnInit {
       });
       this._store.storeOverlay(POI);
       this._data.changeCode(
-        `client.CreateOverlay({\n
-          id: '${POI.id}', \n
-          type: '${POI.type}',\n
-          coord: ['${POI.corrdinateX}', '${POI.corrdinateY}', '${POI.corrdinateZ}'],\n
-          property: {\n
-            label: '${POI.content}',\n
-            icon: '${POI.icon}',\n
-            color: {\n
-              r: ${color[0]},\n
-              g: ${color[1]},\n
-              b: ${color[2]},\n
-            },\n
-            opacity: ${POI.opacity},\n
-            scale: ${POI.scale},\n
-          },\n
-          clusterEnable: true,\n
-        })`
+        `const position = new Vector(${POI.corrdinateX}, ${POI.corrdinateY}, ${POI.corrdinateZ});
+const overlay = new Overlay('poi', {coord: position, property: {icon: '${POI.icon}', content: '${POI.content}', ... }});
+overlay.set(client);`
       );
     } else {
       const Label = new LabelDto();
@@ -208,31 +194,11 @@ export class OverlayComponent implements OnInit {
       });
       this._store.storeOverlay(Label);
       this._data.changeCode(
-        `client.CreateOverlay({\n
-          id: '${Label.id}',\n
-          type: '${Label.type}',\n
-          coord: ['${Label.corrdinateX}', '${Label.corrdinateY}', '${Label.corrdinateZ}'],\n
-          property: {\n
-            title: '${Label.title}',\n
-            content: '${Label.content}',\n
-            textAlign: 'left',\n
-            color: {\n
-              r: ${color[0]},\n
-              g: ${color[1]},\n
-              b: ${color[2]},\n
-            },\n
-            opacity: ${Label.opacity},\n
-            borderColor: {\n
-              r: ${borderColor[0]},\n
-              g: ${borderColor[1]},\n
-              b: ${borderColor[2]},\n
-            },\n
-            borderSize: ${Label.border},\n
-            scale: ${Label.scale},\n
-          },\n
-          clusterEnable: true,\n
-        })`
+        `const position = new Vector(${Label.corrdinateX}, ${Label.corrdinateY}, ${Label.corrdinateZ});
+const overlay = new Overlay('label', {coord: position, property: {title: '${Label.title}', content: '${Label.content}', ... }});
+overlay.set(client);`
       );
+
     }
     this.overlays = this._store.getAllOverlays();
     this.reset();
@@ -271,12 +237,7 @@ export class OverlayComponent implements OnInit {
       distance: 1000.0,
       pitch: 30.0,
     });
-    this._data.changeCode(`
-      client.Focus({\n
-        id: '${overlay.id}',\n
-        distance: 1000.0,\n
-        pitch: 30.0,\n
-      })`);
+    this._data.changeCode(`model.focus()`);
   }
 
   onInputScale() {
@@ -349,13 +310,11 @@ export class OverlayComponent implements OnInit {
   async ngOnInit() {
     this.overlays = this._store.getAllOverlays();
     await this._diva.client?.applyScene('覆盖物');
+    this._data.changeCode(`client.applyScene('覆盖物')`);
     const overlayIds = this.overlays.map((overlay) => overlay.id);
     await this._diva.client.request('SetVisibility', {
       ids: overlayIds,
       visible: true,
     })
-    if (this._diva.client?.applyScene) {
-      this._data.changeCode(`client.applyScene('覆盖物')`);
-    }
   }
 }

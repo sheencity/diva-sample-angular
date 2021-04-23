@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Model, RenderingStyleMode } from '@sheencity/diva-sdk';
 import { plainToClass } from 'class-transformer';
 import { DropdownData } from 'src/app/common/dtos/dropdown-data.interface';
 import {
@@ -73,17 +74,21 @@ export class StateComponent implements OnInit, OnDestroy {
     if (this.isSelectDefault) return;
     this.active = i;
     this.selected = i;
-    const [model] = await this._diva.client.getEntitiesByName(this.equipments[i].title);
+    const [model] = await this._diva.client.getEntitiesByName(
+      this.equipments[i].title
+    );
     // console.log('model is', model);
-    if(!model) return
+    if (!model) return;
     this.selectedEqui = model;
-    const equipmentId = model.id
+    const equipmentId = model.id;
     this._diva.client.request('Focus', {
       id: equipmentId,
       distance: 1000.0,
       pitch: 30.0,
     });
-    this._data.changeCode(`client.Focus({id: '${equipmentId}', distance: 1000.0, pitch: 30.0})`);
+    this._data.changeCode(
+      `model.focus()`
+    );
     console.log('equi', equi);
     // 此处设置设备的聚焦状态
   }
@@ -95,16 +100,25 @@ export class StateComponent implements OnInit, OnDestroy {
         this.isSelectDefault = false;
       }, 500);
     }
-    const [model] = await this._diva.client.getEntitiesByName(equi.title)
-    if(!model) return
-    const id = model.id
-    const type = $event.value;
+    const [model] = await this._diva.client.getEntitiesByName<Model>(
+      equi.title
+    );
+    if (!model) return;
+    const id = model.id;
+    const type = $event.value as RenderingStyleMode;
+    model.setRenderingStyleMode(type);
     // 此处设置渲染状态
     this._diva.client.request('SetRenderStatus', {
       id,
       type,
     });
-    this._data.changeCode(`client.SetRenderStatus({id: '${id}', type: ${type}})`);
+
+    this._data.changeCode(
+      `model.setRenderingStyleMode(RenderingStyleMode.${type
+        .split('')
+        .map((_, idx) => (idx === 0 ? _.toUpperCase() : _))
+        .join('')})`
+    );
   }
 
   onDropdownClick($event: Event, index: number) {
@@ -122,11 +136,11 @@ export class StateComponent implements OnInit, OnDestroy {
   // 销毁钩子
   ngOnDestroy(): void {
     this.equipments.forEach(async (equi) => {
-      const [model] = await this._diva.client.getEntitiesByName(equi.title)
+      const [model] = await this._diva.client.getEntitiesByName(equi.title);
       this._diva.client.request('SetRenderStatus', {
         id: model.id,
         type: EquipmentState.Default,
       });
-    })
+    });
   }
 }

@@ -47,7 +47,7 @@ export class GlobalComponent implements OnInit, OnDestroy {
     this._diva.client.request('ActiveThirdPersonMode', {
       'active': v.value == 'true'
     })
-    this._data.changeCode(`client.ActiveThirdPersonMode({active: ${v.value == 'true'}})`);
+    this._data.changeCode(`client.activeThirdPersonMode(${v.value == 'true'})`);
     this._selectedMode = v;
   }
   public get selectedMode() {

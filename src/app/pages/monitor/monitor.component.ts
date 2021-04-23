@@ -59,7 +59,7 @@ export class MonitorComponent implements OnInit, OnDestroy {
         pitch: 30.0,
       })
       this.selectedMonitorIndex = index;
-      this._data.changeCode(`client.Focus({id: '${this.monitorModels[index].id}', distance: 1000.0, pitch: 30.0})`);
+      this._data.changeCode(`model.focus()`);
   }
 
   async refresh(monitorEqui: MonitorEquiConfigDto, index: number) {
@@ -77,7 +77,6 @@ export class MonitorComponent implements OnInit, OnDestroy {
         height: 280,
       },
     })
-    this._data.changeCode(`client.CreateWebWidget({\nid: '${this.monitorModels[index].id}',\n widgrt: {\nurl: '${monitorEqui.url}',\nwidth: 500, \nheight: 280\n}})`);
     // 此处设置设备网址刷新信息
   }
 

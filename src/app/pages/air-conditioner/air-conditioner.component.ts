@@ -40,7 +40,7 @@ export class AirConditionerComponent implements OnInit, OnDestroy {
   onSwitch($event: boolean, index: number) {
     if (this.airControllers.length === 0) return;
     $event ? this.airControllers[index].turnOn() : this.airControllers[index].turnOff();
-    this._data.changeCode(`client.${$event ? 'TurnOnTheLight' : 'TurnOffTheLight'}(${this.airs[index].id})`)
+    this._data.changeCode(`device.${$event ? 'turnOn()' : 'turnOff()'}`);
     console.log($event, index);
   }
 
@@ -51,7 +51,7 @@ export class AirConditionerComponent implements OnInit, OnDestroy {
       distance: 1000.0,
       pitch: 30.0,
     })
-    this._data.changeCode(`client.Focus(${this.airs[index].id})`);
+    this._data.changeCode(`model.focus()`);
   }
 
   ngOnInit() {

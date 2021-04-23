@@ -29,14 +29,14 @@ export class FloorComponent implements OnInit, OnDestroy {
         duration: 5,
       });
       this._data.changeCode(
-        `client.ExplodeByGroup({groupName: '场景模型/主楼拆分', spacing: 300, floorHeight: 290, duration: 5})`
+        `client.explodeByGroup({groupName: '场景模型/主楼拆分', spacing: 300, floorHeight: 290, duration: 5})`
       );
     } else {
       this._diva.client.request('AggregateByGroup', {
         groupName: '场景模型/主楼拆分',
       });
       this._data.changeCode(
-        `client.AggregateByGroup({groupName: '场景模型/主楼拆分'})`
+        `client.aggregateByGroup({groupName: '场景模型/主楼拆分'})`
       );
     }
     this._explode = v;
@@ -91,7 +91,9 @@ export class FloorComponent implements OnInit, OnDestroy {
     // 此处设置显示管线
     this._pipe = v;
     const currentPipe = this.pipeModels.filter(
-      (pipeModel) => pipeModel.name === this.options[Number(this.selectedFloor.placeholder) - 1].pipeLineName
+      (pipeModel) =>
+        pipeModel.name ===
+        this.options[Number(this.selectedFloor.placeholder) - 1].pipeLineName
     );
     if (this._gradation && v) {
       this._setVisibility(currentPipe, true);
@@ -138,6 +140,11 @@ export class FloorComponent implements OnInit, OnDestroy {
     await this._setVisibility(modelToHide, false);
     await this._setVisibility(pipeToHide, false),
     await this._setVisibility(pipeToShow, this.pipe ? true : false);
+    this._data.changeCode(
+      `client.setVisibility(${[
+        ...modelToFocus.map((model) => `'${model.id}'`),
+      ]}, true)`
+    );  
   }
 
   // 聚焦方法
@@ -147,15 +154,19 @@ export class FloorComponent implements OnInit, OnDestroy {
       distance: 5000.0,
       pitch: 30.0,
     });
-    this._data.changeCode(`client.Focus('Model.id', distance: 5000, pitch: 30)`);
+    this._data.changeCode(`model.focus()`);
   }
   // 显示隐藏方法
-  private async _setVisibility(models: Model[], visible: boolean) {
+  private _setVisibility(models: Model[], visible: boolean) {
     this._diva.client.request('SetVisibility', {
       ids: [...models.map((model) => model.id)],
       visible,
     });
-    this._data.changeCode(`client.SetVisibility(${[...models.map((model) => model.id)]}, ${visible})`);
+    this._data.changeCode(
+      `client.setVisibility(${[
+        ...models.map((model) => `'${model.id}'`),
+      ]}, ${visible})`
+    );
   }
   // 获取模型方法
   private async _getModel(name: string) {
@@ -183,20 +194,19 @@ export class FloorComponent implements OnInit, OnDestroy {
       (c) =>
         `\t{method: '${c.method}', params: {index: ${c.params.index}, visible: ${c.params.visible}}}`
     );
-    this._data.changeCode(`client.batchRequest([\n${code.join(',\n')}\n])`);
   }
 
   async ngOnInit() {
     await this._diva.client?.applyScene('楼层展示');
+    if (this._diva.client?.applyScene) {
+      this._data.changeCode(`client.applyScene('楼层展示')`);
+    }
     this.options.forEach(async (opation) => {
       const model = await this._getModel(opation.value);
       const pipeModel = await this._getModel(opation.pipeLineName);
       this.models.push(model);
       this.pipeModels.push(pipeModel);
     });
-    if (this._diva.client?.applyScene) {
-      this._data.changeCode(`client.applyScene('楼层展示')`);
-    }
     this.SetPathVisibility(false);
   }
   // 销毁钩子
