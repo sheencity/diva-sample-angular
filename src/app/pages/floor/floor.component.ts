@@ -52,8 +52,8 @@ export class FloorComponent implements OnInit, OnDestroy {
     if (v) {
       this._foucsFloor(Number(this.selectedFloor.placeholder));
     } else {
-      this._setVisibility(this.models, true);
-      this._setVisibility(this.pipeModels, false);
+      this._setVisibility(this.models, true, true);
+      this._setVisibility(this.pipeModels, false, true);
     }
     this._gradation = v;
   }
