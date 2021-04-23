@@ -349,6 +349,11 @@ export class OverlayComponent implements OnInit {
   async ngOnInit() {
     this.overlays = this._store.getAllOverlays();
     await this._diva.client?.applyScene('覆盖物');
+    const overlayIds = this.overlays.map((overlay) => overlay.id);
+    await this._diva.client.request('SetVisibility', {
+      ids: overlayIds,
+      visible: true,
+    })
     if (this._diva.client?.applyScene) {
       this._data.changeCode(`client.applyScene('覆盖物')`);
     }
