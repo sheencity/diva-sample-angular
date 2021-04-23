@@ -10,12 +10,15 @@ main {
         text-align: center;
         background: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(8px);
-        color: #bfbfbf;
+        color: #fff;
         font-weight: 700;
+        span {
+          backdrop-filter: unset;
+        }
         &:hover {
           cursor: pointer;
           background: rgba(38, 38, 38, 0.85);
-          color: #bfbfbf;
+          color: #fff;
         }
         &:focus {
           outline: none;
