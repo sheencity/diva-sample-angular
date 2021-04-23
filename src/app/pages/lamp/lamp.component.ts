@@ -8,19 +8,19 @@ import { DivaService } from 'src/app/common/services/diva.service';
 const lightDecs = plainToClass(LightDec, [
   {
     title: '测试灯光01',
-    state: false,
+    state: true,
   },
   {
     title: '测试灯光02',
-    state: false,
+    state: true,
   },
   {
     title: '测试灯光03',
-    state: false,
+    state: true,
   },
   {
     title: '测试灯光04',
-    state: false,
+    state: true,
   },
 ])
 
@@ -68,6 +68,6 @@ export class LampComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.lightControllers.forEach((lightController) => lightController.turnOff());
+    // this.lightControllers.forEach((lightController) => lightController.turnOff());
   }
 }
