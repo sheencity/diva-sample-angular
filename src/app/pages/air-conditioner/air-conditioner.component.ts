@@ -51,7 +51,7 @@ export class AirConditionerComponent implements OnInit, OnDestroy {
       distance: 1000.0,
       pitch: 30.0,
     })
-    this._data.changeCode(`model.focus()`);
+    this._data.changeCode(`device.focus()`);
   }
 
   ngOnInit() {
