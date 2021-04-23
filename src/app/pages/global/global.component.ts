@@ -61,11 +61,12 @@ export class GlobalComponent implements OnInit, OnDestroy {
 
   constructor(private _data: DataService, private _diva: DivaService) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     // this._selectedMode = this._data.selectedMode;
     this._compass = this._data.compass;
     // this._rotation = this._data.rotation;
-    this._diva.client.applyScene('半鸟瞰');
+    await this._diva.client.applyScene('天气控制');
+    this._data.changeCode(`client.applyScene('全局配置')`);
   }
 
   // 销毁钩子

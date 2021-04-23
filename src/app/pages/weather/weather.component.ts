@@ -35,14 +35,6 @@ const weathers = plainToClass(WeatherConfigDto, [
     typeName: WeatherName.Snow,
   },
   {
-    title: '繁星',
-    typeName: WeatherName.Star,
-  },
-  {
-    title: '满月',
-    typeName: WeatherName.Moon,
-  },
-  {
     title: '摄影棚',
     typeName: WeatherName.Studio,
   },
@@ -72,8 +64,8 @@ export class WeatherComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this._diva.client.applyScene('半鸟瞰');
-    this._data.changeCode(`client.applyScene('半鸟瞰')`);
+    this._diva.client.applyScene('天气控制');
+    this._data.changeCode(`client.applyScene('天气控制')`);
   }
 
   // 销毁钩子
