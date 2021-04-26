@@ -6,11 +6,17 @@ import { DropdownData } from '../dtos/dropdown-data.interface';
   providedIn: 'root',
 })
 export class DataService {
+  // 人视模式
   public selectedMode: DropdownData = { value: 'false', placeholder: '飞行' };
+  // 罗盘显示
   public compass = false;
+  // 是否旋转
   public rotation = false;
+  // 当前的楼道层数
   public currentLift = [1, 1, 1, 1];
+  // 灯光的状态
   public lampState = [false, false, false, false];
+  // 示例代码
   private _code = new BehaviorSubject<string>('');
   public code = this._code.asObservable();
 

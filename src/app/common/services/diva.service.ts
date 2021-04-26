@@ -5,10 +5,15 @@ import { Diva, DivaClient } from '@sheencity/diva-sdk';
   providedIn: 'root',
 })
 export class DivaService {
+  // divaClient
   client?: DivaClient;
 
   constructor() {}
 
+  /**
+   * 初始话 webRtc 链接
+   * @param container (HTMLElement) 视频加载的 dom 元素
+   */
   async init(container: HTMLElement) {
     console.log({ container });
     const uri = 'http://localhost:3000';
