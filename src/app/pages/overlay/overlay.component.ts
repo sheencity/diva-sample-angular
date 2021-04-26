@@ -107,6 +107,9 @@ export class OverlayComponent implements OnInit {
     private _data: DataService
   ) {}
 
+  /**
+   * 创建 POI 或 Label
+   */
   async create() {
     if (this.selectedType.value === Overlay.POI) {
       const POI = new POIDto();
@@ -202,9 +205,13 @@ overlay.set(client);`
     }
     this.overlays = this._store.getAllOverlays();
     this.reset();
-    // 此处设置创建 overlay 的参数
   }
 
+  /**
+   * 删除 POI 或 Label
+   * @param $event (Event) 阻止事件冒泡
+   * @param overlay (POIDto | LabelDto) 覆盖物
+   */
   async delete($event: Event, overlay: POIDto | LabelDto) {
     $event.stopPropagation();
     this._store.deleteOverlay(overlay);
@@ -213,6 +220,9 @@ overlay.set(client);`
     this._data.changeCode(`client.DestroyOverlay('${overlay.id}')`);
   }
 
+  /**
+   * 创建覆盖物之后重置所有配置
+   */
   reset() {
     this._selectedIcon = {
       value: POIIcon.Camera,
@@ -230,6 +240,10 @@ overlay.set(client);`
     this.borderColor = '#ffffff';
   }
 
+  /**
+   * 聚焦覆盖物
+   * @param overlay (POIDto | LabelDto) 覆盖物
+   */
   async selectOverlay(overlay: POIDto | LabelDto) {
     this.selectedId = overlay.id;
     await this._diva.client.request('Focus', {
@@ -240,6 +254,10 @@ overlay.set(client);`
     this._data.changeCode(`model.focus()`);
   }
 
+  /**
+   * 缩放值超出限制时重设为限制值
+   * @returns 
+   */
   onInputScale() {
     if (this.scale < 0) {
       this.scale = 0;
@@ -252,6 +270,10 @@ overlay.set(client);`
     }
   }
 
+  /**
+   * 透明度超出限制时重设为限制值
+   * @returns 
+   */
   onInputOpacity() {
     if (this.opacity < 0) {
       this.opacity = 0;
@@ -264,6 +286,10 @@ overlay.set(client);`
     }
   }
 
+  /**
+   * 边框超出限制时重设为限制值
+   * @returns 
+   */
   onInputBorder() {
     if (this.border < 0) {
       this.border = 0;
@@ -276,6 +302,9 @@ overlay.set(client);`
     }
   }
 
+  /**
+   * 拾取世界坐标
+   */
   async pickup() {
     const handler = (event) => {
       const wordPosition = event.worldPosition as Vector3;
@@ -288,6 +317,11 @@ overlay.set(client);`
     this._rd2.setStyle(document.body, 'cursor', 'crosshair');
   }
 
+  /**
+   * 重设 input 框的值
+   * @param index (number) 重设 input 框的索引值
+   * @param value (number) 重设值
+   */
   refreshInput(index: number, value: number) {
     const refreshInputDom = this._elementRef.nativeElement
       .querySelectorAll('.adjust')
@@ -295,6 +329,11 @@ overlay.set(client);`
     refreshInputDom.value = value + '';
   }
 
+  /**
+   * 将 colorInput 的 rgb 字符串转换为十进制色值数组
+   * @param rgb (string) 颜色的 rgb 字符串
+   * @returns number[] 颜色的 rgb 值
+   */
   getRGB(rgb: string) {
     const r = rgb.slice(1, 3);
     const g = rgb.slice(3, 5);
@@ -303,6 +342,10 @@ overlay.set(client);`
     return [t(r), t(g), t(b)];
   }
 
+  /**
+   * 阻止事件冒泡
+   * @param $event 
+   */
   onKeyDown($event) {
     $event.stopPropagation();
   }

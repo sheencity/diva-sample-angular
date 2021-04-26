@@ -56,6 +56,10 @@ export class SceneComponent implements OnInit, OnDestroy {
   public scenes = scenes;
   constructor(private _diva: DivaService, private _data: DataService) {}
 
+  /**
+   * 切换场景
+   * @param scene 场景
+   */
   switchScene(scene: SceneConfigDto) {
     console.log({ scene });
     this._diva.client?.applyScene(scene.index);
