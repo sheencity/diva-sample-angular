@@ -36,13 +36,19 @@ const lifts = plainToClass(LiftConfigDto, [
   styleUrls: ['./customize.component.scss'],
 })
 export class CustomizeComponent implements OnInit {
+  // 电梯模型
   liftModels: Elevator[] = [];
+  // 电梯控制器
   controllers: ElevatorController[] = [];
+  // 初始层数
   currentLift = [1, 1, 1, 1];
+  // 每层高度，由最高高度减最低高度除楼层获得
   step = 299.7;
+  // 当前选中的块，为了添加index，防止下拉框被其他块覆盖住
   active = 0;
+  // 自定义电梯
   lifts: any;
-
+  // 电梯下拉框配置
   options = [
     { value: '1', placeholder: '1' },
     { value: '2', placeholder: '2' },
@@ -59,6 +65,12 @@ export class CustomizeComponent implements OnInit {
   ];
   constructor(private _diva: DivaService, private _data: DataService) {}
 
+  /**
+   * 给初始化的电梯添加 selected 属性，以便于在 dropdown 循环中绑定
+   * @param lift (LiftConfigDto) 电梯
+   * @param i (number) index
+   * @returns 添加 selected 的电梯数组
+   */
   private _addSelected(lift: LiftConfigDto, i: number) {
     let selected = {
       value: this.currentLift[i].toString(),
@@ -67,10 +79,16 @@ export class CustomizeComponent implements OnInit {
     return { ...lift, selected };
   }
 
+  // 选中电梯块或者下拉框时触发，将 index=104 的 css 属性绑定到当前点击的控制块，防止下拉框被其他框覆盖
   activeLift(index: number) {
     this.active = index;
   }
 
+  /**
+   * 选择电梯层数
+   * @param $event (dropdownData) 下拉框选中的值 
+   * @param i (number) 被触发电梯的 index 值
+   */
   async selectLift($event, i) {
     const value = Number($event.value);
     console.log('controllers', this.controllers);
@@ -87,7 +105,7 @@ export class CustomizeComponent implements OnInit {
         this.lifts[i].title
       );
       const coord = await model.getCoordinate();
-      const controller = new ElevatorController({
+      const controller = new ElevatorController({  // 初始化电梯控制器
         landings: {
           f1: new Vector3(coord.x, coord.y, 987),
           f2: new Vector3(coord.x, coord.y, 987 + this.step),
@@ -105,7 +123,7 @@ export class CustomizeComponent implements OnInit {
         },
         speed: 500,
       });
-      const lift = new Elevator({ model, signal: controller.signal });
+      const lift = new Elevator({ model, signal: controller.signal }); // 初始化电梯
       this.liftModels.push(lift);
       this.controllers.push(controller);
     }
