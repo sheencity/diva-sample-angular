@@ -32,6 +32,7 @@ const seasons = plainToClass(SeasonConfigDto, [
     name: 'winterSnow',
   },
 ]);
+// 设置时分
 const getTime = (hour: number, min: number) => {
   const now = new Date();
   now.setHours(hour, min, 0, 0);
@@ -62,19 +63,30 @@ const noons = plainToClass(NoonConfigDto, [
   styleUrls: ['./date.component.scss'],
 })
 export class DateComponent implements OnInit, OnDestroy {
+  // 默认设置的季节
   seasons = seasons;
+  // 默认设置的午时
   noons = noons;
 
+  // 自定义日期
   public date: string;
+  // 自定义时间
+  public time: string;
 
+  /**
+   * 设置自定义日期
+   * @param $event DateInputEvent
+   */
   onDateChange($event: any) {
     const date = new Date($event.target.value);
     this._diva.client.setDate(date);
     this._data.changeCode(`client.setDate(new Date('${date}'))`);
   }
 
-  public time: string;
-
+  /**
+   * 设置自定义时间
+   * @param $event DateInputEvent
+   */
   onTimeChange($event: any) {
     const time = new Date();
     time.setHours(
@@ -89,6 +101,10 @@ export class DateComponent implements OnInit, OnDestroy {
 
   constructor(private _diva: DivaService, private _data: DataService) {}
 
+  /**
+   * 切换季节
+   * @param season SeasonConfigDto
+   */
   async switchSeason(season: SeasonConfigDto) {
     console.log({ season });
     await this._diva.client.setDate(new Date(season.value));
@@ -102,12 +118,17 @@ export class DateComponent implements OnInit, OnDestroy {
         `client.setDate(new Date('${season.value}'));\nclient.setWeather('snow')`
       );
     } else if (season.name === 'autumn') {
+      // 秋季需要设置 11-01， 代码显示 09-23
       this._data.changeCode(`client.setDate(new Date('2021-09-23'))`);
     } else {
       this._data.changeCode(`client.setDate(new Date('${season.value}'))`);
     }
   }
 
+  /**
+   * 切换午时
+   * @param noon NoonConfigDto
+   */
   switchNoon(noon: NoonConfigDto) {
     console.log({ noon });
     this._diva.client.setTime(getTime(noon.value, 0));
@@ -117,12 +138,23 @@ const morning = (now.setHours(${noon.value}), now);
 client.setTime(morning);`
     );
   }
+
+  /**
+   * 设置季节午时 icon
+   * @param name (string) 季节午时标题
+   * @returns (string) 对应的 icon 链接
+   */
   iconBind(name: string) {
     return name === 'winterSnow'
       ? 'assets/icon/date/winter.png'
       : `assets/icon/date/${name}.png`;
   }
 
+  /**
+   * 获取当前日期或时间
+   * @param type (string) 日期/时间
+   * @returns (Date) 
+   */
   getDate(type: string) {
     const date = new Date();
     if (type === 'date') {
@@ -136,6 +168,7 @@ client.setTime(morning);`
     }
   }
 
+  // 规整，方便对时间 input 绑定值
   private _format(v: number) {
     return v < 10 ? `0${v}` : `${v}`;
   }
@@ -145,7 +178,7 @@ client.setTime(morning);`
     this.time = this.getDate('time');
     this._diva.client.setDate(new Date());
     this._diva.client.setTime(new Date());
-    this._diva.client?.applyScene('日期时间');
+    this._diva.client?.applyScene('日期时间'); 
     if (this._diva.client?.applyScene) {
       this._data.changeCode(`client.applyScene('日期时间')`);
     }

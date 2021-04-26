@@ -50,6 +50,7 @@ export class FloorComponent implements OnInit, OnDestroy {
   public set gradation(v: boolean) {
     console.log('gradation', v);
     if (v) {
+      // 聚焦到已选中的层数
       this._foucsFloor(Number(this.selectedFloor.placeholder));
     } else {
       this._setVisibility(this.models, true, true);
@@ -71,7 +72,8 @@ export class FloorComponent implements OnInit, OnDestroy {
     if (!this.gradation) {
       return;
     }
-    if (this._gradation) {
+    if (this._gradation) { 
+       // 聚焦到已选中的层数
       this._foucsFloor(Number(v.placeholder));
     }
     // 此处设置层数
@@ -121,20 +123,29 @@ export class FloorComponent implements OnInit, OnDestroy {
     { placeholder: '13', value: '顶楼_12', pipeLineName: '顶层管线' },
   ];
 
+  /**
+   * 聚焦层数
+   * @param floor (number) 层数
+   */
   private async _foucsFloor(floor: number) {
+    // 显示当前层数模型
     const modelToFocus = this.models.filter(
       (model) => model.name === this.options[floor - 1].value
     );
+    // 隐藏其他层数模型
     const modelToHide = this.models.filter(
       (model) => model.name !== this.options[floor - 1].value
     );
+    // 显示当前层数管道
     const pipeToShow = this.pipeModels.filter(
       (pipeModel) => pipeModel.name === this.options[floor - 1].pipeLineName
     );
+    // 隐藏其他层数的管道
     const pipeToHide = this.pipeModels.filter(
       (pipeModel) => pipeModel.name !== this.options[floor - 1].pipeLineName
     );
 
+    // 聚焦当前楼层
     await this._focus(modelToFocus[0]);
     await this._setVisibility(modelToFocus, true);
     await this._setVisibility(modelToHide, false);
@@ -178,6 +189,7 @@ export class FloorComponent implements OnInit, OnDestroy {
 
   constructor(private _diva: DivaService, private _data: DataService) {}
 
+  // 设置路径显示隐藏
   private SetPathVisibility(v: boolean) {
     const pathIndexArray = [0, 1, 2, 3, 4];
 
@@ -206,6 +218,7 @@ export class FloorComponent implements OnInit, OnDestroy {
     this.options.forEach(async (opation) => {
       const model = await this._getModel(opation.value);
       const pipeModel = await this._getModel(opation.pipeLineName);
+      // 获取所有楼层模型以及管道模型
       this.models.push(model);
       this.pipeModels.push(pipeModel);
     });
@@ -216,6 +229,7 @@ export class FloorComponent implements OnInit, OnDestroy {
     await this._diva.client.request('AggregateByGroup', {
       groupName: '场景模型/主楼拆分',
     });
+    // 显示所有楼层，隐藏所有管道，并且不显示示例代码
     await this._setVisibility(this.models, true, true);
     await this._setVisibility(this.pipeModels, false, true);
     this.SetPathVisibility(true);
