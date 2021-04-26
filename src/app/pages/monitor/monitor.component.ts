@@ -45,6 +45,12 @@ export class MonitorComponent implements OnInit, OnDestroy {
   selectedMonitorIndex: number = -1;
   constructor(private _diva: DivaService, private _data: DataService) {}
 
+  /**
+   * 聚焦监控设备
+   * @param monitor (MonitorConfigDto) 监控设备
+   * @param index (number) 选中监控的 index 值
+   * @param isPop (boolean) 是否为弹窗设备
+   */
   async selectMonitor(monitor: MonitorConfigDto, index: number, isPop: boolean) {
       index = isPop ? index + 2 : index;
       try {
@@ -62,6 +68,11 @@ export class MonitorComponent implements OnInit, OnDestroy {
       this._data.changeCode(`model.focus()`);
   }
 
+  /**
+   * 更新弹窗设备链接并打开设备的弹窗
+   * @param monitorEqui (MonitorEquiConfigDto) 弹窗设备
+   * @param index (number) 弹窗设备的 index 值
+   */
   async refresh(monitorEqui: MonitorEquiConfigDto, index: number) {
     index = index + 2;
     console.log('monitorEqui is', monitorEqui, index);
@@ -80,6 +91,11 @@ export class MonitorComponent implements OnInit, OnDestroy {
     // 此处设置设备网址刷新信息
   }
 
+
+  /**
+   * 阻止事件冒泡
+   * @param $event 
+   */
   onKeydown($event) {
     $event.stopPropagation();
   }

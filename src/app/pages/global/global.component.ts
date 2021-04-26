@@ -14,6 +14,7 @@ export class GlobalComponent implements OnInit, OnDestroy {
   public set compass(v: boolean) {
     this._compass = v;
     this._data.compass = v;
+    // 设置罗盘开关
     this._diva.client.setCompass(v);
     this._data.changeCode(`client.setCompass(${v})`);
   }
@@ -44,6 +45,7 @@ export class GlobalComponent implements OnInit, OnDestroy {
   public set selectedMode(v: DropdownData) {
     this._selectedMode = v;
     // this._data.selectedMode = v;
+    // 设置人视模式
     this._diva.client.request('ActiveThirdPersonMode', {
       'active': v.value == 'true'
     })
