@@ -34,13 +34,18 @@ const equipments = plainToClass(EquipmentConfigDto, [
   styleUrls: ['./state.component.scss'],
 })
 export class StateComponent implements OnInit, OnDestroy {
+  // 是否选择了默认值，防止点击默认值之后事件穿透到块上，触发 click 模型聚焦
   isSelectDefault = false;
+  // 选中的设备
   selectedEqui: any = null;
+  // 选中的设备的 index 值，为了添加选中文字变白，暂时未使用
   selected: number = null;
+  // 激活的块 index 值，给块设置 index 值，防止下拉框被其他块覆盖
   active: number;
   equipments = equipments.map((equipment) => this.addSelected(equipment));
   constructor(private _diva: DivaService, private _data: DataService) {}
 
+  // 状态配置
   options = [
     { value: EquipmentState.Default, placeholder: '默认' },
     { value: EquipmentState.Alarm, placeholder: '报警' },
@@ -48,6 +53,11 @@ export class StateComponent implements OnInit, OnDestroy {
     { value: EquipmentState.Hidden, placeholder: '隐藏' },
   ];
 
+  /**
+   * 设备添加 selectd 属性，方便在循环下拉框组件中绑定值
+   * @param equipment 设备
+   * @returns 
+   */
   private addSelected(equipment: EquipmentConfigDto) {
     let selected: DropdownData<EquipmentState>;
     switch (equipment.state) {
@@ -70,6 +80,12 @@ export class StateComponent implements OnInit, OnDestroy {
     return { ...equipment, selected };
   }
 
+  /**
+   * 设备聚焦
+   * @param equi 设备
+   * @param i (number) 设备的 index 值
+   * @returns 
+   */
   async onClick(equi: EquipmentConfigDto, i: number) {
     if (this.isSelectDefault) return;
     this.active = i;
@@ -90,9 +106,14 @@ export class StateComponent implements OnInit, OnDestroy {
       `model.focus()`
     );
     console.log('equi', equi);
-    // 此处设置设备的聚焦状态
   }
 
+  /**
+   * 设置设备的状态
+   * @param equi 设备
+   * @param $event 选中的状态
+   * @returns 
+   */
   async onChange(equi: EquipmentConfigDto, $event: DropdownData) {
     if ($event.value === 'default') {
       this.isSelectDefault = true;
@@ -107,7 +128,6 @@ export class StateComponent implements OnInit, OnDestroy {
     const id = model.id;
     const type = $event.value as RenderingStyleMode;
     model.setRenderingStyleMode(type);
-    // 此处设置渲染状态
     this._diva.client.request('SetRenderStatus', {
       id,
       type,

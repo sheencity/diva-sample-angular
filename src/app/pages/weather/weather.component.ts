@@ -50,6 +50,11 @@ export class WeatherComponent implements OnInit, OnDestroy {
 
   constructor(private _diva: DivaService, private _data: DataService) {}
 
+  /**
+   * 切换天气
+   * @param weather (WeatherConfigDto) 天气配置
+   * @returns 
+   */
   switchWeather(weather: WeatherConfigDto) {
     console.log({ weather });
     if (!weather.typeName) return;
@@ -59,6 +64,11 @@ export class WeatherComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * 根据天气绑定 icon
+   * @param weatherName (string) 天气名称
+   * @returns 
+   */
   iconBind(weatherName: string) {
     return `assets/icon/weather/${weatherName}.png`;
   }

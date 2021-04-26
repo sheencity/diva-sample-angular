@@ -60,6 +60,10 @@ export class VideoComponent implements OnInit, OnDestroy {
 
   constructor(private _diva: DivaService, public _data: DataService) {}
 
+  /**
+   * 播放路径
+   * @param video (VideoConfigDto) 路径
+   */
   async toggleVideo(video: VideoConfigDto) {
     this.selectedVideo = video.title;
     await this._diva.client.request('StopCameraTrack');
@@ -69,6 +73,11 @@ export class VideoComponent implements OnInit, OnDestroy {
     this._data.changeCode(`client.playCameraTrack('${video.title}')`);
   }
 
+  /**
+   * 设置块的 icon
+   * @param video 路径
+   * @returns 
+   */
   iconBind(video) {
     return 'assets/icon/video/play.png';
   }
