@@ -19,7 +19,6 @@ import { WeatherComponent } from './pages/weather/weather.component';
 import { DateComponent } from './pages/date/date.component';
 import { FloorComponent } from './pages/floor/floor.component';
 import { StateComponent } from './pages/state/state.component';
-import { OverlayComponent } from './pages/overlay/overlay.component';
 import { MonitorComponent } from './pages/monitor/monitor.component';
 import { LampComponent } from './pages/lamp/lamp.component';
 import { CustomizeComponent } from './pages/customize/customize.component';
@@ -44,7 +43,6 @@ const PAGES = [
   DateComponent,
   FloorComponent,
   StateComponent,
-  OverlayComponent,
   MonitorComponent,
   LampComponent,
   CustomizeComponent,
