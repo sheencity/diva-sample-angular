@@ -1,11 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { WeatherName } from '@sheencity/diva-sdk';
-import { plainToClass } from 'class-transformer';
 import { NoonConfigDto, SeasonConfigDto } from 'src/app/common/dtos/data.dto';
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
 
-const seasons = plainToClass(SeasonConfigDto, [
+const seasons = [
   {
     title: '春',
     value: '2021-03-21',
@@ -31,7 +30,7 @@ const seasons = plainToClass(SeasonConfigDto, [
     value: '2021-12-21',
     name: 'winterSnow',
   },
-]);
+];
 // 设置时分
 const getTime = (hour: number, min: number) => {
   const now = new Date();
@@ -39,7 +38,7 @@ const getTime = (hour: number, min: number) => {
   return now;
 };
 
-const noons = plainToClass(NoonConfigDto, [
+const noons = [
   {
     title: '早晨',
     value: 8,
@@ -55,7 +54,7 @@ const noons = plainToClass(NoonConfigDto, [
     value: 17,
     name: 'afternoon',
   },
-]);
+];
 
 @Component({
   selector: 'app-date',

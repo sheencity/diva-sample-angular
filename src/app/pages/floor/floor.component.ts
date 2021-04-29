@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { plainToClass } from 'class-transformer';
 import { DivaService } from 'src/app/common/services/diva.service';
 import { DropdownData } from 'src/app/common/dtos/dropdown-data.interface';
 import { Model } from '@sheencity/diva-sdk';
@@ -169,10 +168,11 @@ export class FloorComponent implements OnInit, OnDestroy {
   }
   // 显示隐藏方法
   private _setVisibility(models: Model[], visible: boolean, leave = false) {
-    this._diva.client.request('SetVisibility', {
-      ids: [...models.map((model) => model.id)],
-      visible,
-    });
+    // this._diva.client.request('SetVisibility', {
+    //   ids: [...models.map((model) => model.id)],
+    //   visible,
+    // });
+    models.map((model) => model.visible = visible);
     if (!leave) {
       this._data.changeCode(
         `client.setVisibility(${[

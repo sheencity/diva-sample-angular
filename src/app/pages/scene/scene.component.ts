@@ -1,10 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { plainToClass } from 'class-transformer';
 import { SceneConfigDto } from 'src/app/common/dtos/scene.dto';
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
 
-const scenes = plainToClass(SceneConfigDto, [
+const scenes = [
   {
     title: '测试场景01',
     index: 0,
@@ -45,7 +44,7 @@ const scenes = plainToClass(SceneConfigDto, [
     title: '测试场景10',
     index: 9,
   },
-]);
+];
 
 @Component({
   selector: 'app-scene',

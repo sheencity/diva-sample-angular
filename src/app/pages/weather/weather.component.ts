@@ -1,11 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { WeatherName } from '@sheencity/diva-sdk';
-import { plainToClass } from 'class-transformer';
 import { WeatherConfigDto } from 'src/app/common/dtos/weather.dto';
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
 
-const weathers = plainToClass(WeatherConfigDto, [
+const weathers = [
   {
     title: '默认',
     typeName: 'default',
@@ -38,7 +37,7 @@ const weathers = plainToClass(WeatherConfigDto, [
     title: '摄影棚',
     typeName: WeatherName.Studio,
   },
-]);
+];
 
 @Component({
   selector: 'app-weather',

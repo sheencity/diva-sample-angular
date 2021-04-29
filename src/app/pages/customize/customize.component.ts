@@ -8,14 +8,13 @@ import {
   Model,
   Vector3,
 } from '@sheencity/diva-sdk';
-import { plainToClass } from 'class-transformer';
 import { DropdownData } from 'src/app/common/dtos/dropdown-data.interface';
 import { LiftConfigDto } from 'src/app/common/dtos/lift.dto';
 import { LightDec } from 'src/app/common/dtos/light.model';
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
 
-const lifts = plainToClass(LiftConfigDto, [
+const lifts = [
   {
     title: '一号梯',
   },
@@ -28,7 +27,7 @@ const lifts = plainToClass(LiftConfigDto, [
   {
     title: '四号梯',
   },
-]);
+];
 
 @Component({
   selector: 'app-customize',

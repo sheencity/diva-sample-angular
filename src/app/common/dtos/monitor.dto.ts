@@ -1,9 +1,8 @@
-import { Expose } from 'class-transformer';
 export class  MonitorConfigDto {
-    @Expose() public readonly title: string;
-    @Expose() public readonly url: string;
+    public readonly title: string;
+    public readonly url: string;
 }
 export class  MonitorEquiConfigDto {
-    @Expose() public readonly title: string;
-    @Expose() public readonly url: string;
+    public readonly title: string;
+    public readonly url: string;
 }

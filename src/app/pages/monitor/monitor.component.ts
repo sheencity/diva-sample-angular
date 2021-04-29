@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Model, RenderingStyleMode } from '@sheencity/diva-sdk';
-import { plainToClass } from 'class-transformer';
 import {
   MonitorConfigDto,
   MonitorEquiConfigDto,
@@ -8,7 +7,7 @@ import {
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
 
-const monitors = plainToClass(MonitorConfigDto, [
+const monitors = [
   {
     title: '测试设备01',
     url: 'rtmp://rtmp01open.ys7.com/openlive/53e8792aa1e540ddb693afb20aaa9517.hd',
@@ -25,7 +24,7 @@ const monitors = plainToClass(MonitorConfigDto, [
     title: '测试设备04',
     url: 'https://www.sheencity.com',
   },
-]);
+];
 
 @Component({
   selector: 'app-monitor',

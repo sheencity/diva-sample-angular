@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Model, RenderingStyleMode } from '@sheencity/diva-sdk';
-import { plainToClass } from 'class-transformer';
 import { DropdownData } from 'src/app/common/dtos/dropdown-data.interface';
 import {
   EquipmentConfigDto,
@@ -9,7 +8,7 @@ import {
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
 
-const equipments = plainToClass(EquipmentConfigDto, [
+const equipments = [
   {
     title: '空调',
     state: EquipmentState.Default,
@@ -26,7 +25,7 @@ const equipments = plainToClass(EquipmentConfigDto, [
     title: '冰箱',
     state: EquipmentState.Default,
   },
-]);
+] as EquipmentConfigDto[];
 
 @Component({
   selector: 'app-state',
@@ -125,13 +124,9 @@ export class StateComponent implements OnInit, OnDestroy {
       equi.title
     );
     if (!model) return;
-    const id = model.id;
+    // const id = model.id;
     const type = $event.value as RenderingStyleMode;
     model.setRenderingStyleMode(type);
-    this._diva.client.request('SetRenderStatus', {
-      id,
-      type,
-    });
 
     this._data.changeCode(
       `model.setRenderingStyleMode(RenderingStyleMode.${type
@@ -156,11 +151,8 @@ export class StateComponent implements OnInit, OnDestroy {
   // 销毁钩子
   ngOnDestroy(): void {
     this.equipments.forEach(async (equi) => {
-      const [model] = await this._diva.client.getEntitiesByName(equi.title);
-      this._diva.client.request('SetRenderStatus', {
-        id: model.id,
-        type: EquipmentState.Default,
-      });
+      const [model] = await this._diva.client.getEntitiesByName<Model>(equi.title);
+      model.setRenderingStyleMode(RenderingStyleMode.Default);
     });
   }
 }

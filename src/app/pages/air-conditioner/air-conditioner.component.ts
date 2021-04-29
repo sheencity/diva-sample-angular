@@ -1,11 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DeviceController, Device } from '@sheencity/diva-sdk';
-import { plainToClass } from 'class-transformer';
 import { LightDec } from 'src/app/common/dtos/light.model';
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
 
-const airDecs = plainToClass(LightDec, [
+const airDecs = [
   {
     title: '测试空调01',
     state: false,
@@ -22,7 +21,7 @@ const airDecs = plainToClass(LightDec, [
     title: '测试空调04',
     state: false,
   },
-])
+]
 
 @Component({
   selector: 'app-air-conditioner',
