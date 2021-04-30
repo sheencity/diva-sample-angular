@@ -36,7 +36,7 @@ const weathers = [
     title: '摄影棚',
     typeName: WeatherName.Studio,
   },
-] as { title: string, typeName: WeatherName }[];
+] as { title: string; typeName: WeatherName }[];
 
 @Component({
   selector: 'app-weather',
@@ -50,10 +50,10 @@ export class WeatherComponent implements OnInit {
 
   /**
    * 切换天气
-   * @param weather (WeatherConfigDto) 天气配置
-   * @returns 
+   * @param weather 天气配置
+   * @returns
    */
-  switchWeather(weather: { title: string, typeName: WeatherName }) {
+  switchWeather(weather: { title: string; typeName: WeatherName }) {
     console.log({ weather });
     if (!weather.typeName) return;
     this._diva.client?.setWeather(weather.typeName);
@@ -65,7 +65,7 @@ export class WeatherComponent implements OnInit {
   /**
    * 根据天气绑定 icon
    * @param weatherName (string) 天气名称
-   * @returns 
+   * @returns
    */
   iconBind(weatherName: string) {
     return `assets/icon/weather/${weatherName}.png`;

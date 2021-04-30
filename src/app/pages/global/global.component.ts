@@ -7,7 +7,7 @@ import { DivaService } from 'src/app/common/services/diva.service';
 @Component({
   selector: 'app-global',
   templateUrl: './global.component.html',
-  styleUrls: ['./global.component.scss']
+  styleUrls: ['./global.component.scss'],
 })
 export class GlobalComponent implements OnInit, OnDestroy {
   // 罗盘
@@ -26,8 +26,14 @@ export class GlobalComponent implements OnInit, OnDestroy {
   private _selectedMode: DropdownData = { value: 'false', placeholder: '飞行' };
   public set selectedMode(v: DropdownData) {
     this._selectedMode = v;
-    this._diva.client.setMovementMode(v.value == 'true' ? MovementMode.ThirdPerson : MovementMode.Fly)
-    this._data.changeCode(`client.setMovementMode(${v.value == 'true' ? 'MovementMode.ThirdPerson' : 'MovementMode.Fly'})`);
+    this._diva.client.setMovementMode(
+      v.value == 'true' ? MovementMode.ThirdPerson : MovementMode.Fly
+    );
+    this._data.changeCode(
+      `client.setMovementMode(${
+        v.value == 'true' ? 'MovementMode.ThirdPerson' : 'MovementMode.Fly'
+      })`
+    );
     this._selectedMode = v;
   }
   public get selectedMode() {
@@ -39,12 +45,14 @@ export class GlobalComponent implements OnInit, OnDestroy {
     { value: 'true', placeholder: '人视' },
   ];
 
-  constructor(private _data: DataService, private _diva: DivaService) { }
+  constructor(private _data: DataService, private _diva: DivaService) {}
 
   async ngOnInit() {
     this._compass = this._data.compass;
     await this._diva.client.applyScene('全局配置');
-    setTimeout(() => {this._data.changeCode(`client.applyScene('全局配置')`)}, 0);
+    setTimeout(() => {
+      this._data.changeCode(`client.applyScene('全局配置')`);
+    }, 0);
   }
 
   ngOnDestroy(): void {

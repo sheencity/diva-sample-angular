@@ -13,7 +13,7 @@ const scenes = [
   { title: '测试场景08', index: 7 },
   { title: '测试场景09', index: 8 },
   { title: '测试场景10', index: 9 },
-] as { title: string, index: number }[];
+] as { title: string; index: number }[];
 
 @Component({
   selector: 'app-scene',
@@ -28,7 +28,7 @@ export class SceneComponent implements OnInit {
    * 切换场景
    * @param scene 场景
    */
-  switchScene(scene: { title: string, index: number }) {
+  switchScene(scene: { title: string; index: number }) {
     console.log({ scene });
     this._diva.client?.applyScene(scene.index);
     if (this._diva.client?.applyScene) {

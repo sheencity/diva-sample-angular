@@ -48,9 +48,9 @@ export class MonitorComponent implements OnInit, OnDestroy {
    */
   async selectMonitor(monitor: {title: string, url: string}, index: number, isPop: boolean) {
     index = isPop ? index + 2 : index;
-    await this.monitorModels[index].focus(1000, Math.PI / 6)
+    await this.monitorModels[index].focus(1000, -Math.PI / 6)
     this.selectedMonitorIndex = index;
-    this._data.changeCode(`model.focus(1000, Math.PI / 6)`);
+    this._data.changeCode(`model.focus(1000, -Math.PI / 6)`);
   }
 
   /**
@@ -61,18 +61,7 @@ export class MonitorComponent implements OnInit, OnDestroy {
   async refresh(monitorEqui: {title: string, url: string}, index: number) {
     index = index + 2;
     console.log('monitorEqui is', monitorEqui, index);
-    // try {
-    //   await this._diva.client.request('DestroyWebWidget', {id: this.monitorModels[index].id});
-    // } catch {
-    // }
-    await this._diva.client.request('CreateWebWidget', {
-      id: this.monitorModels[index].id,
-      widget: {
-        url: monitorEqui.url,
-        width: 500,
-        height: 280,
-      },
-    })
+    await this.monitorModels[index].setWebWidget(new URL(monitorEqui.url), 500, 280);
     // 此处设置设备网址刷新信息
   }
 
@@ -98,14 +87,7 @@ export class MonitorComponent implements OnInit, OnDestroy {
         url = this.monitorEquis[i - 2].url;
       }
       const handle = () => {
-        this._diva.client.request('CreateWebWidget', {
-          id: model.id,
-          widget: {
-            url,
-            width: 500,
-            height: 280,
-          }
-        })
+        model.setWebWidget(new URL(url), 500, 280);
       }
       model.setRenderingStyleMode(RenderingStyleMode.Default);
       model.addEventListener('click', handle)
@@ -118,6 +100,5 @@ export class MonitorComponent implements OnInit, OnDestroy {
   // 销毁钩子
   ngOnDestroy(): void {
     this.monitorModels.forEach((monitor, index) => monitor.removeEventListener('click', this.monitorHandlers[index]));
-    this.monitorModels.forEach((monitor) => this._diva.client.request('DestroyWebWidget', {id: monitor.id}));
   }
 }

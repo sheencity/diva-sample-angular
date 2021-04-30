@@ -13,7 +13,7 @@ const videos = [
   { title: '测试路径08', index: 7 },
   { title: '测试路径09', index: 8 },
   { title: '测试路径10', index: 9 },
-] as { title: string, index: number }[];
+] as { title: string; index: number }[];
 
 @Component({
   selector: 'app-video',
@@ -33,7 +33,7 @@ export class VideoComponent implements OnInit {
    * 播放路径
    * @param video 路径
    */
-  async toggleVideo(video: {title: string, index: number}) {
+  async toggleVideo(video: { title: string; index: number }) {
     this.selectedVideo = video.title;
     await this._diva.client.stopCameraTrack();
     await this._diva.client.playCameraTrack(video.index);

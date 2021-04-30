@@ -29,7 +29,7 @@ const seasons = [
     value: '2021-12-21',
     name: 'winterSnow',
   },
-] as {title: string, value: string, name: string}[];
+] as { title: string; value: string; name: string }[];
 // 设置时分
 const getTime = (hour: number, min: number) => {
   const now = new Date();
@@ -53,7 +53,7 @@ const noons = [
     value: 17,
     name: 'afternoon',
   },
-] as {title: string, value: number, name: string}[];
+] as { title: string; value: number; name: string }[];
 
 @Component({
   selector: 'app-date',
@@ -103,7 +103,7 @@ export class DateComponent implements OnInit, OnDestroy {
    * 切换季节
    * @param season SeasonConfigDto
    */
-  async switchSeason(season: {title: string, value: string, name: string}) {
+  async switchSeason(season: { title: string; value: string; name: string }) {
     console.log({ season });
     await this._diva.client.setDate(new Date(season.value));
     if (season.name === 'winterSnow') {
@@ -127,7 +127,7 @@ export class DateComponent implements OnInit, OnDestroy {
    * 切换午时
    * @param noon NoonConfigDto
    */
-  switchNoon(noon: {title: string, value: number, name: string}) {
+  switchNoon(noon: { title: string; value: number; name: string }) {
     console.log({ noon });
     this._diva.client.setTime(getTime(noon.value, 0));
     this._data.changeCode(
@@ -151,7 +151,7 @@ client.setTime(morning);`
   /**
    * 获取当前日期或时间
    * @param type (string) 日期/时间
-   * @returns (Date) 
+   * @returns (Date)
    */
   getDate(type: string) {
     const date = new Date();
@@ -176,7 +176,7 @@ client.setTime(morning);`
     this.time = this.getDate('time');
     this._diva.client.setDate(new Date());
     this._diva.client.setTime(new Date());
-    this._diva.client?.applyScene('日期时间'); 
+    this._diva.client?.applyScene('日期时间');
     if (this._diva.client?.applyScene) {
       this._data.changeCode(`client.applyScene('日期时间')`);
     }

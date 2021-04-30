@@ -21,7 +21,7 @@ const equipments = [
     title: '冰箱',
     state: RenderingStyleMode.Default,
   },
-] as {title: string, state: RenderingStyleMode}[];
+] as { title: string; state: RenderingStyleMode }[];
 
 @Component({
   selector: 'app-state',
@@ -51,9 +51,9 @@ export class StateComponent implements OnInit, OnDestroy {
   /**
    * 设备添加 selected 属性，方便在循环下拉框组件中绑定值
    * @param equipment 设备
-   * @returns 
+   * @returns
    */
-  private addSelected(equipment: {title: string, state: RenderingStyleMode}) {
+  private addSelected(equipment: { title: string; state: RenderingStyleMode }) {
     let selected: DropdownData<RenderingStyleMode>;
     switch (equipment.state) {
       case RenderingStyleMode.Default:
@@ -76,35 +76,15 @@ export class StateComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * 设备聚焦
-   * @param equi 设备
-   * @param i (number) 设备的 index 值
-   * @returns 
-   */
-  async onClick(equi: {title: string, state: RenderingStyleMode}, i: number) {
-    if (this.isSelectDefault) return;
-    this.active = i;
-    this.selected = i;
-    const [model] = await this._diva.client.getEntitiesByName<Model>(
-      this.equipments[i].title
-    );
-    // console.log('model is', model);
-    if (!model) return;
-    this.selectedEqui = model;
-    model.focus(200, 0);
-    this._data.changeCode(
-      `model.focus(200, 0)`
-    );
-    console.log('equi', equi);
-  }
-
-  /**
    * 设置设备的状态
    * @param equi 设备
    * @param $event 选中的状态
-   * @returns 
+   * @returns
    */
-  async onChange(equi: {title: string, state: RenderingStyleMode}, $event: DropdownData) {
+  async onChange(
+    equi: { title: string; state: RenderingStyleMode },
+    $event: DropdownData
+  ) {
     if ($event.value === 'default') {
       this.isSelectDefault = true;
       setTimeout(() => {

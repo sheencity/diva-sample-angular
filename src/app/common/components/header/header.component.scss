@@ -37,37 +37,10 @@
     .exampleCode {
       height: 43px;
       line-height: 43px;
-      margin-right: 24px;
+      // margin-right: 24px;
       app-switcher {
         width: 117px;
         pointer-events: all;
-      }
-    }
-    .weather {
-      color: #ffffff;
-      font-size: 16px;
-      line-height: 19px;
-      font-weight: normal;
-      font-family: arial, Arial, sans-serif;
-      writing-mode: horizontal-tb;
-      letter-spacing: 0px;
-      text-overflow: unset;
-      white-space: unset;
-      .weather-info {
-        display: flex;
-        justify-content: flex-end;
-        img {
-          margin-right: 5px;
-        }
-      }
-      .date {
-        margin-top: 6px;
-        text-align: right;
-        font-weight: normal;
-        font-family: "Microsoft Yahei";
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
       }
     }
   }

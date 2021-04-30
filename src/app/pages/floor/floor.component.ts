@@ -4,8 +4,7 @@ import { DropdownData } from 'src/app/common/models/dropdown-data.interface';
 import { Entity, Model } from '@sheencity/diva-sdk';
 import { DataService } from 'src/app/common/services/data.service';
 import { TypedGroup } from '@sheencity/diva-sdk/lib/utils/group';
-import { defer, from, Observable, ReplaySubject } from 'rxjs';
-import { buffer, delay, switchMap } from 'rxjs/operators';
+import { defer, from, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-floor',
@@ -32,6 +31,13 @@ export class FloorComponent implements OnInit, OnDestroy {
       else this._diva.client.assemble(group);
 
       this._explode = val;
+      this._data.changeCode(
+        `const group = client.getEntityGroupByGroupPath('场景模型/主楼拆分');\n${
+          val
+            ? 'client.disassemble(group, { spacing: 300, eachHeight: 290, duration: 5 })'
+            : 'client.assemble(group)'
+        }`
+      );
     });
   }
   public get explode() {
@@ -142,19 +148,19 @@ export class FloorComponent implements OnInit, OnDestroy {
     await this._focus(modelToFocus[0]);
     await this._setVisibility(modelToFocus, true);
     await this._setVisibility(modelToHide, false);
-    await this._setVisibility(pipeToHide, false),
+    await this._setVisibility(pipeToHide, false);
     await this._setVisibility(pipeToShow, this.pipe ? true : false);
     this._data.changeCode(
       `client.setVisibility(${[
         ...modelToFocus.map((model) => `'${model.id}'`),
       ]}, true)`
-    );  
+    );
   }
 
   // 聚焦方法
   private async _focus(model: Model) {
-    await model.focus(5000, Math.PI / 6);
-    this._data.changeCode(`model.focus(5000, Math.PI / 6)`);
+    await model.focus(5000, -Math.PI / 6);
+    this._data.changeCode(`model.focus(5000, -Math.PI / 6)`);
   }
   // 显示隐藏方法
   private _setVisibility(models: Model[], visible: boolean, leave = false) {

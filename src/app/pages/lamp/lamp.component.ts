@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DeviceController, Device } from '@sheencity/diva-sdk';
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
@@ -20,16 +20,16 @@ const lightDecs = [
     title: '测试灯光04',
     state: true,
   },
-] as {title: string, state: boolean}[];
+] as { title: string; state: boolean }[];
 
 @Component({
   selector: 'app-lamp',
   templateUrl: './lamp.component.html',
   styleUrls: ['./lamp.component.scss'],
 })
-export class LampComponent implements OnInit, OnDestroy {
+export class LampComponent implements OnInit {
   // 自定义的灯光设备
-  public lightDecs: {title: string, state: boolean}[] = [];
+  public lightDecs: { title: string; state: boolean }[] = [];
   // 灯光设备
   public lights: Device[] = [];
   // 灯光控制器
@@ -58,8 +58,8 @@ export class LampComponent implements OnInit, OnDestroy {
    */
   async onClick(index: number) {
     if (!this.lights[index]) return;
-    await this.lights[index].focus(1000, Math.PI / 6)
-    this._data.changeCode(`device.focus(1000, Math.PI / 6)`);
+    await this.lights[index].focus(1000, -Math.PI / 6);
+    this._data.changeCode(`device.focus(1000, -Math.PI / 6)`);
   }
   async ngOnInit() {
     this._diva.client.applyScene('灯光控制');
@@ -79,9 +79,5 @@ export class LampComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this._data.changeCode(`client.applyScene('灯光控制')`);
     }, 0);
-  }
-
-  ngOnDestroy() {
-    // this.lightControllers.forEach((lightController) => lightController.turnOff());
   }
 }

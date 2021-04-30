@@ -65,7 +65,7 @@ export class CustomizeComponent implements OnInit {
    * @param i (number) index
    * @returns 添加 selected 的电梯数组
    */
-  private _addSelected(lift: {title: string}, i: number) {
+  private _addSelected(lift: { title: string }, i: number) {
     let selected = {
       value: this.currentLift[i].toString(),
       placeholder: this.currentLift[i].toString(),
@@ -80,7 +80,7 @@ export class CustomizeComponent implements OnInit {
 
   /**
    * 选择电梯层数
-   * @param $event (dropdownData) 下拉框选中的值 
+   * @param $event (dropdownData) 下拉框选中的值
    * @param i (number) 被触发电梯的 index 值
    */
   async selectLift($event, i) {
@@ -99,7 +99,8 @@ export class CustomizeComponent implements OnInit {
         this.lifts[i].title
       );
       const coord = await model.getCoordinate();
-      const controller = new ElevatorController({  // 初始化电梯控制器
+      const controller = new ElevatorController({
+        // 初始化电梯控制器
         landings: {
           f1: new Vector3(coord.x, coord.y, 987),
           f2: new Vector3(coord.x, coord.y, 987 + this.step),

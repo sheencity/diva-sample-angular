@@ -20,22 +20,22 @@ const airDecs = [
     title: '测试空调04',
     state: false,
   },
-]
+];
 
 @Component({
   selector: 'app-air-conditioner',
   templateUrl: './air-conditioner.component.html',
-  styleUrls: ['./air-conditioner.component.scss']
+  styleUrls: ['./air-conditioner.component.scss'],
 })
 export class AirConditionerComponent implements OnInit, OnDestroy {
   // 自动的空调设备
-  public airDecs: {title: string, state: boolean}[] = [];
+  public airDecs: { title: string; state: boolean }[] = [];
   // 空调设备
   public airs: Device[] = [];
   // 空调控制器
   public airControllers: DeviceController[] = [];
 
-  constructor(private _diva: DivaService, private _data: DataService) { }
+  constructor(private _diva: DivaService, private _data: DataService) {}
   /**
    * 空调的开关
    * @param $event (boolean) switch 的值
@@ -44,7 +44,9 @@ export class AirConditionerComponent implements OnInit, OnDestroy {
    */
   onSwitch($event: boolean, index: number) {
     if (this.airControllers.length === 0) return;
-    $event ? this.airControllers[index].turnOn() : this.airControllers[index].turnOff();
+    $event
+      ? this.airControllers[index].turnOn()
+      : this.airControllers[index].turnOff();
     this._data.changeCode(`device.${$event ? 'turnOn()' : 'turnOff()'}`);
     console.log($event, index);
   }
@@ -52,19 +54,19 @@ export class AirConditionerComponent implements OnInit, OnDestroy {
   /**
    * 设备聚焦
    * @param index 选中设备的 index 值
-   * @returns 
+   * @returns
    */
   async onClick(index: number) {
     if (!this.airs[index]) return;
-    await this.airs[index].focus(1000, Math.PI / 6);
-    this._data.changeCode(`device.focus(1000, Math.PI / 6)`);
+    await this.airs[index].focus(1000, -Math.PI / 6);
+    this._data.changeCode(`device.focus(1000, -Math.PI / 6)`);
   }
 
   ngOnInit() {
     this._diva.client.applyScene('空调控制');
     this.airDecs = airDecs;
     // 初始化设备的初始状态
-    this.airDecs.forEach((airDec) => airDec.state = false);
+    this.airDecs.forEach((airDec) => (airDec.state = false));
     this.airDecs.forEach(async (airDec) => {
       const airController = new DeviceController();
       const [air] = await this._diva.client.getEntitiesByName<Device>(airDec.title);
