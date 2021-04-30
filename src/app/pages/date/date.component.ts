@@ -107,9 +107,9 @@ export class DateComponent implements OnInit, OnDestroy {
     console.log({ season });
     await this._diva.client.setDate(new Date(season.value));
     if (season.name === 'winterSnow') {
-      await this._diva.client.setWether(WeatherName.Snow);
+      await this._diva.client.setWeather(WeatherName.Snow);
     } else {
-      await this._diva.client.setWether(WeatherName.Default);
+      await this._diva.client.setWeather(WeatherName.Default);
     }
     if (season.name === 'winterSnow') {
       this._data.changeCode(
@@ -183,6 +183,6 @@ client.setTime(morning);`
   }
   // 销毁钩子
   ngOnDestroy(): void {
-    this._diva.client.setWether(WeatherName.Default);
+    this._diva.client.setWeather(WeatherName.Default);
   }
 }

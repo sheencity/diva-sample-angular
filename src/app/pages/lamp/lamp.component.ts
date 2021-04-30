@@ -58,12 +58,8 @@ export class LampComponent implements OnInit, OnDestroy {
    */
   async onClick(index: number) {
     if (!this.lights[index]) return;
-    await this._diva.client.request('Focus', {
-      id: this.lights[index].id,
-      distance: 1000.0,
-      pitch: 30.0,
-    });
-    this._data.changeCode(`device.focus()`);
+    await this.lights[index].focus(1000, Math.PI / 6)
+    this._data.changeCode(`device.focus(1000, Math.PI / 6)`);
   }
   async ngOnInit() {
     this._diva.client.applyScene('灯光控制');

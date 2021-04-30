@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { WeatherName } from '@sheencity/diva-sdk';
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
@@ -36,14 +36,14 @@ const weathers = [
     title: '摄影棚',
     typeName: WeatherName.Studio,
   },
-] as {title: string, typeName: WeatherName}[];
+] as { title: string, typeName: WeatherName }[];
 
 @Component({
   selector: 'app-weather',
   templateUrl: './weather.component.html',
   styleUrls: ['./weather.component.scss'],
 })
-export class WeatherComponent implements OnInit, OnDestroy {
+export class WeatherComponent implements OnInit {
   public weathers = weathers;
 
   constructor(private _diva: DivaService, private _data: DataService) {}
@@ -53,11 +53,11 @@ export class WeatherComponent implements OnInit, OnDestroy {
    * @param weather (WeatherConfigDto) 天气配置
    * @returns 
    */
-  switchWeather(weather: {title: string, typeName: WeatherName}) {
+  switchWeather(weather: { title: string, typeName: WeatherName }) {
     console.log({ weather });
     if (!weather.typeName) return;
-    this._diva.client?.setWether(weather.typeName);
-    if (this._diva.client?.setWether) {
+    this._diva.client?.setWeather(weather.typeName);
+    if (this._diva.client?.setWeather) {
       this._data.changeCode(`client.setWether('${weather.typeName}')`);
     }
   }
@@ -75,7 +75,4 @@ export class WeatherComponent implements OnInit, OnDestroy {
     this._diva.client.applyScene('天气控制');
     this._data.changeCode(`client.applyScene('天气控制')`);
   }
-
-  // 销毁钩子
-  ngOnDestroy(): void {}
 }

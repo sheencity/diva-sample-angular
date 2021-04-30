@@ -56,12 +56,8 @@ export class AirConditionerComponent implements OnInit, OnDestroy {
    */
   async onClick(index: number) {
     if (!this.airs[index]) return;
-    await this._diva.client.request('Focus', {
-      id: this.airs[index].id,
-      distance: 1000.0,
-      pitch: 30.0,
-    })
-    this._data.changeCode(`device.focus()`);
+    await this.airs[index].focus(1000, Math.PI / 6);
+    this._data.changeCode(`device.focus(1000, Math.PI / 6)`);
   }
 
   ngOnInit() {

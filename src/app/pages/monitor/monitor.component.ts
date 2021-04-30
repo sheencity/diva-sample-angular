@@ -47,20 +47,10 @@ export class MonitorComponent implements OnInit, OnDestroy {
    * @param isPop (boolean) 是否为弹窗设备
    */
   async selectMonitor(monitor: {title: string, url: string}, index: number, isPop: boolean) {
-      index = isPop ? index + 2 : index;
-      try {
-        if (this.selectedMonitorIndex >= 0) {
-          await this._diva.client.request('DestroyWebWidget', {id: this.monitorModels[this.selectedMonitorIndex].id});
-        }
-      } catch {
-      }
-      await this._diva.client.request('Focus', {
-        id: this.monitorModels[index].id,
-        distance: 1000.0,
-        pitch: 30.0,
-      })
-      this.selectedMonitorIndex = index;
-      this._data.changeCode(`model.focus()`);
+    index = isPop ? index + 2 : index;
+    await this.monitorModels[index].focus(1000, Math.PI / 6)
+    this.selectedMonitorIndex = index;
+    this._data.changeCode(`model.focus(1000, Math.PI / 6)`);
   }
 
   /**
@@ -71,10 +61,10 @@ export class MonitorComponent implements OnInit, OnDestroy {
   async refresh(monitorEqui: {title: string, url: string}, index: number) {
     index = index + 2;
     console.log('monitorEqui is', monitorEqui, index);
-    try {
-      await this._diva.client.request('DestroyWebWidget', {id: this.monitorModels[index].id});
-    } catch {
-    }
+    // try {
+    //   await this._diva.client.request('DestroyWebWidget', {id: this.monitorModels[index].id});
+    // } catch {
+    // }
     await this._diva.client.request('CreateWebWidget', {
       id: this.monitorModels[index].id,
       widget: {

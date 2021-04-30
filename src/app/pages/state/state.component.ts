@@ -85,20 +85,15 @@ export class StateComponent implements OnInit, OnDestroy {
     if (this.isSelectDefault) return;
     this.active = i;
     this.selected = i;
-    const [model] = await this._diva.client.getEntitiesByName(
+    const [model] = await this._diva.client.getEntitiesByName<Model>(
       this.equipments[i].title
     );
     // console.log('model is', model);
     if (!model) return;
     this.selectedEqui = model;
-    const equipmentId = model.id;
-    this._diva.client.request('Focus', {
-      id: equipmentId,
-      distance: 1000.0,
-      pitch: 30.0,
-    });
+    model.focus(200, 0);
     this._data.changeCode(
-      `model.focus()`
+      `model.focus(200, 0)`
     );
     console.log('equi', equi);
   }

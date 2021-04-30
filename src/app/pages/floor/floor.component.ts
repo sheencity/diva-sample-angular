@@ -1,9 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DivaService } from 'src/app/common/services/diva.service';
 import { DropdownData } from 'src/app/common/models/dropdown-data.interface';
-import { Model } from '@sheencity/diva-sdk';
-import { element } from 'protractor';
+import { Entity, Model } from '@sheencity/diva-sdk';
 import { DataService } from 'src/app/common/services/data.service';
+import { TypedGroup } from '@sheencity/diva-sdk/lib/utils/group';
+import { defer, from, Observable, ReplaySubject } from 'rxjs';
+import { buffer, delay, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-floor',
@@ -15,30 +17,22 @@ export class FloorComponent implements OnInit, OnDestroy {
   models: Model[] = [];
   // 所有管道模型
   pipeModels: Model[] = [];
+  explodeGroup: TypedGroup<Entity>;
+  group$: Observable<TypedGroup<Entity>>;
+
   // 炸开
   private _explode = false;
-  public set explode(v: boolean) {
-    console.log('explode', v);
+  public set explode(val: boolean) {
+    if (!this.group$) return;
+    this.group$.subscribe((group) => {
+      group;
+      const options = { spacing: 300, eachHeight: 290, duration: 5 };
 
-    if (v) {
-      this._diva.client.request('ExplodeByGroup', {
-        groupName: '场景模型/主楼拆分',
-        spacing: 300,
-        floorHeight: 290,
-        duration: 5,
-      });
-      this._data.changeCode(
-        `client.explodeByGroup({groupName: '场景模型/主楼拆分', spacing: 300, floorHeight: 290, duration: 5})`
-      );
-    } else {
-      this._diva.client.request('AggregateByGroup', {
-        groupName: '场景模型/主楼拆分',
-      });
-      this._data.changeCode(
-        `client.aggregateByGroup({groupName: '场景模型/主楼拆分'})`
-      );
-    }
-    this._explode = v;
+      if (val) this._diva.client.disassemble(group, options);
+      else this._diva.client.assemble(group);
+
+      this._explode = val;
+    });
   }
   public get explode() {
     return this._explode;
@@ -50,7 +44,7 @@ export class FloorComponent implements OnInit, OnDestroy {
     console.log('gradation', v);
     if (v) {
       // 聚焦到已选中的层数
-      this._foucsFloor(Number(this.selectedFloor.placeholder));
+      this._focusFloor(Number(this.selectedFloor.placeholder));
     } else {
       this._setVisibility(this.models, true, true);
       this._setVisibility(this.pipeModels, false, true);
@@ -71,9 +65,9 @@ export class FloorComponent implements OnInit, OnDestroy {
     if (!this.gradation) {
       return;
     }
-    if (this._gradation) { 
-       // 聚焦到已选中的层数
-      this._foucsFloor(Number(v.placeholder));
+    if (this._gradation) {
+      // 聚焦到已选中的层数
+      this._focusFloor(Number(v.placeholder));
     }
     // 此处设置层数
     this._selectedFloor = v;
@@ -126,7 +120,7 @@ export class FloorComponent implements OnInit, OnDestroy {
    * 聚焦层数
    * @param floor (number) 层数
    */
-  private async _foucsFloor(floor: number) {
+  private async _focusFloor(floor: number) {
     // 显示当前层数模型
     const modelToFocus = this.models.filter(
       (model) => model.name === this.options[floor - 1].value
@@ -159,20 +153,12 @@ export class FloorComponent implements OnInit, OnDestroy {
 
   // 聚焦方法
   private async _focus(model: Model) {
-    await this._diva.client.request('Focus', {
-      id: model.id,
-      distance: 5000.0,
-      pitch: 30.0,
-    });
-    this._data.changeCode(`model.focus()`);
+    await model.focus(5000, Math.PI / 6);
+    this._data.changeCode(`model.focus(5000, Math.PI / 6)`);
   }
   // 显示隐藏方法
   private _setVisibility(models: Model[], visible: boolean, leave = false) {
-    // this._diva.client.request('SetVisibility', {
-    //   ids: [...models.map((model) => model.id)],
-    //   visible,
-    // });
-    models.map((model) => model.visible = visible);
+    models.map((model) => (model.visible = visible));
     if (!leave) {
       this._data.changeCode(
         `client.setVisibility(${[
@@ -215,23 +201,27 @@ export class FloorComponent implements OnInit, OnDestroy {
     if (this._diva.client?.applyScene) {
       this._data.changeCode(`client.applyScene('楼层展示')`);
     }
-    this.options.forEach(async (opation) => {
-      const model = await this._getModel(opation.value);
-      const pipeModel = await this._getModel(opation.pipeLineName);
+    this.options.forEach(async (option) => {
+      const model = await this._getModel(option.value);
+      const pipeModel = await this._getModel(option.pipeLineName);
       // 获取所有楼层模型以及管道模型
       this.models.push(model);
       this.pipeModels.push(pipeModel);
     });
+    console.log(this.models);
     this.SetPathVisibility(false);
+    const getGroup = () =>
+      from(this._diva.client.getEntityGroupByGroupPath('场景模型/主楼拆分'));
+    this.group$ = defer(getGroup);
   }
   // 销毁钩子
   async ngOnDestroy() {
-    await this._diva.client.request('AggregateByGroup', {
-      groupName: '场景模型/主楼拆分',
-    });
+    if (this.group$) {
+      this.group$.subscribe((group) => this._diva.client.assemble(group));
+    }
     // 显示所有楼层，隐藏所有管道，并且不显示示例代码
-    await this._setVisibility(this.models, true, true);
-    await this._setVisibility(this.pipeModels, false, true);
+    this._setVisibility(this.models, true, true);
+    this._setVisibility(this.pipeModels, false, true);
     this.SetPathVisibility(true);
   }
 }
