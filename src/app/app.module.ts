@@ -8,7 +8,6 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './common/components/header/header.component';
 import { NavComponent } from './common/components/nav/nav.component';
 import { ContentBlockComponent } from './common/components/content-block/content-block.component';
-import { EventBlockComponent } from './common/components/event-block/event-block.component';
 import { DropDownComponent } from './common/components/dropdown.component/dropdown.component';
 import { SwitcherComponent } from './common/components/switcher/switcher.component';
 
@@ -31,7 +30,6 @@ const COMPONENTS = [
   NavComponent,
   CodeViewComponent,
   ContentBlockComponent,
-  EventBlockComponent,
   DropDownComponent,
   SwitcherComponent,
 ];

@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { WeatherName } from '@sheencity/diva-sdk';
-import { WeatherConfigDto } from 'src/app/common/dtos/weather.dto';
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
 
@@ -37,7 +36,7 @@ const weathers = [
     title: '摄影棚',
     typeName: WeatherName.Studio,
   },
-];
+] as {title: string, typeName: WeatherName}[];
 
 @Component({
   selector: 'app-weather',
@@ -54,7 +53,7 @@ export class WeatherComponent implements OnInit, OnDestroy {
    * @param weather (WeatherConfigDto) 天气配置
    * @returns 
    */
-  switchWeather(weather: WeatherConfigDto) {
+  switchWeather(weather: {title: string, typeName: WeatherName}) {
     console.log({ weather });
     if (!weather.typeName) return;
     this._diva.client?.setWether(weather.typeName);

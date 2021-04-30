@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { VideoConfigDto } from 'src/app/common/dtos/video.dto';
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
 
@@ -44,7 +43,7 @@ const videos = [
     title: '测试路径10',
     index: 9,
   },
-];
+] as {title: string, index: number}[];
 
 @Component({
   selector: 'app-video',
@@ -64,7 +63,7 @@ export class VideoComponent implements OnInit, OnDestroy {
    * 播放路径
    * @param video (VideoConfigDto) 路径
    */
-  async toggleVideo(video: VideoConfigDto) {
+  async toggleVideo(video: {title: string, index: number}) {
     this.selectedVideo = video.title;
     await this._diva.client.request('StopCameraTrack');
     await this._diva.client.request('PlayCameraTrackByIndex', {

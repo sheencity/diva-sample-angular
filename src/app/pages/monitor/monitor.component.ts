@@ -1,9 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Model, RenderingStyleMode } from '@sheencity/diva-sdk';
-import {
-  MonitorConfigDto,
-  MonitorEquiConfigDto,
-} from 'src/app/common/dtos/monitor.dto';
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
 
@@ -24,7 +20,7 @@ const monitors = [
     title: '测试设备04',
     url: 'https://www.sheencity.com',
   },
-];
+] as {title: string, url: string}[];
 
 @Component({
   selector: 'app-monitor',
@@ -50,7 +46,7 @@ export class MonitorComponent implements OnInit, OnDestroy {
    * @param index (number) 选中监控的 index 值
    * @param isPop (boolean) 是否为弹窗设备
    */
-  async selectMonitor(monitor: MonitorConfigDto, index: number, isPop: boolean) {
+  async selectMonitor(monitor: {title: string, url: string}, index: number, isPop: boolean) {
       index = isPop ? index + 2 : index;
       try {
         if (this.selectedMonitorIndex >= 0) {
@@ -72,7 +68,7 @@ export class MonitorComponent implements OnInit, OnDestroy {
    * @param monitorEqui (MonitorEquiConfigDto) 弹窗设备
    * @param index (number) 弹窗设备的 index 值
    */
-  async refresh(monitorEqui: MonitorEquiConfigDto, index: number) {
+  async refresh(monitorEqui: {title: string, url: string}, index: number) {
     index = index + 2;
     console.log('monitorEqui is', monitorEqui, index);
     try {

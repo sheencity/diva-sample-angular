@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { DropdownData } from '../dtos/dropdown-data.interface';
+import { DropdownData } from '../models/dropdown-data.interface';
 
 @Injectable({
   providedIn: 'root',

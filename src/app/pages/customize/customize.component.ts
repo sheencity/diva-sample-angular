@@ -1,16 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  Device,
-  DeviceController,
   Elevator,
   ElevatorController,
-  linear,
   Model,
   Vector3,
 } from '@sheencity/diva-sdk';
-import { DropdownData } from 'src/app/common/dtos/dropdown-data.interface';
-import { LiftConfigDto } from 'src/app/common/dtos/lift.dto';
-import { LightDec } from 'src/app/common/dtos/light.model';
+import { DropdownData } from 'src/app/common/models/dropdown-data.interface';
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
 
@@ -70,7 +65,7 @@ export class CustomizeComponent implements OnInit {
    * @param i (number) index
    * @returns 添加 selected 的电梯数组
    */
-  private _addSelected(lift: LiftConfigDto, i: number) {
+  private _addSelected(lift: {title: string}, i: number) {
     let selected = {
       value: this.currentLift[i].toString(),
       placeholder: this.currentLift[i].toString(),

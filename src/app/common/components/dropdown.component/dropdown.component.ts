@@ -1,5 +1,5 @@
 import { Component, Input, forwardRef, Output, EventEmitter } from '@angular/core';
-import { DropdownData } from '../../dtos/dropdown-data.interface';
+import { DropdownData } from '../../models/dropdown-data.interface';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 @Component({
   selector: 'app-dropdown',

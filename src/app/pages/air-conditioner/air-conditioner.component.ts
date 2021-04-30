@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DeviceController, Device } from '@sheencity/diva-sdk';
-import { LightDec } from 'src/app/common/dtos/light.model';
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
 
@@ -30,7 +29,7 @@ const airDecs = [
 })
 export class AirConditionerComponent implements OnInit, OnDestroy {
   // 自动的空调设备
-  public airDecs: LightDec[] = [];
+  public airDecs: {title: string, state: boolean}[] = [];
   // 空调设备
   public airs: Device[] = [];
   // 空调控制器

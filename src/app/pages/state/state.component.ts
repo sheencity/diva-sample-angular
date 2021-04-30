@@ -1,31 +1,27 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Model, RenderingStyleMode } from '@sheencity/diva-sdk';
-import { DropdownData } from 'src/app/common/dtos/dropdown-data.interface';
-import {
-  EquipmentConfigDto,
-  EquipmentState,
-} from 'src/app/common/dtos/equipment.dto';
+import { DropdownData } from 'src/app/common/models/dropdown-data.interface';
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
 
 const equipments = [
   {
     title: '空调',
-    state: EquipmentState.Default,
+    state: RenderingStyleMode.Default,
   },
   {
     title: '电视机',
-    state: EquipmentState.Default,
+    state: RenderingStyleMode.Default,
   },
   {
     title: '路由器',
-    state: EquipmentState.Default,
+    state: RenderingStyleMode.Default,
   },
   {
     title: '冰箱',
-    state: EquipmentState.Default,
+    state: RenderingStyleMode.Default,
   },
-] as EquipmentConfigDto[];
+] as {title: string, state: RenderingStyleMode}[];
 
 @Component({
   selector: 'app-state',
@@ -46,34 +42,34 @@ export class StateComponent implements OnInit, OnDestroy {
 
   // 状态配置
   options = [
-    { value: EquipmentState.Default, placeholder: '默认' },
-    { value: EquipmentState.Alarm, placeholder: '报警' },
-    { value: EquipmentState.Translucent, placeholder: '半透' },
-    { value: EquipmentState.Hidden, placeholder: '隐藏' },
-  ];
+    { value: RenderingStyleMode.Default, placeholder: '默认' },
+    { value: RenderingStyleMode.Alarm, placeholder: '报警' },
+    { value: RenderingStyleMode.Translucence, placeholder: '半透' },
+    { value: RenderingStyleMode.Hidden, placeholder: '隐藏' },
+  ] as DropdownData<RenderingStyleMode>[];
 
   /**
-   * 设备添加 selectd 属性，方便在循环下拉框组件中绑定值
+   * 设备添加 selected 属性，方便在循环下拉框组件中绑定值
    * @param equipment 设备
    * @returns 
    */
-  private addSelected(equipment: EquipmentConfigDto) {
-    let selected: DropdownData<EquipmentState>;
+  private addSelected(equipment: {title: string, state: RenderingStyleMode}) {
+    let selected: DropdownData<RenderingStyleMode>;
     switch (equipment.state) {
-      case EquipmentState.Default:
-        selected = { value: EquipmentState.Default, placeholder: '默认' };
+      case RenderingStyleMode.Default:
+        selected = { value: RenderingStyleMode.Default, placeholder: '默认' };
         break;
-      case EquipmentState.Alarm:
-        selected = { value: EquipmentState.Alarm, placeholder: '报警' };
+      case RenderingStyleMode.Alarm:
+        selected = { value: RenderingStyleMode.Alarm, placeholder: '报警' };
         break;
-      case EquipmentState.Translucent:
-        selected = { value: EquipmentState.Translucent, placeholder: '半透' };
+      case RenderingStyleMode.Translucence:
+        selected = { value: RenderingStyleMode.Translucence, placeholder: '半透' };
         break;
-      case EquipmentState.Hidden:
-        selected = { value: EquipmentState.Hidden, placeholder: '隐藏' };
+      case RenderingStyleMode.Hidden:
+        selected = { value: RenderingStyleMode.Hidden, placeholder: '隐藏' };
         break;
       default:
-        selected = { value: EquipmentState.Default, placeholder: '默认' };
+        selected = { value: RenderingStyleMode.Default, placeholder: '默认' };
         break;
     }
     return { ...equipment, selected };
@@ -85,7 +81,7 @@ export class StateComponent implements OnInit, OnDestroy {
    * @param i (number) 设备的 index 值
    * @returns 
    */
-  async onClick(equi: EquipmentConfigDto, i: number) {
+  async onClick(equi: {title: string, state: RenderingStyleMode}, i: number) {
     if (this.isSelectDefault) return;
     this.active = i;
     this.selected = i;
@@ -113,7 +109,7 @@ export class StateComponent implements OnInit, OnDestroy {
    * @param $event 选中的状态
    * @returns 
    */
-  async onChange(equi: EquipmentConfigDto, $event: DropdownData) {
+  async onChange(equi: {title: string, state: RenderingStyleMode}, $event: DropdownData) {
     if ($event.value === 'default') {
       this.isSelectDefault = true;
       setTimeout(() => {

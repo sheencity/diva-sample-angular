@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DeviceController, Device } from '@sheencity/diva-sdk';
-import { LightDec } from 'src/app/common/dtos/light.model';
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
 
@@ -21,7 +20,7 @@ const lightDecs = [
     title: '测试灯光04',
     state: true,
   },
-];
+] as {title: string, state: boolean}[];
 
 @Component({
   selector: 'app-lamp',
@@ -30,7 +29,7 @@ const lightDecs = [
 })
 export class LampComponent implements OnInit, OnDestroy {
   // 自定义的灯光设备
-  public lightDecs: LightDec[] = [];
+  public lightDecs: {title: string, state: boolean}[] = [];
   // 灯光设备
   public lights: Device[] = [];
   // 灯光控制器

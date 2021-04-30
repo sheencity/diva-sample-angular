@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DivaService } from 'src/app/common/services/diva.service';
-import { DropdownData } from 'src/app/common/dtos/dropdown-data.interface';
+import { DropdownData } from 'src/app/common/models/dropdown-data.interface';
 import { Model } from '@sheencity/diva-sdk';
 import { element } from 'protractor';
 import { DataService } from 'src/app/common/services/data.service';

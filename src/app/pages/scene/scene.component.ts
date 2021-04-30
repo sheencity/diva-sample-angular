@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { SceneConfigDto } from 'src/app/common/dtos/scene.dto';
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
 
@@ -44,7 +43,7 @@ const scenes = [
     title: '测试场景10',
     index: 9,
   },
-];
+] as {title: string, index: number}[];
 
 @Component({
   selector: 'app-scene',
@@ -59,7 +58,7 @@ export class SceneComponent implements OnInit, OnDestroy {
    * 切换场景
    * @param scene 场景
    */
-  switchScene(scene: SceneConfigDto) {
+  switchScene(scene: {title: string, index: number}) {
     console.log({ scene });
     this._diva.client?.applyScene(scene.index);
     if (this._diva.client?.applyScene) {
