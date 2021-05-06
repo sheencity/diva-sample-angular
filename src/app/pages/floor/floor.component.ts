@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { DivaService } from 'src/app/common/services/diva.service';
-import { DropdownData } from 'src/app/common/models/dropdown-data.interface';
 import { Entity, Model } from '@sheencity/diva-sdk';
-import { DataService } from 'src/app/common/services/data.service';
 import { TypedGroup } from '@sheencity/diva-sdk/lib/utils/group';
 import { defer, from, Observable } from 'rxjs';
+import { shareReplay } from 'rxjs/operators'
+import { DropdownData } from 'src/app/common/models/dropdown-data.interface';
+import { DataService } from 'src/app/common/services/data.service';
+import { DivaService } from 'src/app/common/services/diva.service';
 
 @Component({
   selector: 'app-floor',
@@ -17,16 +18,15 @@ export class FloorComponent implements OnInit, OnDestroy {
   // 所有管道模型
   pipeModels: Model[] = [];
   explodeGroup: TypedGroup<Entity>;
-  group$: Observable<TypedGroup<Entity>>;
+  group$: Observable<Set<Entity>>;
 
   // 炸开
   private _explode = false;
   public set explode(val: boolean) {
     if (!this.group$) return;
     this.group$.subscribe((group) => {
-      group;
       const options = { spacing: 300, eachHeight: 290, duration: 5 };
-
+      
       if (val) this._diva.client.disassemble(group, options);
       else this._diva.client.assemble(group);
 
@@ -184,22 +184,9 @@ export class FloorComponent implements OnInit, OnDestroy {
   // 设置路径显示隐藏
   private SetPathVisibility(v: boolean) {
     const pathIndexArray = [0, 1, 2, 3, 4];
-
-    const requestBatch = pathIndexArray.map((i) => {
-      return {
-        method: 'SetPathVisibility',
-        params: {
-          index: i,
-          visible: v,
-        },
-      };
-    });
-
-    this._diva.client.batchRequest(requestBatch);
-    const code = requestBatch.map(
-      (c) =>
-        `\t{method: '${c.method}', params: {index: ${c.params.index}, visible: ${c.params.visible}}}`
-    );
+    pathIndexArray.forEach((i) => {
+      this._diva.client.setPathVisibility(i, v);
+    })
   }
 
   async ngOnInit() {
@@ -218,7 +205,7 @@ export class FloorComponent implements OnInit, OnDestroy {
     this.SetPathVisibility(false);
     const getGroup = () =>
       from(this._diva.client.getEntityGroupByGroupPath('场景模型/主楼拆分'));
-    this.group$ = defer(getGroup);
+    this.group$ = defer(getGroup).pipe(shareReplay(1));
   }
   // 销毁钩子
   async ngOnDestroy() {
