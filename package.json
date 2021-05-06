@@ -1,6 +1,7 @@
 {
   "name": "diva-sdk",
   "version": "0.0.0",
+  "repository": "https://github.com/sheencity/diva-sample",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
