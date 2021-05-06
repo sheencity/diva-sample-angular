@@ -1,10 +1,14 @@
-# diva-sdk Demo
+<h1 align="center">DIVA Sample</h1>
+<div align="center">
+  <strong>Digital Intelligence Visualization API</strong>
+</div>
+<br />
 
-该项目为调用 diva-sdk 接口的案例
+该项目为调用 diva-sdk 接口的案例。
 
 ## 下载
 
-```javascript
+```shell
 git clone https://github.com/sheencity/diva-sample
 ```
 
@@ -13,13 +17,13 @@ git clone https://github.com/sheencity/diva-sample
 - node v14 lts
 - npm v7
 
-```javascript
+```shell
 npm install
 ```
 
 ## 运行项目
 
-```javascript
+```shell
 npm start
 ```
 
