@@ -29,8 +29,6 @@ const equipments = [
   styleUrls: ['./state.component.scss'],
 })
 export class StateComponent implements OnInit, OnDestroy {
-  // 是否选择了默认值，防止点击默认值之后事件穿透到块上，触发 click 模型聚焦
-  isSelectDefault = false;
   // 选中的设备
   selectedEqui: any = null;
   // 选中的设备的 index 值，为了添加选中文字变白，暂时未使用
@@ -83,12 +81,6 @@ export class StateComponent implements OnInit, OnDestroy {
     equi: { title: string; state: RenderingStyleMode },
     $event: DropdownData
   ) {
-    if ($event.value === 'default') {
-      this.isSelectDefault = true;
-      setTimeout(() => {
-        this.isSelectDefault = false;
-      }, 500);
-    }
     const [model] = await this._diva.client.getEntitiesByName<Model>(
       equi.title
     );
