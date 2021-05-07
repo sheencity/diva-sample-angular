@@ -38,8 +38,6 @@ export class CustomizeComponent implements OnInit {
   currentLift = [1, 1, 1, 1];
   // 每层高度，由最高高度减最低高度除楼层获得
   step = 299.7;
-  // 当前选中的块，为了添加index，防止下拉框被其他块覆盖住
-  active = 0;
   // 自定义电梯
   lifts: any;
   // 电梯下拉框配置
@@ -61,8 +59,8 @@ export class CustomizeComponent implements OnInit {
 
   /**
    * 给初始化的电梯添加 selected 属性，以便于在 dropdown 循环中绑定
-   * @param lift (LiftConfigDto) 电梯
-   * @param i (number) index
+   * @param lift 电梯
+   * @param i index
    * @returns 添加 selected 的电梯数组
    */
   private _addSelected(lift: { title: string }, i: number) {
@@ -71,11 +69,6 @@ export class CustomizeComponent implements OnInit {
       placeholder: this.currentLift[i].toString(),
     } as DropdownData;
     return { ...lift, selected };
-  }
-
-  // 选中电梯块或者下拉框时触发，将 index=104 的 css 属性绑定到当前点击的控制块，防止下拉框被其他框覆盖
-  activeLift(index: number) {
-    this.active = index;
   }
 
   /**
@@ -123,6 +116,4 @@ export class CustomizeComponent implements OnInit {
       this.controllers.push(controller);
     }
   }
-  // 销毁钩子
-  ngOnDestroy(): void {}
 }

@@ -101,7 +101,7 @@ export class DateComponent implements OnInit, OnDestroy {
 
   /**
    * 切换季节
-   * @param season SeasonConfigDto
+   * @param season
    */
   async switchSeason(season: { title: string; value: string; name: string }) {
     console.log({ season });
@@ -113,7 +113,8 @@ export class DateComponent implements OnInit, OnDestroy {
     }
     if (season.name === 'winterSnow') {
       this._data.changeCode(
-        `client.setDate(new Date('${season.value}'));\nclient.setWeather('snow')`
+        `client.setDate(new Date('${season.value}'));`,
+        `client.setWeather('snow')`
       );
     } else if (season.name === 'autumn') {
       // 秋季需要设置 11-01， 代码显示 09-23
@@ -125,15 +126,15 @@ export class DateComponent implements OnInit, OnDestroy {
 
   /**
    * 切换午时
-   * @param noon NoonConfigDto
+   * @param noon
    */
   switchNoon(noon: { title: string; value: number; name: string }) {
     console.log({ noon });
     this._diva.client.setTime(getTime(noon.value, 0));
     this._data.changeCode(
-      `const now = new Date();
-const morning = (now.setHours(${noon.value}), now);
-client.setTime(morning);`
+      'const now = new Date();',
+      `const time = (now.setHours(${noon.value}), now);`,
+      'client.setTime(time);'
     );
   }
 

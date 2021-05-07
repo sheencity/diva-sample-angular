@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Entity, Model } from '@sheencity/diva-sdk';
 import { TypedGroup } from '@sheencity/diva-sdk/lib/utils/group';
 import { defer, from, Observable } from 'rxjs';
-import { shareReplay } from 'rxjs/operators'
+import { shareReplay } from 'rxjs/operators';
 import { DropdownData } from 'src/app/common/models/dropdown-data.interface';
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
@@ -26,17 +26,16 @@ export class FloorComponent implements OnInit, OnDestroy {
     if (!this.group$) return;
     this.group$.subscribe((group) => {
       const options = { spacing: 300, eachHeight: 290, duration: 5 };
-      
+
       if (val) this._diva.client.disassemble(group, options);
       else this._diva.client.assemble(group);
 
       this._explode = val;
       this._data.changeCode(
-        `const group = client.getEntityGroupByGroupPath('场景模型/主楼拆分');\n${
-          val
-            ? 'client.disassemble(group, { spacing: 300, eachHeight: 290, duration: 5 })'
-            : 'client.assemble(group)'
-        }`
+        `const group = client.getEntityGroupByGroupPath('场景模型/主楼拆分');`,
+        val
+          ? 'client.disassemble(group, { spacing: 300, eachHeight: 290, duration: 5 })'
+          : 'client.assemble(group)'
       );
     });
   }
@@ -186,7 +185,7 @@ export class FloorComponent implements OnInit, OnDestroy {
     const pathIndexArray = [0, 1, 2, 3, 4];
     pathIndexArray.forEach((i) => {
       this._diva.client.setPathVisibility(i, v);
-    })
+    });
   }
 
   async ngOnInit() {

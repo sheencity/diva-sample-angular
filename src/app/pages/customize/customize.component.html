@@ -1,19 +1,12 @@
 <main>
   <app-content-block caption="数字孪生电梯演示">
     <ng-container *ngFor="let lift of lifts; index as i">
-      <div
-        (click)="activeLift(i)"
-        class="drop-block"
-        [style.z-index]="active === i ? 104 : unset"
-      >
-        <div class="drop-item selected">
+      <div class="drop-block">
+        <div class="drop-item">
           <span>{{ lift.title }}</span>
           <div>
-            <app-dropdown
-              (select)="selectLift($event, i)"
-              [options]="options"
-              [(ngModel)]="lift.selected"
-            ></app-dropdown>
+            <app-dropdown (select)="selectLift($event, i)" [options]="options" [(ngModel)]="lift.selected">
+            </app-dropdown>
             <span style="margin-left: 4px">层</span>
           </div>
         </div>

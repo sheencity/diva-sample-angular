@@ -35,8 +35,6 @@ export class StateComponent implements OnInit, OnDestroy {
   selectedEqui: any = null;
   // 选中的设备的 index 值，为了添加选中文字变白，暂时未使用
   selected: number = null;
-  // 激活的块 index 值，给块设置 index 值，防止下拉框被其他块覆盖
-  active: number;
   equipments = equipments.map((equipment) => this.addSelected(equipment));
   constructor(private _diva: DivaService, private _data: DataService) {}
 
@@ -109,7 +107,6 @@ export class StateComponent implements OnInit, OnDestroy {
 
   onDropdownClick($event: Event, index: number) {
     $event.stopPropagation();
-    this.active = index;
   }
 
   ngOnInit(): void {

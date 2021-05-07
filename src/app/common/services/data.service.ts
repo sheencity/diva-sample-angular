@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { DropdownData } from '../models/dropdown-data.interface';
 
 @Injectable({
@@ -23,8 +23,9 @@ export class DataService {
   constructor() {
     this.changeCode('client.applyScene("场景切换")');
   }
-  changeCode(code: string) {
+  changeCode(...code: string[]) {
     console.log(code);
-    this._code.next(code);
+    if(!code || !code.length) return;
+    this._code.next(code.reduce((pre, cur) => pre + '\n' + cur));
   }
 }

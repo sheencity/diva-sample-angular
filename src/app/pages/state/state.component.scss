@@ -1,3 +1,5 @@
+@import '../../common/styles/styles.scss';
+
 main {
   pointer-events: all;
   .drop-block {
@@ -8,6 +10,7 @@ main {
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(8px);
     cursor: pointer;
+    @include reverseCascade(1, 4);
     .drop-item {
       height: 24px;
       display: flex;

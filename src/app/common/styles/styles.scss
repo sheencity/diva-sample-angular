@@ -1,0 +1,8 @@
+// 用于反转元素内各子元素的层级顺序
+@mixin reverseCascade($start, $end) {
+  @for $i from $start to $end + 1 {
+    &:nth-child(#{$i}) {
+      z-index: $end + 1 - $i;
+    }
+  }
+}
