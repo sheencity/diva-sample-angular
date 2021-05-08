@@ -4,7 +4,7 @@
             <div class="content" (click)="switchWeather(weather)">
                 <div class="title">{{weather.title}}</div>
                 <div class="icon">
-                    <img [src]="iconBind(weather.typeName)" />
+                    <img src="assets/icon/weather/{{weather.typeName}}.png" />
                 </div>
             </div>
         </ng-container>

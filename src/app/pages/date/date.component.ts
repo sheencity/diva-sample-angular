@@ -177,10 +177,9 @@ export class DateComponent implements OnInit, OnDestroy {
     this.time = this.getDate('time');
     this._diva.client.setDate(new Date());
     this._diva.client.setTime(new Date());
-    this._diva.client?.applyScene('日期时间');
-    if (this._diva.client?.applyScene) {
+    this._diva.client?.applyScene('日期时间').then(() => {
       this._data.changeCode(`client.applyScene('日期时间')`);
-    }
+    });
   }
   // 销毁钩子
   ngOnDestroy(): void {

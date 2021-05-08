@@ -4,8 +4,8 @@
             <div class="drop-block">
                 <div class="drop-item" [class.selected]="selected === i">
                     <span>{{equipment.title}}</span>
-                    <app-dropdown (click)="onDropdownClick($event, i)" (select)="onChange(equipment, $event)"
-                        [options]="options" [(ngModel)]="equipment.selected"></app-dropdown>
+                    <app-dropdown (select)="onChange(equipment, $event)" [options]="options"
+                        [(ngModel)]="equipment.selected"></app-dropdown>
                 </div>
             </div>
         </ng-container>

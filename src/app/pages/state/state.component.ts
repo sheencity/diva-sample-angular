@@ -85,27 +85,20 @@ export class StateComponent implements OnInit, OnDestroy {
       equi.title
     );
     if (!model) return;
-    // const id = model.id;
     const type = $event.value as RenderingStyleMode;
     model.setRenderingStyleMode(type);
 
     this._data.changeCode(
-      `model.setRenderingStyleMode(RenderingStyleMode.${type
-        .split('')
-        .map((_, idx) => (idx === 0 ? _.toUpperCase() : _))
-        .join('')})`
+      `model.setRenderingStyleMode(RenderingStyleMode.${
+        type.slice(0, 1).toUpperCase() + type.slice(1)
+      })`
     );
   }
 
-  onDropdownClick($event: Event, index: number) {
-    $event.stopPropagation();
-  }
-
   ngOnInit(): void {
-    this._diva.client?.applyScene('状态演示');
-    if (this._diva.client?.applyScene) {
+    this._diva.client?.applyScene('状态演示').then(() => {
       this._data.changeCode(`client.applyScene('状态演示')`);
-    }
+    });
   }
 
   // 销毁钩子

@@ -190,9 +190,7 @@ export class FloorComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     await this._diva.client?.applyScene('楼层展示');
-    if (this._diva.client?.applyScene) {
-      this._data.changeCode(`client.applyScene('楼层展示')`);
-    }
+    this._data.changeCode(`client.applyScene('楼层展示')`);
     this.options.forEach(async (option) => {
       const model = await this._getModel(option.value);
       const pipeModel = await this._getModel(option.pipeLineName);

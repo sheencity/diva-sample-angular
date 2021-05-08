@@ -30,16 +30,14 @@ export class SceneComponent implements OnInit {
    */
   switchScene(scene: { title: string; index: number }) {
     console.log({ scene });
-    this._diva.client?.applyScene(scene.index);
-    if (this._diva.client?.applyScene) {
+    this._diva.client?.applyScene(scene.index).then(() => {
       this._data.changeCode(`client.applyScene('${scene.title}')`);
-    }
+    });
   }
 
   ngOnInit(): void {
-    this._diva.client?.applyScene('半鸟瞰');
-    if (this._diva.client?.applyScene) {
+    this._diva.client?.applyScene('半鸟瞰').then(() => {
       this._data.changeCode(`client.applyScene('半鸟瞰')`);
-    }
+    });
   }
 }

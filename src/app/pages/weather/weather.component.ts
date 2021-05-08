@@ -56,23 +56,14 @@ export class WeatherComponent implements OnInit {
   switchWeather(weather: { title: string; typeName: WeatherName }) {
     console.log({ weather });
     if (!weather.typeName) return;
-    this._diva.client?.setWeather(weather.typeName);
-    if (this._diva.client?.setWeather) {
+    this._diva.client?.setWeather(weather.typeName).then(() => {
       this._data.changeCode(`client.setWether('${weather.typeName}')`);
-    }
-  }
-
-  /**
-   * 根据天气绑定 icon
-   * @param weatherName (string) 天气名称
-   * @returns
-   */
-  iconBind(weatherName: string) {
-    return `assets/icon/weather/${weatherName}.png`;
+    });
   }
 
   ngOnInit(): void {
-    this._diva.client.applyScene('天气控制');
-    this._data.changeCode(`client.applyScene('天气控制')`);
+    this._diva.client?.applyScene('天气控制').then(() => {
+      this._data.changeCode(`client.applyScene('天气控制')`);
+    });
   }
 }

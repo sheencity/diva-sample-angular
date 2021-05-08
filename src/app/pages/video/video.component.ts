@@ -25,8 +25,6 @@ export class VideoComponent implements OnInit {
 
   public selectedVideo: string = null;
 
-  public isPlaying = false;
-
   constructor(private _diva: DivaService, public _data: DataService) {}
 
   /**
@@ -41,9 +39,8 @@ export class VideoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._diva.client?.applyScene('半鸟瞰');
-    if (this._diva.client?.applyScene) {
+    this._diva.client?.applyScene('半鸟瞰').then(() => {
       this._data.changeCode(`client.applyScene('半鸟瞰')`);
-    }
+    });
   }
 }
