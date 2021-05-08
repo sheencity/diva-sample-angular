@@ -16,7 +16,7 @@ export class DivaService {
    */
   async init(container: HTMLElement) {
     console.log({ container });
-    const uri = 'http://192.168.50.18:3000';
+    const uri = 'http://127.0.0.1:3000';
     const apiKey = '<replace_your_api_key_here>';
     console.log(uri, apiKey, container);
     const diva = new Diva({ container, apiKey, uri });
