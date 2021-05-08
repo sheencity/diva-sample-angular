@@ -1,0 +1,29 @@
+@import '../../common/styles/styles.scss';
+
+main {
+  pointer-events: all;
+  color: #fff;
+  .drop-block {
+    width: 100%;
+    padding: 18px 20px;
+    margin-top: 8px;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    cursor: pointer;
+    @include reverseCascade(1, 4);
+    .drop-item {
+      height: 24px;
+      display: flex;
+      justify-content: space-between;
+      color: #fff;
+      span {
+        line-height: 24px;
+        font-weight: bold;
+      }
+      app-dropdown {
+        width: 57px;
+      }
+    }
+  }
+}

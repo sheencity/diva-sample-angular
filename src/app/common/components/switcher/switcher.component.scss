@@ -1,0 +1,61 @@
+:host {
+    display: inline-flex;
+    justify-content: flex-start;
+    align-items: center;
+    .switcher-lable-title {
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 20px;
+        color: #fff;
+        margin-right: 8px;
+    }
+    .switch {
+        width: 24px;
+        height: 14px;
+        position: relative;
+        display: inline-block;
+    }
+    .switch-disabled {
+        opacity: 0.5;
+    }
+    input {
+        display: none;
+    }
+    .round {
+        border-radius: 10px;
+    }
+    .slider {
+        background: rgba(255, 255, 255, 0.1);
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 24px;
+        transition: all 0.2s;
+        cursor: pointer;
+        // adding inset bottom box-shadow
+        // box-shadow: inset 0 -1px 0 0 rgba(0,0,0,0.5);
+    }
+    //小圆点
+    .slider:after {
+        content: '';
+        width: 10px;
+        height: 10px;
+        display: block;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.6);
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        transition: all 0.2s;
+    }
+    .ball-color:after {
+        background: #444;
+    }
+    //单选框选中后改变的样式
+    input:checked+.slider:after {
+        transform: translateX(10px);
+        background: #fff;
+    }
+}

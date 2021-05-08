@@ -1,0 +1,13 @@
+<main>
+    <app-content-block caption="设备状态">
+        <ng-container *ngFor="let equipment of equipments; index as i">
+            <div class="drop-block">
+                <div class="drop-item" [class.selected]="selected === i">
+                    <span>{{equipment.title}}</span>
+                    <app-dropdown (select)="onChange(equipment, $event)" [options]="options"
+                        [(ngModel)]="equipment.selected"></app-dropdown>
+                </div>
+            </div>
+        </ng-container>
+    </app-content-block>
+</main>

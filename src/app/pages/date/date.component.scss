@@ -1,0 +1,73 @@
+main {
+    pointer-events: all;
+    .date-block {
+        width: 240px;
+        margin-top: 8px;
+        padding: 12px 20px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(8px);
+        .date-select {
+            display: flex;
+            justify-content: space-between;
+            span {
+                font-weight: bold;
+                line-height: 24px;
+                color: #fff;
+            }
+            input {
+                width: 108px;
+                height: 24px;
+                padding: 6px;
+                box-sizing: border-box;
+                background: rgba(0, 0, 0, 0.3);
+                color: #fff;
+                font-size: 12px;
+                font-weight: 500;
+                border: none;
+                border-radius: 2px;
+                outline: none;
+                user-select: none;
+            }
+            ::-webkit-calendar-picker-indicator {
+                filter: invert(1);
+            }
+            ::-webkit-calendar-picker-indicator {
+                margin-left: 0;
+            }
+        }
+        .date-time {
+            margin-top: 8px;
+        }
+    }
+    .content {
+        width: 240px;
+        height: 60px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(8px);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+        box-sizing: border-box;
+        margin-top: 8px;
+        cursor: pointer;
+        pointer-events: all;
+        .title {
+            height: 20px;
+            line-height: 20px;
+            font-weight: bold;
+            color: #fff;
+        }
+        .icon {
+            width: 24px;
+            height: 24px;
+        }
+    }
+    .content:hover .title{
+        color: #fff;
+    }
+}

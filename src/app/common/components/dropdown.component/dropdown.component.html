@@ -1,0 +1,9 @@
+<a class="select">
+  <p [class.select-disabled]="disabled" style="margin: 0;user-select: none;">
+    <input [disabled]="disabled" readonly (keydown)='$event.preventDefault();' type="text" class="placeholder" [value]="selectedItem?.placeholder" (blur)="onBlur($event)" (click)="onClick($event)">
+    <img class="arrow-down" [class.activity] = '!hideOptions' [src]="disabled ? 'assets/arrow-down-disabled.svg' : 'assets/arrow-down.svg'" width="9" height="6" />
+  </p>
+  <ul class="option" [style.height]="!hideOptions ? height : '0px'">
+    <li *ngFor="let item of items" (mousedown)="menuClick(item)" class="dropdown-item">{{item.placeholder}}</li>
+  </ul>
+</a>

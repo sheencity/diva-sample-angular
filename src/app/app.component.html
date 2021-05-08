@@ -1,0 +1,21 @@
+<div class="win">
+  <div class="backend-container" #backendContainer></div>
+  <main>
+    <header>
+      <app-header #header></app-header>
+    </header>
+    <article>
+      <nav>
+        <app-nav></app-nav>
+      </nav>
+      <div class="content">
+        <div>
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+      <div class="codeView" *ngIf="header.exampleCode">
+        <app-code-view></app-code-view>
+      </div>
+    </article>
+  </main>
+</div>

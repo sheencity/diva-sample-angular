@@ -1,0 +1,5 @@
+<span class="switcher-lable-title" *ngIf="label">{{label}}</span>
+<label class="switch" (click)="onClick($event)" [class.switch-disabled]="disabled">
+  <input type="checkbox" [(ngModel)]="isOn" [disabled]="disabled"/>
+  <div class="slider round" [class.ball-color]="!!ballColor"  [style.background]="background"></div>
+</label>
