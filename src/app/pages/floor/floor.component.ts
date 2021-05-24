@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Entity, Model } from '@sheencity/diva-sdk';
-import { TypedGroup } from '@sheencity/diva-sdk/lib/utils/group';
+import { Model, TypedGroup } from '@sheencity/diva-sdk';
 import { defer, from, Observable } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
 import { DropdownData } from 'src/app/common/models/dropdown-data.interface';
@@ -17,8 +16,7 @@ export class FloorComponent implements OnInit, OnDestroy {
   models: Model[] = [];
   // 所有管道模型
   pipeModels: Model[] = [];
-  explodeGroup: TypedGroup<Entity>;
-  group$: Observable<Set<Entity>>;
+  group$: Observable<TypedGroup<Model>>;
 
   // 炸开
   private _explode = false;
@@ -27,8 +25,8 @@ export class FloorComponent implements OnInit, OnDestroy {
     this.group$.subscribe((group) => {
       const options = { spacing: 300, eachHeight: 290, duration: 5 };
 
-      if (val) this._diva.client.disassemble(group, options);
-      else this._diva.client.assemble(group);
+      if (val) group.disassemble(options);
+      else group.assemble();
 
       this._explode = val;
       this._data.changeCode(
@@ -201,7 +199,7 @@ export class FloorComponent implements OnInit, OnDestroy {
     console.log(this.models);
     this.SetPathVisibility(false);
     const getGroup = () =>
-      from(this._diva.client.getEntityGroupByGroupPath('场景模型/主楼拆分'));
+      from(this._diva.client.getModelGroupByGroupPath('场景模型/主楼拆分'));
     this.group$ = defer(getGroup).pipe(shareReplay(1));
   }
   // 销毁钩子
