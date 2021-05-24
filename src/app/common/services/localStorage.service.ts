@@ -6,7 +6,6 @@ const STORE_TOKEN = 'overlay';
   providedIn: 'root',
 })
 export class LocalStorageService {
-
   constructor() {}
 
   /**
@@ -14,7 +13,8 @@ export class LocalStorageService {
    * @param overlay (POIOverlay | LabelOverlay) 覆盖物
    */
   storeOverlay(overlay: POIOverlay | LabelOverlay) {
-    const overlays: (POIOverlay | LabelOverlay)[] = JSON.parse(localStorage.getItem(STORE_TOKEN)) || [];
+    const overlays: (POIOverlay | LabelOverlay)[] =
+      JSON.parse(localStorage.getItem(STORE_TOKEN)) || [];
     overlays.unshift(overlay);
     localStorage.setItem(STORE_TOKEN, JSON.stringify(overlays));
   }
@@ -24,11 +24,12 @@ export class LocalStorageService {
    * @param overlay (POIOverlay | LabelOverlay) 覆盖物
    */
   deleteOverlay(overlay) {
-    const overlays: (POIOverlay | LabelOverlay)[] = JSON.parse(localStorage.getItem(STORE_TOKEN)) || [];
-    const index = overlays.findIndex((over) => over.id === overlay.id)
+    const overlays: (POIOverlay | LabelOverlay)[] =
+      JSON.parse(localStorage.getItem(STORE_TOKEN)) || [];
+    const index = overlays.findIndex((over) => over.id === overlay.id);
     if (index >= 0) {
-        overlays.splice(index, 1)
-        localStorage.setItem(STORE_TOKEN, JSON.stringify(overlays));
+      overlays.splice(index, 1);
+      localStorage.setItem(STORE_TOKEN, JSON.stringify(overlays));
     }
   }
 
@@ -38,7 +39,6 @@ export class LocalStorageService {
    * @returns (POIOverlay | LabelOverlay)[] 覆盖物数组
    */
   getAllOverlays(k = STORE_TOKEN): (POIOverlay | LabelOverlay)[] {
-      return JSON.parse(localStorage.getItem(k)) || []
+    return JSON.parse(localStorage.getItem(k)) || [];
   }
-
 }

@@ -1,10 +1,4 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  OnInit,
-  Renderer2,
-} from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 import { Model, Vector3 } from '@sheencity/diva-sdk';
 import { DropdownData } from 'src/app/common/models/dropdown-data.interface';
 import { DataService } from 'src/app/common/services/data.service';
@@ -148,9 +142,9 @@ export class OverlayComponent implements OnInit {
       // });
       this._store.storeOverlay(POI);
       this._data.changeCode(
-        `const position = new Vector(${POI.corrdinateX}, ${POI.corrdinateY}, ${POI.corrdinateZ});
-const overlay = new Overlay('poi', {coord: position, property: {icon: '${POI.icon}', content: '${POI.content}', ... }});
-overlay.set(client);`
+        `const position = new Vector(${POI.corrdinateX}, ${POI.corrdinateY}, ${POI.corrdinateZ});`,
+        `const overlay = new Overlay('poi', {coord: position, property: {icon: '${POI.icon}', content: '${POI.content}', ... }});`,
+        `overlay.set(client);`
       );
     } else {
       const Label = new LabelOverlay();
@@ -200,9 +194,9 @@ overlay.set(client);`
       // });
       this._store.storeOverlay(Label);
       this._data.changeCode(
-        `const position = new Vector(${Label.corrdinateX}, ${Label.corrdinateY}, ${Label.corrdinateZ});
-const overlay = new Overlay('label', {coord: position, property: {title: '${Label.title}', content: '${Label.content}', ... }});
-overlay.set(client);`
+        `const position = new Vector(${Label.corrdinateX}, ${Label.corrdinateY}, ${Label.corrdinateZ});`,
+        `const overlay = new Overlay('label', {coord: position, property: {title: '${Label.title}', content: '${Label.content}', ... }});`,
+        `overlay.set(client);`
       );
     }
     this.overlays = this._store.getAllOverlays();
@@ -250,11 +244,6 @@ overlay.set(client);`
     this.selectedId = overlay.id;
     const entity = await this._diva.client.getEntityById<Model>(overlay.id);
     entity.focus(1000, -Math.PI / 6);
-    // await this._diva.client.request('Focus', {
-    //   id: overlay.id,
-    //   distance: 1000.0,
-    //   pitch: 30.0,
-    // });
     this._data.changeCode(`model.focus(1000, -Math.PI / 6)`);
   }
 
@@ -358,11 +347,6 @@ overlay.set(client);`
     this.overlays = this._store.getAllOverlays();
     await this._diva.client?.applyScene('覆盖物');
     this._data.changeCode(`client.applyScene('覆盖物')`);
-    // const overlayIds = this.overlays.map((overlay) => overlay.id);
-    // await this._diva.client.request('SetVisibility', {
-    //   ids: overlayIds,
-    //   visible: true,
-    // });
     this.overlays.map(async (overlay) => {
       const entity = await this._diva.client.getEntityById<Model>(overlay.id);
       entity.visible = true;
