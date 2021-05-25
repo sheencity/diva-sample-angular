@@ -17,9 +17,9 @@ import {
   styleUrls: ['./overlay.component.scss'],
 })
 export class OverlayComponent implements OnInit {
-  // 覆盖物列表
+  /** 覆盖物列表 */
   public overlays: (POIOverlay | LabelOverlay)[] = [];
-  // 种类
+  /** 种类 */
   private _selectedType: DropdownData = {
     value: OverlayType.POI,
     placeholder: 'POI',
@@ -30,8 +30,7 @@ export class OverlayComponent implements OnInit {
   public get selectedType() {
     return this._selectedType;
   }
-
-  // 类型
+  /** 类型 */
   private _selectedIcon: DropdownData = {
     value: POIIcon.Camera,
     placeholder: '摄像头',
@@ -42,32 +41,27 @@ export class OverlayComponent implements OnInit {
   public get selectedIcon() {
     return this._selectedIcon;
   }
-
-  /**
-   * 坐标
-   */
-  // x 坐标
+  /** x 坐标 */
   public corrdinateX = 0.0;
-  // y 坐标
+  /** y 坐标 */
   public corrdinateY = 0.0;
-  // z 坐标
+  /** z 坐标 */
   public corrdinateZ = 0.0;
-
-  // 标题
+  /** 标题 */
   public title = '';
-  // 内容
+  /** 内容 */
   public content = '';
-  // 颜色
+  /** 颜色 */
   public color = '#000000';
-  // 缩放
+  /** 缩放 */
   public scale = 1.0;
-  // 不透明度
+  /** 不透明度 */
   public opacity = 1.0;
-  // 边框大小
+  /** 边框大小 */
   public border = 0.0;
-  // 边框颜色
+  /** 边框颜色 */
   public borderColor = '#ffffff';
-  // 选中覆盖物的id
+  /** 选中覆盖物的id */
   public selectedId: string = null;
 
   // 种类配置
@@ -135,11 +129,6 @@ export class OverlayComponent implements OnInit {
       });
       const entity = await this._diva.client.getEntityById<Model>(POI.id);
       entity.focus(1000, -Math.PI / 6);
-      // await this._diva.client.request('Focus', {
-      //   id: POI.id,
-      //   distance: 1000.0,
-      //   pitch: 30.0,
-      // });
       this._store.storeOverlay(POI);
       this._data.changeCode(
         `const position = new Vector(${POI.corrdinateX}, ${POI.corrdinateY}, ${POI.corrdinateZ});`,
@@ -187,11 +176,6 @@ export class OverlayComponent implements OnInit {
       });
       const entity = await this._diva.client.getEntityById<Model>(Label.id);
       entity.focus(1000, -Math.PI / 6);
-      // await this._diva.client.request('Focus', {
-      //   id: Label.id,
-      //   distance: 1000.0,
-      //   pitch: 30.0,
-      // });
       this._store.storeOverlay(Label);
       this._data.changeCode(
         `const position = new Vector(${Label.corrdinateX}, ${Label.corrdinateY}, ${Label.corrdinateZ});`,
@@ -235,7 +219,6 @@ export class OverlayComponent implements OnInit {
     this.border = 0.0;
     this.borderColor = '#ffffff';
   }
-
   /**
    * 聚焦覆盖物
    * @param overlay (POIOverlay | LabelOverlay) 覆盖物
@@ -246,55 +229,6 @@ export class OverlayComponent implements OnInit {
     entity.focus(1000, -Math.PI / 6);
     this._data.changeCode(`model.focus(1000, -Math.PI / 6)`);
   }
-
-  /**
-   * 缩放值超出限制时重设为限制值
-   * @returns
-   */
-  onInputScale() {
-    if (this.scale < 0) {
-      this.scale = 0;
-      this.refreshInput(0, this.scale);
-      return;
-    } else if (this.scale > 100) {
-      this.scale = 100;
-      this.refreshInput(0, this.scale);
-      return;
-    }
-  }
-
-  /**
-   * 透明度超出限制时重设为限制值
-   * @returns
-   */
-  onInputOpacity() {
-    if (this.opacity < 0) {
-      this.opacity = 0;
-      this.refreshInput(1, this.opacity);
-      return;
-    } else if (this.opacity > 1) {
-      this.opacity = 1;
-      this.refreshInput(1, this.opacity);
-      return;
-    }
-  }
-
-  /**
-   * 边框超出限制时重设为限制值
-   * @returns
-   */
-  onInputBorder() {
-    if (this.border < 0) {
-      this.border = 0;
-      this.refreshInput(3, this.border);
-      return;
-    } else if (this.border > 1) {
-      this.border = 1;
-      this.refreshInput(3, this.border);
-      return;
-    }
-  }
-
   /**
    * 拾取世界坐标
    */
@@ -309,19 +243,6 @@ export class OverlayComponent implements OnInit {
     await this._diva.client.addEventListener('click', handler, { once: true });
     this._rd2.setStyle(document.body, 'cursor', 'crosshair');
   }
-
-  /**
-   * 重设 input 框的值
-   * @param index (number) 重设 input 框的索引值
-   * @param value (number) 重设值
-   */
-  refreshInput(index: number, value: number) {
-    const refreshInputDom = this._elementRef.nativeElement
-      .querySelectorAll('.adjust')
-      .item(index);
-    refreshInputDom.value = value + '';
-  }
-
   /**
    * 将 colorInput 的 rgb 字符串转换为十进制色值数组
    * @param rgb (string) 颜色的 rgb 字符串
