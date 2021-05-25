@@ -205,7 +205,7 @@ export class FloorComponent implements OnInit, OnDestroy {
   // 销毁钩子
   async ngOnDestroy() {
     if (this.group$) {
-      this.group$.subscribe((group) => this._diva.client.assemble(group));
+      this.group$.subscribe((group) => group.assemble());
     }
     // 显示所有楼层，隐藏所有管道，并且不显示示例代码
     this._setVisibility(this.models, true, true);
