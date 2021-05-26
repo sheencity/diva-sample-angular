@@ -161,7 +161,7 @@ export class FloorComponent implements OnInit, OnDestroy {
   }
   // 显示隐藏方法
   private _setVisibility(models: Model[], visible: boolean, leave = false) {
-    models.map((model) => (model.visible = visible));
+    models.map((model) => (model.setVisibility(visible)));
     if (!leave) {
       this._data.changeCode(
         `client.setVisibility(${[
