@@ -233,9 +233,6 @@ export class OverlayComponent implements OnInit {
         emission.id
       );
       entity.focus(1000, -Math.PI / 6);
-      // console.log(entity)
-      // setTimeout(() => entity.destroy(), 1000);
-      // await entity.detach();
       this._store.storeOverlay(emission);
       this._data.changeCode(
         `const overlay = new Emissive(config);`,
@@ -258,6 +255,7 @@ export class OverlayComponent implements OnInit {
     this.overlays = this._store.getAllOverlays();
     const entity = await this._diva.client.getEntityById(overlay.id);
     entity.destroy();
+    // entity.detach();
     this._data.changeCode(`entity.destroy()`);
   }
 
