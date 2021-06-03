@@ -1,22 +1,30 @@
-import { Component, Input, forwardRef, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  forwardRef,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
 @Component({
   selector: 'app-switcher',
   templateUrl: './switcher.component.html',
   styleUrls: ['./switcher.component.scss'],
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => SwitcherComponent),
-    multi: true,
-}],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => SwitcherComponent),
+      multi: true,
+    },
+  ],
 })
 export class SwitcherComponent implements ControlValueAccessor {
   @Input() public label: string;
-  @Input() public background: string = 'rgba(255, 255, 255, 0.1)'   ;
-  @Input() public disabled = false; 
+  @Input() public background: string = 'rgba(255, 255, 255, 0.1)';
+  @Input() public disabled = false;
   @Input() public ballColor;
-  @Output() public switch = new EventEmitter<boolean>()
+  @Output() public switch = new EventEmitter<boolean>();
   private _isOn: boolean;
   public get isOn(): boolean {
     return this._isOn;
@@ -27,7 +35,7 @@ export class SwitcherComponent implements ControlValueAccessor {
     this.change(this._isOn);
   }
   public change = (value: boolean) => {};
-  constructor() { }
+  constructor() {}
   public writeValue(v: boolean) {
     this.isOn = v;
   }

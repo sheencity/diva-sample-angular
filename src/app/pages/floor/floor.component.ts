@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Entity, Model, TypedGroup } from '@sheencity/diva-sdk';
+import { Model, TypedGroup } from '@sheencity/diva-sdk';
 import { defer, from, Observable } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
 import { DropdownData } from 'src/app/common/models/dropdown-data.interface';
@@ -16,7 +16,6 @@ export class FloorComponent implements OnInit, OnDestroy {
   models: Model[] = [];
   // 所有管道模型
   pipeModels: Model[] = [];
-  explodeGroup: TypedGroup<Model>;
   group$: Observable<TypedGroup<Model>>;
 
   // 炸开
@@ -162,7 +161,7 @@ export class FloorComponent implements OnInit, OnDestroy {
   }
   // 显示隐藏方法
   private _setVisibility(models: Model[], visible: boolean, leave = false) {
-    models.map((model) => (model.visible = visible));
+    models.map((model) => (model.setVisibility(visible)));
     if (!leave) {
       this._data.changeCode(
         `client.setVisibility(${[

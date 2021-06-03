@@ -68,7 +68,7 @@ export class MonitorComponent implements OnInit, OnDestroy {
 
   /**
    * 阻止事件冒泡
-   * @param $event 
+   * @param $event
    */
   onKeydown($event) {
     $event.stopPropagation();

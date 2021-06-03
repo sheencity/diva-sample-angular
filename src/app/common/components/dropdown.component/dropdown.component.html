@@ -4,6 +4,6 @@
     <img class="arrow-down" [class.activity] = '!hideOptions' [src]="disabled ? 'assets/arrow-down-disabled.svg' : 'assets/arrow-down.svg'" width="9" height="6" />
   </p>
   <ul class="option" [style.height]="!hideOptions ? height : '0px'">
-    <li *ngFor="let item of items" (mousedown)="menuClick(item)" class="dropdown-item">{{item.placeholder}}</li>
+    <li *ngFor="let item of items" (mousedown)="menuClick(item)" class="dropdown-item" [title]="item.placeholder">{{item.placeholder}}</li>
   </ul>
 </a>
