@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LabelOverlay, POIOverlay } from '../models/overlay.model';
+import { EmissiveOverlay, LabelOverlay, POIOverlay } from '../models/overlay.model';
 const STORE_TOKEN = 'overlay';
 
 @Injectable({
@@ -12,8 +12,8 @@ export class LocalStorageService {
    * 将覆盖物信息存储在 localStorage 中
    * @param overlay (POIOverlay | LabelOverlay) 覆盖物
    */
-  storeOverlay(overlay: POIOverlay | LabelOverlay) {
-    const overlays: (POIOverlay | LabelOverlay)[] =
+  storeOverlay(overlay: POIOverlay | LabelOverlay | EmissiveOverlay) {
+    const overlays: (POIOverlay | LabelOverlay | EmissiveOverlay)[] =
       JSON.parse(localStorage.getItem(STORE_TOKEN)) || [];
     overlays.unshift(overlay);
     localStorage.setItem(STORE_TOKEN, JSON.stringify(overlays));
@@ -24,7 +24,7 @@ export class LocalStorageService {
    * @param overlay (POIOverlay | LabelOverlay) 覆盖物
    */
   deleteOverlay(overlay) {
-    const overlays: (POIOverlay | LabelOverlay)[] =
+    const overlays: (POIOverlay | LabelOverlay | EmissiveOverlay)[] =
       JSON.parse(localStorage.getItem(STORE_TOKEN)) || [];
     const index = overlays.findIndex((over) => over.id === overlay.id);
     if (index >= 0) {
@@ -38,7 +38,7 @@ export class LocalStorageService {
    * @param k key值
    * @returns (POIOverlay | LabelOverlay)[] 覆盖物数组
    */
-  getAllOverlays(k = STORE_TOKEN): (POIOverlay | LabelOverlay)[] {
+  getAllOverlays(k = STORE_TOKEN): (POIOverlay | LabelOverlay | EmissiveOverlay)[] {
     return JSON.parse(localStorage.getItem(k)) || [];
   }
 }

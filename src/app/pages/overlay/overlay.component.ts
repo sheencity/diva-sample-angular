@@ -1,16 +1,18 @@
-import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
-import { Model, Vector3 } from '@sheencity/diva-sdk';
+import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Emissive, EmissiveConfig, Model, Vector3 } from '@sheencity/diva-sdk';
 import { DropdownData } from 'src/app/common/models/dropdown-data.interface';
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
 import { LocalStorageService } from 'src/app/common/services/localStorage.service';
 import {
+  EmissionType,
+  EmissiveOverlay,
   LabelOverlay,
   OverlayType,
   POIIcon,
   POIOverlay,
 } from 'src/app/common/models/overlay.model';
-
+import { DivaMouseEvent } from '@sheencity/diva-sdk/lib/events/diva.events';
 @Component({
   selector: 'app-overlay',
   templateUrl: './overlay.component.html',
@@ -18,29 +20,21 @@ import {
 })
 export class OverlayComponent implements OnInit {
   /** 覆盖物列表 */
-  public overlays: (POIOverlay | LabelOverlay)[] = [];
+  public overlays: (POIOverlay | LabelOverlay | EmissiveOverlay)[] = [];
   /** 种类 */
-  private _selectedType: DropdownData = {
+  public selectedType: DropdownData = {
     value: OverlayType.POI,
     placeholder: 'POI',
   };
-  public set selectedType(v: DropdownData) {
-    this._selectedType = v;
-  }
-  public get selectedType() {
-    return this._selectedType;
-  }
   /** 类型 */
-  private _selectedIcon: DropdownData = {
+  public selectedIcon: DropdownData = {
     value: POIIcon.Camera,
     placeholder: '摄像头',
   };
-  public set selectedIcon(v: DropdownData) {
-    this._selectedIcon = v;
-  }
-  public get selectedIcon() {
-    return this._selectedIcon;
-  }
+  public selectedEmissive: DropdownData<EmissionType> = {
+    value: EmissionType.type1,
+    placeholder: '悬浮标记01',
+  };
   /** x 坐标 */
   public corrdinateX = 0.0;
   /** y 坐标 */
@@ -63,11 +57,14 @@ export class OverlayComponent implements OnInit {
   public borderColor = '#ffffff';
   /** 选中覆盖物的id */
   public selectedId: string = null;
+  public emission: number = 1.0;
+  public speed: number = 2.0;
 
   // 种类配置
   typeOptions = [
     { value: OverlayType.POI, placeholder: 'POI' },
     { value: OverlayType.Label, placeholder: 'Label' },
+    { value: OverlayType.Emissive, placeholder: 'Emissive' },
   ];
   // 类型配置
   iconOptions = [
@@ -86,8 +83,17 @@ export class OverlayComponent implements OnInit {
     { value: POIIcon.Mall, placeholder: '商场' },
     { value: POIIcon.Toilet, placeholder: '卫生间' },
   ];
+  emissiveOptions = [
+    { value: EmissionType.type1, placeholder: '悬浮标记01' },
+    { value: EmissionType.type2, placeholder: '圆形区域轮廓02' },
+    { value: EmissionType.type3, placeholder: '雷达标记' },
+    { value: EmissionType.type4, placeholder: '地面标记01' },
+    { value: EmissionType.type5, placeholder: '圆形区域轮廓01' },
+    { value: EmissionType.type6, placeholder: '事故标记' },
+    { value: EmissionType.type7, placeholder: '悬浮标记02' },
+    { value: EmissionType.type8, placeholder: '圆形区域轮廓03' },
+  ];
   constructor(
-    private _elementRef: ElementRef<any>,
     private _store: LocalStorageService,
     private _diva: DivaService,
     private _rd2: Renderer2,
@@ -135,7 +141,7 @@ export class OverlayComponent implements OnInit {
         `const overlay = new Overlay('poi', {coord: position, property: {icon: '${POI.icon}', content: '${POI.content}', ... }});`,
         `overlay.set(client);`
       );
-    } else {
+    } else if (this.selectedType.value === OverlayType.Label) {
       const Label = new LabelOverlay();
       (Label.corrdinateX = this.corrdinateX),
         (Label.corrdinateY = this.corrdinateY),
@@ -182,6 +188,60 @@ export class OverlayComponent implements OnInit {
         `const overlay = new Overlay('label', {coord: position, property: {title: '${Label.title}', content: '${Label.content}', ... }});`,
         `overlay.set(client);`
       );
+    } else if (this.selectedType.value === OverlayType.Emissive) {
+      const emission = new EmissiveOverlay();
+      emission.icon = this.selectedEmissive.value;
+      emission.corrdinateX = this.corrdinateX;
+      emission.corrdinateY = this.corrdinateY;
+      emission.corrdinateZ = this.corrdinateZ;
+      emission.color = this.color;
+      emission.emission = this.emission;
+      emission.speed = this.speed;
+      await this._diva.client.request('CreateOverlay', {
+        id: emission.id,
+        type: emission.type,
+        coord: [
+          emission.corrdinateX,
+          emission.corrdinateY,
+          emission.corrdinateZ,
+        ],
+        resourceName: emission.icon,
+        property: {
+          color: emission.color,
+          emissive: emission.emission,
+          speed: emission.speed,
+        },
+        clusterEnable: true,
+      });
+      // const config = {
+      //   id: id,
+      //   visible: true,
+      //   coord: new Vector3(this.corrdinateX, this.corrdinateY, this.corrdinateZ),
+      //   resource: {
+      //     name: EmissionType.type5,
+      //   },
+      //   emissionColor: '#ff0',
+      //   emissionStrength: 1,
+      //   speed: 1,
+      // } as EmissiveConfig;
+
+      // const overlay = new Emissive(config);
+      // await overlay.attach(this._diva.client)
+      // await overlay.create();
+
+      const entity = await this._diva.client.getEntityById<Emissive>(
+        emission.id
+      );
+      entity.focus(1000, -Math.PI / 6);
+      // console.log(entity)
+      // setTimeout(() => entity.destroy(), 1000);
+      // await entity.detach();
+      this._store.storeOverlay(emission);
+      this._data.changeCode(
+        `const overlay = new Emissive(config);`,
+        `await overlay.attach(client);`,
+        `await overlay.create();`
+      );
     }
     this.overlays = this._store.getAllOverlays();
     this.reset();
@@ -196,17 +256,22 @@ export class OverlayComponent implements OnInit {
     $event.stopPropagation();
     this._store.deleteOverlay(overlay);
     this.overlays = this._store.getAllOverlays();
-    await this._diva.client.request('DestroyOverlay', { id: overlay.id });
-    this._data.changeCode(`client.DestroyOverlay('${overlay.id}')`);
+    const entity = await this._diva.client.getEntityById(overlay.id);
+    entity.destroy();
+    this._data.changeCode(`entity.destroy()`);
   }
 
   /**
    * 创建覆盖物之后重置所有配置
    */
   reset() {
-    this._selectedIcon = {
+    this.selectedIcon = {
       value: POIIcon.Camera,
       placeholder: '摄像头',
+    };
+    this.selectedEmissive = {
+      value: EmissionType.type1,
+      placeholder: '悬浮标记01',
     };
     this.corrdinateX = 0.0;
     this.corrdinateY = 0.0;
@@ -218,12 +283,14 @@ export class OverlayComponent implements OnInit {
     this.opacity = 1.0;
     this.border = 0.0;
     this.borderColor = '#ffffff';
+    this.emission = 1.0;
+    this.speed = 2.0;
   }
   /**
    * 聚焦覆盖物
    * @param overlay (POIOverlay | LabelOverlay) 覆盖物
    */
-  async selectOverlay(overlay: POIOverlay | LabelOverlay) {
+  async selectOverlay(overlay: POIOverlay | LabelOverlay | EmissiveOverlay) {
     this.selectedId = overlay.id;
     const entity = await this._diva.client.getEntityById<Model>(overlay.id);
     entity.focus(1000, -Math.PI / 6);
@@ -233,8 +300,8 @@ export class OverlayComponent implements OnInit {
    * 拾取世界坐标
    */
   async pickup() {
-    const handler = (event) => {
-      const wordPosition = event.worldPosition as Vector3;
+    const handler = (event: DivaMouseEvent) => {
+      const wordPosition = event.worldPosition;
       this.corrdinateX = wordPosition.x;
       this.corrdinateY = wordPosition.y;
       this.corrdinateZ = wordPosition.z;
@@ -270,7 +337,7 @@ export class OverlayComponent implements OnInit {
     this._data.changeCode(`client.applyScene('覆盖物')`);
     this.overlays.map(async (overlay) => {
       const entity = await this._diva.client.getEntityById<Model>(overlay.id);
-      entity.visible = true;
+      entity.setVisibility(true);
     });
   }
 }

@@ -29,9 +29,16 @@
         <span>标题</span>
         <input (keydown)="onKeyDown($event)" type="text" [(ngModel)]="title" placeholder="请输入文字" />
       </div>
-      <div class="input-item" [style.height]="selectedType.value === 'poi' ? '24px' : '48px'">
+      <div class="input-item" [style.height]="selectedType.value === 'poi' ? '24px' : '48px'"
+        *ngIf="selectedType.value !== 'emissiveOverlay'">
         <span>内容</span>
         <textarea cols="4" (keydown)="onKeyDown($event)" [(ngModel)]="content" placeholder="请输入文字"></textarea>
+      </div>
+      <div class="drop-item" style="margin-top: 12px;" *ngIf="selectedType.value === 'emissiveOverlay'">
+        <span>类型</span>
+        <div>
+          <app-dropdown [options]="emissiveOptions" [(ngModel)]="selectedEmissive"></app-dropdown>
+        </div>
       </div>
       <div class="drop-item" style="margin-top: 12px;" *ngIf="selectedType.value === 'poi'">
         <span>类型</span>
@@ -47,7 +54,7 @@
         <span>缩放</span>
         <app-input-number [(ngModel)]="scale" [min]="0" [max]="100"></app-input-number>
       </div>
-      <div class="input-item">
+      <div class="input-item" *ngIf="selectedType.value !== 'emissiveOverlay'">
         <span>不透明度</span>
         <app-input-number [(ngModel)]="opacity" [min]="0" [max]="1"></app-input-number>
       </div>
@@ -58,6 +65,14 @@
       <div class="input-item" *ngIf="selectedType.value === 'label'">
         <span>边框颜色</span>
         <input [(ngModel)]="borderColor" type="color" />
+      </div>
+      <div class="input-item" *ngIf="selectedType.value === 'emissiveOverlay'">
+        <span>自发光强度</span>
+        <app-input-number [(ngModel)]="emission" [min]="0"></app-input-number>
+      </div>
+      <div class="input-item" *ngIf="selectedType.value === 'emissiveOverlay'">
+        <span>速度</span>
+        <app-input-number [(ngModel)]="speed" [min]="0"></app-input-number>
       </div>
       <div class="btn-item">
         <span></span>
@@ -71,9 +86,9 @@
         <ng-container *ngFor="let overlay of overlays; index as i">
           <div class="overlay-list" (click)="selectOverlay(overlay)">
             <div class="overlay-item" [class.selected]="selectedId === overlay.id">
-              <span>{{overlay.type === 'poi' ? overlay.content : overlay.title}}</span>
+              <span>{{overlay.type === 'poi' ? overlay.content : overlay.type === 'label' ? overlay.title : overlay.icon}}</span>
               <div class="overlay-info">
-                <span>{{overlay.type === 'poi' ? 'POI' : '标签'}}</span>
+                <span>{{overlay.type === 'poi' ? 'POI' : overlay.type === 'label' ? '标签' : 'Emissive'}}</span>
                 <div class="overlay-delete" (click)="delete($event, overlay)">
                   <img src="assets/icon/overlay/delete.png" />
                 </div>
