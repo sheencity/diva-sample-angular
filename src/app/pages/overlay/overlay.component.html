@@ -34,6 +34,12 @@
         <span>内容</span>
         <textarea cols="4" (keydown)="onKeyDown($event)" [(ngModel)]="content" placeholder="请输入文字"></textarea>
       </div>
+      <div class="drop-item" style="margin-top: 12px;" *ngIf="selectedType.value === 'label'">
+        <span>对齐方式</span>
+        <div>
+          <app-dropdown [options]="alignOptions" [(ngModel)]="selectedAlign"></app-dropdown>
+        </div>
+      </div>
       <div class="drop-item" style="margin-top: 12px;" *ngIf="selectedType.value === 'emissiveOverlay'">
         <span>类型</span>
         <div>
@@ -49,6 +55,20 @@
       <div class="input-item">
         <span>颜色</span>
         <input [(ngModel)]="color" type="color" />
+      </div>
+      <div class="input-item" *ngIf="selectedType.value === 'emissiveOverlay'">
+        <span>旋转</span>
+        <div class="coordinate-items">
+          <div class="coordinate-item">
+            <span>X</span><input (keydown)="onKeyDown($event)" [(ngModel)]="rotationX" type="number" />
+          </div>
+          <div class="coordinate-item">
+            <span>Y</span><input (keydown)="onKeyDown($event)" [(ngModel)]="rotationY" type="number" />
+          </div>
+          <div class="coordinate-item">
+            <span>Z</span><input (keydown)="onKeyDown($event)" [(ngModel)]="rotationZ" type="number" />
+          </div>
+        </div>
       </div>
       <div class="input-item">
         <span>缩放</span>

@@ -40,6 +40,9 @@ export class Overlay {
   public corrdinateZ: number;
   public content: string;
   public color: string;
+  public rotationX: number;
+  public rotationY: number;
+  public rotationZ: number;
   public scale: number;
   public opacity: number;
   constructor() {
@@ -55,6 +58,7 @@ export class POIOverlay extends Overlay {
 export class LabelOverlay extends Overlay {
   public readonly type = OverlayType.Label;
   public title: string;
+  public align: "left" | "start" | "right" | "end" | "center" | "justify";
   public border: number;
   public borderColor: string;
 }

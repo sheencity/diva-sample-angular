@@ -1,5 +1,12 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
-import { Emissive, Model, POI, TextLabel, Vector3 } from '@sheencity/diva-sdk';
+import {
+  Emissive,
+  Model,
+  POI,
+  Quaternion,
+  TextLabel,
+  Vector3,
+} from '@sheencity/diva-sdk';
 import { DropdownData } from 'src/app/common/models/dropdown-data.interface';
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
@@ -20,14 +27,11 @@ import { Matrix } from '@sheencity/diva-sdk';
   styleUrls: ['./overlay.component.scss'],
 })
 export class OverlayComponent implements OnInit {
-  /** 覆盖物列表 */
   public overlays: (POIOverlay | LabelOverlay | EmissiveOverlay)[] = [];
-  /** 种类 */
   public selectedType: DropdownData = {
     value: OverlayType.POI,
     placeholder: 'POI',
   };
-  /** 类型 */
   public selectedIcon: DropdownData = {
     value: POIIcon.Camera,
     placeholder: '摄像头',
@@ -36,38 +40,40 @@ export class OverlayComponent implements OnInit {
     value: EmissionType.type1,
     placeholder: '悬浮标记01',
   };
-  /** x 坐标 */
   public corrdinateX = 0.0;
-  /** y 坐标 */
   public corrdinateY = 0.0;
-  /** z 坐标 */
   public corrdinateZ = 0.0;
-  /** 标题 */
   public title = '';
-  /** 内容 */
   public content = '';
-  /** 颜色 */
   public color = '#000000';
-  /** 缩放 */
+  public rotationX = 0;
+  public rotationY = 0;
+  public rotationZ = 0;
   public scale = 1.0;
-  /** 不透明度 */
   public opacity = 1.0;
-  /** 边框大小 */
   public border = 0.0;
-  /** 边框颜色 */
   public borderColor = '#ffffff';
-  /** 选中覆盖物的id */
   public selectedId: string = null;
   public emission: number = 1.0;
   public speed: number = 2.0;
+  public selectedAlign = {
+    value: 'center',
+    placeholder: '居中',
+  } as {
+    value: 'left' | 'start' | 'right' | 'end' | 'center' | 'justify';
+    placeholder: string;
+  };
 
-  // 种类配置
   typeOptions = [
     { value: OverlayType.POI, placeholder: 'POI' },
     { value: OverlayType.Label, placeholder: 'Label' },
     { value: OverlayType.Emissive, placeholder: 'Emissive' },
   ];
-  // 类型配置
+  alignOptions = [
+    { value: 'center', placeholder: '居中' },
+    { value: 'left', placeholder: '左对齐' },
+    { value: 'right', placeholder: '右对齐' },
+  ];
   iconOptions = [
     { value: POIIcon.Camera, placeholder: '摄像头' },
     { value: POIIcon.Location, placeholder: '定位' },
@@ -94,6 +100,7 @@ export class OverlayComponent implements OnInit {
     { value: EmissionType.type7, placeholder: '悬浮标记02' },
     { value: EmissionType.type8, placeholder: '圆形区域轮廓03' },
   ];
+
   constructor(
     private _store: LocalStorageService,
     private _diva: DivaService,
@@ -102,7 +109,7 @@ export class OverlayComponent implements OnInit {
   ) {}
 
   /**
-   * 创建 POI 或 Label
+   * 创建覆盖物
    */
   async create() {
     if (this.selectedType.value === OverlayType.POI) {
@@ -146,6 +153,7 @@ export class OverlayComponent implements OnInit {
       overlay.corrdinateZ = this.corrdinateZ;
       overlay.title = this.title;
       overlay.content = this.content;
+      overlay.align = this.selectedAlign.value;
       overlay.color = this.color;
       overlay.scale = this.scale;
       overlay.opacity = this.opacity;
@@ -159,7 +167,11 @@ export class OverlayComponent implements OnInit {
       const textOverlay = new TextLabel({
         id: overlay.id,
         title: overlay.title,
-        content: overlay.content,
+        content: {
+          text: overlay.content,
+          align: overlay.align,
+          color: 'auto',
+        },
         backgroundColor: overlay.color,
         transform: transform,
         border: {
@@ -173,6 +185,7 @@ export class OverlayComponent implements OnInit {
       });
       textOverlay.attach(this._diva.client);
       await textOverlay.create();
+      textOverlay.focus(1000, -Math.PI / 6);
       this._store.storeOverlay(overlay);
       this._data.changeCode(
         `const overlay = new TextLabel(config_learnMoreInTutorial);`,
@@ -188,17 +201,23 @@ export class OverlayComponent implements OnInit {
       overlay.color = this.color;
       overlay.emission = this.emission;
       overlay.speed = this.speed;
+      overlay.rotationX = this.rotationX;
+      overlay.rotationY = this.rotationY;
+      overlay.rotationZ = this.rotationZ;
       overlay.scale = this.scale;
-      // const transform = Matrix.Identity();
-      // transform.scaleInPlace(overlay.scale);  // 使用 transform 属性设置 自发光覆盖物（emissive）的偏移和缩放时
-      // transform.setTranslation(               // 必须将缩放方法放置在偏移方法之前
-      //   overlay.corrdinateX,
-      //   overlay.corrdinateY,
-      //   overlay.corrdinateZ
-      // );
       const emissiveOverlay = new Emissive({
         id: overlay.id,
-        // transform: transform,
+        // transform: Matrix.RotationYawPitchRoll(
+        //   overlay.rotationY,
+        //   overlay.rotationX,
+        //   overlay.rotationZ,
+        // ).scaleInPlace(
+        //   overlay.scale
+        // ).addTranslation(
+        //   overlay.corrdinateX,
+        //   overlay.corrdinateY,
+        //   overlay.corrdinateZ
+        // ),
         resource: {
           id: '',
           name: overlay.icon,
@@ -210,7 +229,12 @@ export class OverlayComponent implements OnInit {
         coord: new Vector3(
           overlay.corrdinateX,
           overlay.corrdinateY,
-          overlay.corrdinateZ
+          overlay.corrdinateZ,
+        ),
+        rotation: Quaternion.FromEulerAngles(
+          overlay.rotationX,
+          overlay.rotationY,
+          overlay.rotationZ,
         ),
         scale: new Vector3(overlay.scale, overlay.scale, overlay.scale),
       });
@@ -255,9 +279,16 @@ export class OverlayComponent implements OnInit {
       value: EmissionType.type1,
       placeholder: '悬浮标记01',
     };
+    this.selectedAlign = {
+      value: 'center',
+      placeholder: '居中',
+    };
     this.corrdinateX = 0.0;
     this.corrdinateY = 0.0;
     this.corrdinateZ = 0.0;
+    this.rotationX = 0;
+    this.rotationY = 0;
+    this.rotationZ = 0;
     this.title = '';
     this.content = '';
     this.color = '#000000';
