@@ -1,5 +1,5 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
-import { Emissive, EmissiveConfig, Model, Vector3 } from '@sheencity/diva-sdk';
+import { Emissive, Model, POI, TextLabel, Vector3 } from '@sheencity/diva-sdk';
 import { DropdownData } from 'src/app/common/models/dropdown-data.interface';
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
@@ -13,6 +13,7 @@ import {
   POIOverlay,
 } from 'src/app/common/models/overlay.model';
 import { DivaMouseEvent } from '@sheencity/diva-sdk/lib/events/diva.events';
+import { Matrix } from '@sheencity/diva-sdk';
 @Component({
   selector: 'app-overlay',
   templateUrl: './overlay.component.html',
@@ -105,138 +106,121 @@ export class OverlayComponent implements OnInit {
    */
   async create() {
     if (this.selectedType.value === OverlayType.POI) {
-      const POI = new POIOverlay();
-      POI.icon = this.selectedIcon.value as POIIcon;
-      (POI.corrdinateX = this.corrdinateX),
-        (POI.corrdinateY = this.corrdinateY),
-        (POI.corrdinateZ = this.corrdinateZ),
-        (POI.content = this.content),
-        (POI.color = this.color),
-        (POI.scale = this.scale),
-        (POI.opacity = this.opacity),
-        console.log('poiConfig', POI);
-      const color = this.getRGB(POI.color);
-      await this._diva.client.request('CreateOverlay', {
-        id: POI.id,
-        type: POI.type,
-        coord: [POI.corrdinateX, POI.corrdinateY, POI.corrdinateZ],
-        property: {
-          label: POI.content,
-          icon: POI.icon,
-          color: {
-            r: color[0],
-            g: color[1],
-            b: color[2],
-          },
-          opacity: POI.opacity,
-          scale: POI.scale,
-        },
-        clusterEnable: true,
+      const overlay = new POIOverlay();
+      overlay.icon = this.selectedIcon.value as POIIcon;
+      overlay.corrdinateX = this.corrdinateX;
+      overlay.corrdinateY = this.corrdinateY;
+      overlay.corrdinateZ = this.corrdinateZ;
+      overlay.content = this.content;
+      overlay.color = this.color;
+      overlay.scale = this.scale;
+      overlay.opacity = this.opacity;
+      const transform = Matrix.Translation(
+        overlay.corrdinateX,
+        overlay.corrdinateY,
+        overlay.corrdinateZ
+      );
+      const poiOverlay = new POI({
+        id: overlay.id,
+        label: overlay.content,
+        icon: overlay.icon,
+        backgroundColor: overlay.color,
+        opacity: overlay.opacity,
+        transform: transform,
+        scale: overlay.scale,
+        name: overlay.content,
       });
-      const entity = await this._diva.client.getEntityById<Model>(POI.id);
-      entity.focus(1000, -Math.PI / 6);
-      this._store.storeOverlay(POI);
+      poiOverlay.attach(this._diva.client);
+      await poiOverlay.create();
+      poiOverlay.focus(1000, -Math.PI / 6);
+      this._store.storeOverlay(overlay);
       this._data.changeCode(
-        `const position = new Vector(${POI.corrdinateX}, ${POI.corrdinateY}, ${POI.corrdinateZ});`,
-        `const overlay = new Overlay('poi', {coord: position, property: {icon: '${POI.icon}', content: '${POI.content}', ... }});`,
-        `overlay.set(client);`
+        `const overlay = new POI(config_learnMoreInTutorial);`,
+        `overlay.attach(client);`,
+        `await overlay.create();`
       );
     } else if (this.selectedType.value === OverlayType.Label) {
-      const Label = new LabelOverlay();
-      (Label.corrdinateX = this.corrdinateX),
-        (Label.corrdinateY = this.corrdinateY),
-        (Label.corrdinateZ = this.corrdinateZ),
-        (Label.title = this.title),
-        (Label.content = this.content),
-        (Label.color = this.color),
-        (Label.scale = this.scale),
-        (Label.opacity = this.opacity),
-        (Label.border = this.border),
-        (Label.borderColor = this.borderColor),
-        console.log('labelConfig', Label);
-      const color = this.getRGB(Label.color);
-      const borderColor = this.getRGB(Label.borderColor);
-      await this._diva.client.request('CreateOverlay', {
-        id: Label.id,
-        type: Label.type,
-        coord: [Label.corrdinateX, Label.corrdinateY, Label.corrdinateZ],
-        property: {
-          title: Label.title,
-          content: Label.content,
-          textAlign: 'left',
-          color: {
-            r: color[0],
-            g: color[1],
-            b: color[2],
-          },
-          opacity: Label.opacity,
-          borderColor: {
-            r: borderColor[0],
-            g: borderColor[1],
-            b: borderColor[2],
-          },
-          borderSize: Label.border,
-          scale: Label.scale,
+      const overlay = new LabelOverlay();
+      overlay.corrdinateX = this.corrdinateX;
+      overlay.corrdinateY = this.corrdinateY;
+      overlay.corrdinateZ = this.corrdinateZ;
+      overlay.title = this.title;
+      overlay.content = this.content;
+      overlay.color = this.color;
+      overlay.scale = this.scale;
+      overlay.opacity = this.opacity;
+      overlay.border = this.border;
+      overlay.borderColor = this.borderColor;
+      const transform = Matrix.Translation(
+        overlay.corrdinateX,
+        overlay.corrdinateY,
+        overlay.corrdinateZ
+      );
+      const textOverlay = new TextLabel({
+        id: overlay.id,
+        title: overlay.title,
+        content: overlay.content,
+        backgroundColor: overlay.color,
+        transform: transform,
+        border: {
+          color: overlay.borderColor,
+          width: overlay.border,
+          radius: 0,
         },
-        clusterEnable: true,
+        opacity: overlay.opacity,
+        scale: overlay.scale,
+        name: overlay.title,
       });
-      const entity = await this._diva.client.getEntityById<Model>(Label.id);
-      entity.focus(1000, -Math.PI / 6);
-      this._store.storeOverlay(Label);
+      textOverlay.attach(this._diva.client);
+      await textOverlay.create();
+      this._store.storeOverlay(overlay);
       this._data.changeCode(
-        `const position = new Vector(${Label.corrdinateX}, ${Label.corrdinateY}, ${Label.corrdinateZ});`,
-        `const overlay = new Overlay('label', {coord: position, property: {title: '${Label.title}', content: '${Label.content}', ... }});`,
-        `overlay.set(client);`
+        `const overlay = new TextLabel(config_learnMoreInTutorial);`,
+        `overlay.attach(client);`,
+        `await overlay.create();`
       );
     } else if (this.selectedType.value === OverlayType.Emissive) {
-      const emission = new EmissiveOverlay();
-      emission.icon = this.selectedEmissive.value;
-      emission.corrdinateX = this.corrdinateX;
-      emission.corrdinateY = this.corrdinateY;
-      emission.corrdinateZ = this.corrdinateZ;
-      emission.color = this.color;
-      emission.emission = this.emission;
-      emission.speed = this.speed;
-      await this._diva.client.request('CreateOverlay', {
-        id: emission.id,
-        type: emission.type,
-        coord: [
-          emission.corrdinateX,
-          emission.corrdinateY,
-          emission.corrdinateZ,
-        ],
-        resourceName: emission.icon,
-        property: {
-          color: emission.color,
-          emissive: emission.emission,
-          speed: emission.speed,
+      const overlay = new EmissiveOverlay();
+      overlay.icon = this.selectedEmissive.value;
+      overlay.corrdinateX = this.corrdinateX;
+      overlay.corrdinateY = this.corrdinateY;
+      overlay.corrdinateZ = this.corrdinateZ;
+      overlay.color = this.color;
+      overlay.emission = this.emission;
+      overlay.speed = this.speed;
+      overlay.scale = this.scale;
+      // const transform = Matrix.Identity();
+      // transform.scaleInPlace(overlay.scale);  // 使用 transform 属性设置 自发光覆盖物（emissive）的偏移和缩放时
+      // transform.setTranslation(               // 必须将缩放方法放置在偏移方法之前
+      //   overlay.corrdinateX,
+      //   overlay.corrdinateY,
+      //   overlay.corrdinateZ
+      // );
+      const emissiveOverlay = new Emissive({
+        id: overlay.id,
+        // transform: transform,
+        resource: {
+          id: '',
+          name: overlay.icon,
         },
-        clusterEnable: true,
+        emissionColor: overlay.color,
+        emissionStrength: overlay.emission,
+        speed: overlay.speed,
+        name: overlay.icon,
+        coord: new Vector3(
+          overlay.corrdinateX,
+          overlay.corrdinateY,
+          overlay.corrdinateZ
+        ),
+        scale: new Vector3(overlay.scale, overlay.scale, overlay.scale),
       });
-      // const config = {
-      //   id: id,
-      //   visible: true,
-      //   coord: new Vector3(this.corrdinateX, this.corrdinateY, this.corrdinateZ),
-      //   resource: {
-      //     name: EmissionType.type5,
-      //   },
-      //   emissionColor: '#ff0',
-      //   emissionStrength: 1,
-      //   speed: 1,
-      // } as EmissiveConfig;
-
-      // const overlay = new Emissive(config);
-      // await overlay.attach(this._diva.client)
-      // await overlay.create();
-
-      const entity = await this._diva.client.getEntityById<Emissive>(
-        emission.id
-      );
-      entity.focus(1000, -Math.PI / 6);
-      this._store.storeOverlay(emission);
+      emissiveOverlay.attach(this._diva.client);
+      await emissiveOverlay.create();
+      emissiveOverlay.focus(1000, -Math.PI / 6);
+      this._store.storeOverlay(overlay);
       this._data.changeCode(
-        `const overlay = new Emissive(config);`,
-        `await overlay.attach(client);`,
+        `const overlay = new Emissive(config_learnMoreInTutorial);`,
+        `overlay.attach(client);`,
         `await overlay.create();`
       );
     }
@@ -254,8 +238,8 @@ export class OverlayComponent implements OnInit {
     this._store.deleteOverlay(overlay);
     this.overlays = this._store.getAllOverlays();
     const entity = await this._diva.client.getEntityById(overlay.id);
-    entity.destroy();
-    // entity.detach();
+    await entity.destroy();
+    await entity.detach();
     this._data.changeCode(`entity.destroy()`);
   }
 
