@@ -251,11 +251,9 @@ export class OverlayComponent implements OnInit {
   }
 
   /**
-   * 删除 POI 或 Label
-   * @param $event (Event) 阻止事件冒泡
-   * @param overlay (POIDto | LabelDto) 覆盖物
+   * 删除覆盖物
    */
-  async delete($event: Event, overlay: POIOverlay | LabelOverlay) {
+  async delete($event: Event, overlay: POIOverlay | LabelOverlay | EmissiveOverlay) {
     $event.stopPropagation();
     this._store.deleteOverlay(overlay);
     this.overlays = this._store.getAllOverlays();
@@ -299,7 +297,6 @@ export class OverlayComponent implements OnInit {
   }
   /**
    * 聚焦覆盖物
-   * @param overlay (POIOverlay | LabelOverlay) 覆盖物
    */
   async selectOverlay(overlay: POIOverlay | LabelOverlay | EmissiveOverlay) {
     this.selectedId = overlay.id;
@@ -320,18 +317,6 @@ export class OverlayComponent implements OnInit {
     };
     await this._diva.client.addEventListener('click', handler, { once: true });
     this._rd2.setStyle(document.body, 'cursor', 'crosshair');
-  }
-  /**
-   * 将 colorInput 的 rgb 字符串转换为十进制色值数组
-   * @param rgb (string) 颜色的 rgb 字符串
-   * @returns number[] 颜色的 rgb 值
-   */
-  getRGB(rgb: string) {
-    const r = rgb.slice(1, 3);
-    const g = rgb.slice(3, 5);
-    const b = rgb.slice(5, 7);
-    const t = (ox: string) => eval(`0x${ox}`);
-    return [t(r), t(g), t(b)];
   }
 
   /**

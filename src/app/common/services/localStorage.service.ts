@@ -10,7 +10,6 @@ export class LocalStorageService {
 
   /**
    * 将覆盖物信息存储在 localStorage 中
-   * @param overlay (POIOverlay | LabelOverlay) 覆盖物
    */
   storeOverlay(overlay: POIOverlay | LabelOverlay | EmissiveOverlay) {
     const overlays: (POIOverlay | LabelOverlay | EmissiveOverlay)[] =
@@ -21,9 +20,8 @@ export class LocalStorageService {
 
   /**
    * 从 localStorage 中删除相应的覆盖物信息
-   * @param overlay (POIOverlay | LabelOverlay) 覆盖物
    */
-  deleteOverlay(overlay) {
+  deleteOverlay(overlay: POIOverlay | LabelOverlay | EmissiveOverlay) {
     const overlays: (POIOverlay | LabelOverlay | EmissiveOverlay)[] =
       JSON.parse(localStorage.getItem(STORE_TOKEN)) || [];
     const index = overlays.findIndex((over) => over.id === overlay.id);
@@ -35,8 +33,6 @@ export class LocalStorageService {
 
   /**
    * 获取 localStorage 中所有的覆盖物信息
-   * @param k key值
-   * @returns (POIOverlay | LabelOverlay)[] 覆盖物数组
    */
   getAllOverlays(k = STORE_TOKEN): (POIOverlay | LabelOverlay | EmissiveOverlay)[] {
     return JSON.parse(localStorage.getItem(k)) || [];
