@@ -1,11 +1,9 @@
 <main>
   <app-content-block caption="监控视频演示">
-    <ng-container *ngFor="let monitor of monitors; index as i">
-      <div class="content-block" (click)="selectMonitor(monitor, i, false)">
+    <ng-container *ngFor="let monitor of monitors">
+      <div class="content-block" (click)="selectMonitor(monitor.title)">
         <div class="content-item">
-          <span [class.selected]="selectedMonitorIndex === i">{{
-            monitor.title
-          }}</span>
+          <span>{{monitor.title}}</span>
         </div>
       </div>
     </ng-container>
@@ -13,16 +11,14 @@
   <div style="margin-top: 20px;">
     <app-content-block caption="设备弹窗演示">
       <ng-container *ngFor="let monitorEqui of monitorEquis; index as i">
-        <div class="refresh-block" (click)="selectMonitor(monitor, i, true)">
+        <div class="refresh-block" (click)="selectMonitor(monitorEqui.title)">
           <div class="refresh-item">
-            <span [class.selected]="selectedMonitorIndex === i">{{
-              monitorEqui.title
-            }}</span>
-            <div class="refresh-icon" (click)="refresh(monitorEqui, i)">
+            <span>{{monitorEqui.title}}</span>
+            <div class="refresh-icon" (click)="refresh(monitorEqui)">
               <img src="assets/icon/monitor/refresh.png" />
             </div>
           </div>
-          <input (click)="onKeydown($event)" (keydown)="onKeydown($event)" [(ngModel)]="monitorEqui.url" />
+          <input (click)="stopPropagation($event)" (keydown)="stopPropagation($event)" [(ngModel)]="monitorEqui.url" />
         </div>
       </ng-container>
     </app-content-block>

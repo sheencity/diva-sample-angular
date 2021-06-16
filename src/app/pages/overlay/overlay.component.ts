@@ -122,18 +122,17 @@ export class OverlayComponent implements OnInit {
       overlay.color = this.color;
       overlay.scale = this.scale;
       overlay.opacity = this.opacity;
-      const transform = Matrix.Translation(
-        overlay.corrdinateX,
-        overlay.corrdinateY,
-        overlay.corrdinateZ
-      );
       const poiOverlay = new POI({
         id: overlay.id,
         label: overlay.content,
         icon: overlay.icon,
         backgroundColor: overlay.color,
         opacity: overlay.opacity,
-        transform: transform,
+        transform: Matrix.Translation(
+          overlay.corrdinateX,
+          overlay.corrdinateY,
+          overlay.corrdinateZ
+        ),
         scale: overlay.scale,
         name: overlay.content,
       });
@@ -159,11 +158,6 @@ export class OverlayComponent implements OnInit {
       overlay.opacity = this.opacity;
       overlay.border = this.border;
       overlay.borderColor = this.borderColor;
-      const transform = Matrix.Translation(
-        overlay.corrdinateX,
-        overlay.corrdinateY,
-        overlay.corrdinateZ
-      );
       const textOverlay = new TextLabel({
         id: overlay.id,
         title: overlay.title,
@@ -173,7 +167,11 @@ export class OverlayComponent implements OnInit {
           color: 'auto',
         },
         backgroundColor: overlay.color,
-        transform: transform,
+        transform: Matrix.Translation(
+          overlay.corrdinateX,
+          overlay.corrdinateY,
+          overlay.corrdinateZ
+        ),
         border: {
           color: overlay.borderColor,
           width: overlay.border,
@@ -229,12 +227,12 @@ export class OverlayComponent implements OnInit {
         coord: new Vector3(
           overlay.corrdinateX,
           overlay.corrdinateY,
-          overlay.corrdinateZ,
+          overlay.corrdinateZ
         ),
         rotation: Quaternion.FromEulerAngles(
           overlay.rotationX,
           overlay.rotationY,
-          overlay.rotationZ,
+          overlay.rotationZ
         ),
         scale: new Vector3(overlay.scale, overlay.scale, overlay.scale),
       });

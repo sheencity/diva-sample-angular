@@ -20,7 +20,7 @@ const monitors = [
     title: '测试设备04',
     url: 'https://www.sheencity.com',
   },
-] as {title: string, url: string}[];
+] as { title: string; url: string }[];
 
 @Component({
   selector: 'app-monitor',
@@ -32,73 +32,66 @@ export class MonitorComponent implements OnInit, OnDestroy {
   monitors = monitors.slice(0, 2);
   // 弹窗设备
   monitorEquis = monitors.slice(2, 4);
-  // 设备模型列表
-  monitorModels: Model[] = [];
   // 事件句柄列表
-  monitorHandlers = [];
+  monitorHandlers: () => any;
   // 选中的监控列表
-  selectedMonitorIndex: number = -1;
+
   constructor(private _diva: DivaService, private _data: DataService) {}
 
-  /**
-   * 聚焦监控设备
-   * @param monitor (MonitorConfigDto) 监控设备
-   * @param index (number) 选中监控的 index 值
-   * @param isPop (boolean) 是否为弹窗设备
-   */
-  async selectMonitor(monitor: {title: string, url: string}, index: number, isPop: boolean) {
-    index = isPop ? index + 2 : index;
-    await this.monitorModels[index].focus(1000, -Math.PI / 6)
-    this.selectedMonitorIndex = index;
+  async removeWidget(name: string) {
+    await (await this.getModelByName(name)).setWebWidget(null);
+  }
+  async setWidget(monitor: string | Model, url: string) {
+    if (typeof monitor === 'string') {
+      monitor = await this.getModelByName(monitor);
+    }
+    if (!url) return;
+    await monitor.setWebWidget(new URL(url), 500, 280);
+    this._data.changeCode(`model.setWebWidget(new URL('${url}'), 500, 280)`);
+  }
+  async refresh(monitorEqui: { title: string; url: string }) {
+    try {
+      await this.removeWidget(monitorEqui.title);
+    } catch (e) {
+      console.log('当前模型无可清除的 web 组件');
+    }
+    await this.setWidget(monitorEqui.title, monitorEqui.url);
+  }
+
+  async selectMonitor(name: string) {
+    await (await this.getModelByName(name)).focus(1000, -Math.PI / 6);
     this._data.changeCode(`model.focus(1000, -Math.PI / 6)`);
   }
 
-  /**
-   * 更新弹窗设备链接并打开设备的弹窗
-   * @param monitorEqui (MonitorEquiConfigDto) 弹窗设备
-   * @param index (number) 弹窗设备的 index 值
-   */
-  async refresh(monitorEqui: {title: string, url: string}, index: number) {
-    index = index + 2;
-    console.log('monitorEqui is', monitorEqui, index);
-    await this.monitorModels[index].setWebWidget(new URL(monitorEqui.url), 500, 280);
-    // 此处设置设备网址刷新信息
+  async getModelByName(name: string) {
+    return (await this._diva.client.getEntitiesByName<Model>(name))[0];
   }
 
-
-  /**
-   * 阻止事件冒泡
-   * @param $event
-   */
-  onKeydown($event) {
+  stopPropagation($event) {
     $event.stopPropagation();
   }
 
   async ngOnInit() {
-    this._diva.client.applyScene('监控设备')
-    for (let i=0; i < 4; i++) {
-      let model: Model;
-      let url: string;
-      if (i < 2) {
-        model = (await this._diva.client.getEntitiesByName<Model>(this.monitors[i].title))[0];
-        url = this.monitors[i].url;
-      } else {
-        model = (await this._diva.client.getEntitiesByName<Model>(this.monitorEquis[i - 2].title))[0];
-        url = this.monitorEquis[i - 2].url;
-      }
-      const handle = () => {
-        model.setWebWidget(new URL(url), 500, 280);
-      }
+    this._diva.client.applyScene('监控设备').then(() => {
+      this._data.changeCode(`client.applyScene('监控设备')`);
+    });
+    const outer = this;
+    for (let i = 0; i < 4; i++) {
+      const model = await this.getModelByName(monitors[i].title);
+      const handle = function () {
+        const url = monitors.find((m) => m.title === this.name).url;
+        outer.setWidget(this as Model, url);
+      };
       model.setRenderingStyleMode(RenderingStyleMode.Default);
-      model.addEventListener('click', handle)
-      this.monitorModels.push(model);
-      this.monitorHandlers.push(handle);
-      setTimeout(() => {this._data.changeCode(`client.applyScene('监控设备')`)}, 0);
+      model.addEventListener('click', handle);
+      this.monitorHandlers = handle;
     }
   }
 
-  // 销毁钩子
   ngOnDestroy(): void {
-    this.monitorModels.forEach((monitor, index) => monitor.removeEventListener('click', this.monitorHandlers[index]));
+    monitors.forEach(async (m) => {
+      const model = await this.getModelByName(m.title);
+      model.removeEventListener('click', this.monitorHandlers);
+    });
   }
 }
