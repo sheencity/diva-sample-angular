@@ -32,9 +32,10 @@ export class MonitorComponent implements OnInit, OnDestroy {
   monitors = monitors.slice(0, 2);
   // 弹窗设备
   monitorEquis = monitors.slice(2, 4);
+  // 存放各个设备对应的 model 对象
+  models: Map<string, Model>;
   // 事件句柄列表
-  monitorHandlers: () => any;
-  // 选中的监控列表
+  monitorHandlers: Array<() => any>;
 
   constructor(private _diva: DivaService, private _data: DataService) {}
 
@@ -64,7 +65,12 @@ export class MonitorComponent implements OnInit, OnDestroy {
   }
 
   async getModelByName(name: string) {
-    return (await this._diva.client.getEntitiesByName<Model>(name))[0];
+    let m = this.models.get(name);
+    if (!m) {
+      m = (await this._diva.client.getEntitiesByName<Model>(name))[0];
+      this.models.set(name, m);
+    }
+    return m;
   }
 
   stopPropagation($event) {
@@ -75,6 +81,8 @@ export class MonitorComponent implements OnInit, OnDestroy {
     this._diva.client.applyScene('监控设备').then(() => {
       this._data.changeCode(`client.applyScene('监控设备')`);
     });
+    this.models = new Map();
+    this.monitorHandlers = [];
     const outer = this;
     for (let i = 0; i < 4; i++) {
       const model = await this.getModelByName(monitors[i].title);
@@ -84,14 +92,14 @@ export class MonitorComponent implements OnInit, OnDestroy {
       };
       model.setRenderingStyleMode(RenderingStyleMode.Default);
       model.addEventListener('click', handle);
-      this.monitorHandlers = handle;
+      this.monitorHandlers.push(handle);
     }
   }
 
   ngOnDestroy(): void {
-    monitors.forEach(async (m) => {
+    monitors.forEach(async (m, i) => {
       const model = await this.getModelByName(m.title);
-      model.removeEventListener('click', this.monitorHandlers);
+      model.removeEventListener('click', this.monitorHandlers[i]);
     });
   }
 }
