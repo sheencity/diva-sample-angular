@@ -1,10 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  Elevator,
-  ElevatorController,
-  Model,
-  Vector3,
-} from '@sheencity/diva-sdk';
+import { Elevator, ElevatorController, Model } from '@sheencity/diva-sdk';
+import { Vector3 } from '@sheencity/diva-sdk-math';
 import { DropdownData } from 'src/app/common/models/dropdown-data.interface';
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';

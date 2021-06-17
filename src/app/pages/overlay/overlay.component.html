@@ -108,7 +108,7 @@
             <div class="overlay-item" [class.selected]="selectedId === overlay.id">
               <span>{{overlay.type === 'poi' ? overlay.content : overlay.type === 'label' ? overlay.title : overlay.icon}}</span>
               <div class="overlay-info">
-                <span>{{overlay.type === 'poi' ? 'POI' : overlay.type === 'label' ? '标签' : 'Emissive'}}</span>
+                <span>{{overlay.type === 'poi' ? 'POI' : overlay.type === 'label' ? 'Marker' : 'Emissive'}}</span>
                 <div class="overlay-delete" (click)="delete($event, overlay)">
                   <img src="assets/icon/overlay/delete.png" />
                 </div>

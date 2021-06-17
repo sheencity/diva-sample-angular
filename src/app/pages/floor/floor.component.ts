@@ -30,7 +30,7 @@ export class FloorComponent implements OnInit, OnDestroy {
 
       this._explode = val;
       this._data.changeCode(
-        `const group = client.getEntityGroupByGroupPath('场景模型/主楼拆分');`,
+        `const group = client.getModelGroupByGroupPath('场景模型/主楼拆分');`,
         val
           ? 'client.disassemble(group, { spacing: 300, eachHeight: 290, duration: 5 })'
           : 'client.assemble(group)'

@@ -1,12 +1,5 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
-import {
-  Emissive,
-  Model,
-  POI,
-  Quaternion,
-  TextLabel,
-  Vector3,
-} from '@sheencity/diva-sdk';
+import { Emissive, Marker, Model, POI } from '@sheencity/diva-sdk';
 import { DropdownData } from 'src/app/common/models/dropdown-data.interface';
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
@@ -14,20 +7,20 @@ import { LocalStorageService } from 'src/app/common/services/localStorage.servic
 import {
   EmissionType,
   EmissiveOverlay,
-  LabelOverlay,
+  MarkerOverlay,
   OverlayType,
   POIIcon,
   POIOverlay,
 } from 'src/app/common/models/overlay.model';
 import { DivaMouseEvent } from '@sheencity/diva-sdk/lib/events/diva.events';
-import { Matrix } from '@sheencity/diva-sdk';
+import { Matrix, Quaternion, Vector3 } from '@sheencity/diva-sdk-math';
 @Component({
   selector: 'app-overlay',
   templateUrl: './overlay.component.html',
   styleUrls: ['./overlay.component.scss'],
 })
 export class OverlayComponent implements OnInit {
-  public overlays: (POIOverlay | LabelOverlay | EmissiveOverlay)[] = [];
+  public overlays: (POIOverlay | MarkerOverlay | EmissiveOverlay)[] = [];
   public selectedType: DropdownData = {
     value: OverlayType.POI,
     placeholder: 'POI',
@@ -60,13 +53,13 @@ export class OverlayComponent implements OnInit {
     value: 'center',
     placeholder: '居中',
   } as {
-    value: 'left' | 'start' | 'right' | 'end' | 'center' | 'justify';
+    value: 'left' | 'right' | 'center';
     placeholder: string;
   };
 
   typeOptions = [
     { value: OverlayType.POI, placeholder: 'POI' },
-    { value: OverlayType.Label, placeholder: 'Label' },
+    { value: OverlayType.Label, placeholder: 'Marker' },
     { value: OverlayType.Emissive, placeholder: 'Emissive' },
   ];
   alignOptions = [
@@ -124,7 +117,7 @@ export class OverlayComponent implements OnInit {
       overlay.opacity = this.opacity;
       const poiOverlay = new POI({
         id: overlay.id,
-        label: overlay.content,
+        content: overlay.content,
         icon: overlay.icon,
         backgroundColor: overlay.color,
         opacity: overlay.opacity,
@@ -146,7 +139,7 @@ export class OverlayComponent implements OnInit {
         `await overlay.create();`
       );
     } else if (this.selectedType.value === OverlayType.Label) {
-      const overlay = new LabelOverlay();
+      const overlay = new MarkerOverlay();
       overlay.corrdinateX = this.corrdinateX;
       overlay.corrdinateY = this.corrdinateY;
       overlay.corrdinateZ = this.corrdinateZ;
@@ -158,35 +151,31 @@ export class OverlayComponent implements OnInit {
       overlay.opacity = this.opacity;
       overlay.border = this.border;
       overlay.borderColor = this.borderColor;
-      const textOverlay = new TextLabel({
+      const markerOverlay = new Marker({
         id: overlay.id,
         title: overlay.title,
-        content: {
-          text: overlay.content,
-          align: overlay.align,
-          color: 'auto',
+        content: overlay.content,
+        align: overlay.align,
+        border: {
+          color: overlay.borderColor,
+          width: overlay.border,
         },
         backgroundColor: overlay.color,
+        opacity: overlay.opacity,
+        scale: overlay.scale,
         transform: Matrix.Translation(
           overlay.corrdinateX,
           overlay.corrdinateY,
           overlay.corrdinateZ
         ),
-        border: {
-          color: overlay.borderColor,
-          width: overlay.border,
-          radius: 0,
-        },
-        opacity: overlay.opacity,
-        scale: overlay.scale,
         name: overlay.title,
       });
-      textOverlay.attach(this._diva.client);
-      await textOverlay.create();
-      textOverlay.focus(1000, -Math.PI / 6);
+      markerOverlay.attach(this._diva.client);
+      await markerOverlay.create();
+      markerOverlay.focus(1000, -Math.PI / 6);
       this._store.storeOverlay(overlay);
       this._data.changeCode(
-        `const overlay = new TextLabel(config_learnMoreInTutorial);`,
+        `const overlay = new Marker(config_learnMoreInTutorial);`,
         `overlay.attach(client);`,
         `await overlay.create();`
       );
@@ -205,17 +194,6 @@ export class OverlayComponent implements OnInit {
       overlay.scale = this.scale;
       const emissiveOverlay = new Emissive({
         id: overlay.id,
-        // transform: Matrix.RotationYawPitchRoll(
-        //   overlay.rotationY,
-        //   overlay.rotationX,
-        //   overlay.rotationZ,
-        // ).scaleInPlace(
-        //   overlay.scale
-        // ).addTranslation(
-        //   overlay.corrdinateX,
-        //   overlay.corrdinateY,
-        //   overlay.corrdinateZ
-        // ),
         resource: {
           id: '',
           name: overlay.icon,
@@ -235,6 +213,18 @@ export class OverlayComponent implements OnInit {
           overlay.rotationZ
         ),
         scale: new Vector3(overlay.scale, overlay.scale, overlay.scale),
+        // 其中 coord、rotation、scale 属性可用 transform 属性代替
+        // transform: Matrix.RotationYawPitchRoll(
+        //   overlay.rotationY,
+        //   overlay.rotationX,
+        //   overlay.rotationZ,
+        // ).scaleInPlace(
+        //   overlay.scale
+        // ).addTranslation(
+        //   overlay.corrdinateX,
+        //   overlay.corrdinateY,
+        //   overlay.corrdinateZ
+        // ),
       });
       emissiveOverlay.attach(this._diva.client);
       await emissiveOverlay.create();
@@ -253,7 +243,10 @@ export class OverlayComponent implements OnInit {
   /**
    * 删除覆盖物
    */
-  async delete($event: Event, overlay: POIOverlay | LabelOverlay | EmissiveOverlay) {
+  async delete(
+    $event: Event,
+    overlay: POIOverlay | MarkerOverlay | EmissiveOverlay
+  ) {
     $event.stopPropagation();
     this._store.deleteOverlay(overlay);
     this.overlays = this._store.getAllOverlays();
@@ -298,7 +291,7 @@ export class OverlayComponent implements OnInit {
   /**
    * 聚焦覆盖物
    */
-  async selectOverlay(overlay: POIOverlay | LabelOverlay | EmissiveOverlay) {
+  async selectOverlay(overlay: POIOverlay | MarkerOverlay | EmissiveOverlay) {
     this.selectedId = overlay.id;
     const entity = await this._diva.client.getEntityById<Model>(overlay.id);
     entity.focus(1000, -Math.PI / 6);
