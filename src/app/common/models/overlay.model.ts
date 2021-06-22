@@ -55,10 +55,10 @@ export class POIOverlay extends Overlay {
   public icon: POIIcon;
 }
 
-export class MarkerOverlay extends Overlay {
+export class LabelOverlay extends Overlay {
   public readonly type = OverlayType.Label;
   public title: string;
-  public align: 'left' | 'right' | 'center';
+  public align: "left" | "start" | "right" | "end" | "center" | "justify";
   public border: number;
   public borderColor: string;
 }
