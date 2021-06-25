@@ -24,7 +24,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   private _updateResolution = () => {
     const height = this.backendContainer.nativeElement.clientHeight;
-    const width = this.backendContainer.nativeElement.clientWidth;
+    const width = this.backendContainer.nativeElement.clientWidth + 2;
     this._divaSer.client.setResolution({ width, height });
   }
 
