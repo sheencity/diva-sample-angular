@@ -24,7 +24,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   private _updateResolution = () => {
     const height = this.backendContainer.nativeElement.clientHeight;
-    const width = this.backendContainer.nativeElement.clientWidth + 2;
+    const width = this.backendContainer.nativeElement.clientWidth;
     this._divaSer.client.setResolution({ width, height });
   }
 
@@ -32,9 +32,12 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     if (this.backendContainer) {
       await this._divaSer.init(this.backendContainer.nativeElement);
       this._updateResolution();
-      window.onresize = () => {
+
+      // 监听显示区域的改变
+      const resizeObserver = new ResizeObserver(() => {
         this._changeResolution$.next(true);
-      };
+      })
+      resizeObserver.observe(this.backendContainer.nativeElement);
     }
     this._subs = this._changeResolution$
       .pipe(debounceTime(200))
