@@ -1,6 +1,6 @@
 <div class="win">
   <div class="backend-container" #backendContainer></div>
-  <main>
+  <main [ngClass]="{'includeCodeArea': header.exampleCode}">
     <header>
       <app-header #header></app-header>
     </header>
