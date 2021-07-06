@@ -1,10 +1,10 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import {
   Emissive,
+  Marker,
   Model,
   POI,
   Quaternion,
-  TextLabel,
   Vector3,
 } from '@sheencity/diva-sdk';
 import { DropdownData } from 'src/app/common/models/dropdown-data.interface';
@@ -14,20 +14,19 @@ import { LocalStorageService } from 'src/app/common/services/localStorage.servic
 import {
   EmissionType,
   EmissiveOverlay,
-  LabelOverlay,
+  MarkerOverlay,
   OverlayType,
   POIIcon,
   POIOverlay,
 } from 'src/app/common/models/overlay.model';
 import { DivaMouseEvent } from '@sheencity/diva-sdk/lib/events/diva.events';
-import { Matrix } from '@sheencity/diva-sdk';
 @Component({
   selector: 'app-overlay',
   templateUrl: './overlay.component.html',
   styleUrls: ['./overlay.component.scss'],
 })
 export class OverlayComponent implements OnInit {
-  public overlays: (POIOverlay | LabelOverlay | EmissiveOverlay)[] = [];
+  public overlays: (POIOverlay | MarkerOverlay | EmissiveOverlay)[] = [];
   public selectedType: DropdownData = {
     value: OverlayType.POI,
     placeholder: 'POI',
@@ -40,9 +39,9 @@ export class OverlayComponent implements OnInit {
     value: EmissionType.type1,
     placeholder: '悬浮标记01',
   };
-  public corrdinateX = 0.0;
-  public corrdinateY = 0.0;
-  public corrdinateZ = 0.0;
+  public coordinateX = 0.0;
+  public coordinateY = 0.0;
+  public coordinateZ = 0.0;
   public title = '';
   public content = '';
   public color = '#000000';
@@ -51,7 +50,7 @@ export class OverlayComponent implements OnInit {
   public rotationZ = 0;
   public scale = 1.0;
   public opacity = 1.0;
-  public border = 0.0;
+  public borderWidth = 0.0;
   public borderColor = '#ffffff';
   public selectedId: string = null;
   public emission: number = 1.0;
@@ -60,14 +59,14 @@ export class OverlayComponent implements OnInit {
     value: 'center',
     placeholder: '居中',
   } as {
-    value: 'left' | 'start' | 'right' | 'end' | 'center' | 'justify';
+    value: 'left' | 'right' | 'center';
     placeholder: string;
   };
 
   typeOptions = [
     { value: OverlayType.POI, placeholder: 'POI' },
-    { value: OverlayType.Label, placeholder: 'Label' },
-    { value: OverlayType.Emissive, placeholder: 'Emissive' },
+    { value: OverlayType.Marker, placeholder: 'Marker' },
+    { value: OverlayType.Emissive, placeholder: 'Effect' },
   ];
   alignOptions = [
     { value: 'center', placeholder: '居中' },
@@ -115,87 +114,85 @@ export class OverlayComponent implements OnInit {
     if (this.selectedType.value === OverlayType.POI) {
       const overlay = new POIOverlay();
       overlay.icon = this.selectedIcon.value as POIIcon;
-      overlay.corrdinateX = this.corrdinateX;
-      overlay.corrdinateY = this.corrdinateY;
-      overlay.corrdinateZ = this.corrdinateZ;
+      overlay.coordinateX = this.coordinateX;
+      overlay.coordinateY = this.coordinateY;
+      overlay.coordinateZ = this.coordinateZ;
       overlay.content = this.content;
       overlay.color = this.color;
       overlay.scale = this.scale;
       overlay.opacity = this.opacity;
       const poiOverlay = new POI({
-        id: overlay.id,
-        label: overlay.content,
         icon: overlay.icon,
+        title: overlay.content,
         backgroundColor: overlay.color,
         opacity: overlay.opacity,
-        transform: Matrix.Translation(
-          overlay.corrdinateX,
-          overlay.corrdinateY,
-          overlay.corrdinateZ
-        ),
         scale: overlay.scale,
+        coord: new Vector3(
+          overlay.coordinateX,
+          overlay.coordinateY,
+          overlay.coordinateZ
+        ),
+        resource: {
+          name: 'POI文字标签',
+        },
+        id: overlay.id,
         name: overlay.content,
-      });
-      poiOverlay.attach(this._diva.client);
-      await poiOverlay.create();
+      } as any );
+      await poiOverlay.setClient(this._diva.client);
       poiOverlay.focus(1000, -Math.PI / 6);
       this._store.storeOverlay(overlay);
       this._data.changeCode(
         `const overlay = new POI(config_learnMoreInTutorial);`,
-        `overlay.attach(client);`,
-        `await overlay.create();`
+        `await overlay.setClient(diva.client);`
       );
-    } else if (this.selectedType.value === OverlayType.Label) {
-      const overlay = new LabelOverlay();
-      overlay.corrdinateX = this.corrdinateX;
-      overlay.corrdinateY = this.corrdinateY;
-      overlay.corrdinateZ = this.corrdinateZ;
+    } else if (this.selectedType.value === OverlayType.Marker) {
+      const overlay = new MarkerOverlay();
+      overlay.coordinateX = this.coordinateX;
+      overlay.coordinateY = this.coordinateY;
+      overlay.coordinateZ = this.coordinateZ;
       overlay.title = this.title;
       overlay.content = this.content;
       overlay.align = this.selectedAlign.value;
       overlay.color = this.color;
       overlay.scale = this.scale;
       overlay.opacity = this.opacity;
-      overlay.border = this.border;
+      overlay.borderWidth = this.borderWidth;
       overlay.borderColor = this.borderColor;
-      const textOverlay = new TextLabel({
-        id: overlay.id,
+      const markerOverlay = new Marker({
         title: overlay.title,
-        content: {
-          text: overlay.content,
-          align: overlay.align,
-          color: 'auto',
-        },
-        backgroundColor: overlay.color,
-        transform: Matrix.Translation(
-          overlay.corrdinateX,
-          overlay.corrdinateY,
-          overlay.corrdinateZ
-        ),
+        content: overlay.content,
+        align: overlay.align,
         border: {
           color: overlay.borderColor,
-          width: overlay.border,
-          radius: 0,
+          width: overlay.borderWidth,
         },
+        backgroundColor: overlay.color,
         opacity: overlay.opacity,
         scale: overlay.scale,
+        coord: new Vector3(
+          overlay.coordinateX,
+          overlay.coordinateY,
+          overlay.coordinateZ
+        ),
+        resource: {
+          name: '连线标签',
+        },
+        id: overlay.id,
         name: overlay.title,
       });
-      textOverlay.attach(this._diva.client);
-      await textOverlay.create();
-      textOverlay.focus(1000, -Math.PI / 6);
+      await markerOverlay.setClient(this._diva.client);
+      markerOverlay.focus(1000, -Math.PI / 6);
       this._store.storeOverlay(overlay);
       this._data.changeCode(
-        `const overlay = new TextLabel(config_learnMoreInTutorial);`,
-        `overlay.attach(client);`,
-        `await overlay.create();`
+        `const overlay = new Marker(config_learnMoreInTutorial);`,
+        `await overlay.setClient(diva.client);`
       );
     } else if (this.selectedType.value === OverlayType.Emissive) {
       const overlay = new EmissiveOverlay();
       overlay.icon = this.selectedEmissive.value;
-      overlay.corrdinateX = this.corrdinateX;
-      overlay.corrdinateY = this.corrdinateY;
-      overlay.corrdinateZ = this.corrdinateZ;
+      overlay.coordinateX = this.coordinateX;
+      overlay.coordinateY = this.coordinateY;
+      overlay.coordinateZ = this.coordinateZ;
       overlay.color = this.color;
       overlay.emission = this.emission;
       overlay.speed = this.speed;
@@ -204,46 +201,32 @@ export class OverlayComponent implements OnInit {
       overlay.rotationZ = this.rotationZ;
       overlay.scale = this.scale;
       const emissiveOverlay = new Emissive({
-        id: overlay.id,
-        // transform: Matrix.RotationYawPitchRoll(
-        //   overlay.rotationY,
-        //   overlay.rotationX,
-        //   overlay.rotationZ,
-        // ).scaleInPlace(
-        //   overlay.scale
-        // ).addTranslation(
-        //   overlay.corrdinateX,
-        //   overlay.corrdinateY,
-        //   overlay.corrdinateZ
-        // ),
-        resource: {
-          id: '',
-          name: overlay.icon,
-        },
         emissionColor: overlay.color,
         emissionStrength: overlay.emission,
         speed: overlay.speed,
-        name: overlay.icon,
         coord: new Vector3(
-          overlay.corrdinateX,
-          overlay.corrdinateY,
-          overlay.corrdinateZ
+          overlay.coordinateX,
+          overlay.coordinateY,
+          overlay.coordinateZ
         ),
         rotation: Quaternion.FromEulerAngles(
-          overlay.rotationX,
-          overlay.rotationY,
-          overlay.rotationZ
+          overlay.rotationX * Math.PI / 180,
+          overlay.rotationY * Math.PI / 180,
+          overlay.rotationZ * Math.PI / 180
         ),
         scale: new Vector3(overlay.scale, overlay.scale, overlay.scale),
+        resource: {
+          name: overlay.icon,
+        },
+        id: overlay.id,
+        name: overlay.icon,
       });
-      emissiveOverlay.attach(this._diva.client);
-      await emissiveOverlay.create();
+      await emissiveOverlay.setClient(this._diva.client);
       emissiveOverlay.focus(1000, -Math.PI / 6);
       this._store.storeOverlay(overlay);
       this._data.changeCode(
         `const overlay = new Emissive(config_learnMoreInTutorial);`,
-        `overlay.attach(client);`,
-        `await overlay.create();`
+        `await overlay.setClient(diva.client);`
       );
     }
     this.overlays = this._store.getAllOverlays();
@@ -253,14 +236,16 @@ export class OverlayComponent implements OnInit {
   /**
    * 删除覆盖物
    */
-  async delete($event: Event, overlay: POIOverlay | LabelOverlay | EmissiveOverlay) {
+  async delete(
+    $event: Event,
+    overlay: POIOverlay | MarkerOverlay | EmissiveOverlay
+  ) {
     $event.stopPropagation();
     this._store.deleteOverlay(overlay);
     this.overlays = this._store.getAllOverlays();
     const entity = await this._diva.client.getEntityById(overlay.id);
-    await entity.destroy();
-    await entity.detach();
-    this._data.changeCode(`entity.destroy()`);
+    await entity.setClient(null);
+    this._data.changeCode(`entity.setClient(null)`);
   }
 
   /**
@@ -279,9 +264,9 @@ export class OverlayComponent implements OnInit {
       value: 'center',
       placeholder: '居中',
     };
-    this.corrdinateX = 0.0;
-    this.corrdinateY = 0.0;
-    this.corrdinateZ = 0.0;
+    this.coordinateX = 0.0;
+    this.coordinateY = 0.0;
+    this.coordinateZ = 0.0;
     this.rotationX = 0;
     this.rotationY = 0;
     this.rotationZ = 0;
@@ -290,7 +275,7 @@ export class OverlayComponent implements OnInit {
     this.color = '#000000';
     this.scale = 1.0;
     this.opacity = 1.0;
-    this.border = 0.0;
+    this.borderWidth = 0.0;
     this.borderColor = '#ffffff';
     this.emission = 1.0;
     this.speed = 2.0;
@@ -298,7 +283,7 @@ export class OverlayComponent implements OnInit {
   /**
    * 聚焦覆盖物
    */
-  async selectOverlay(overlay: POIOverlay | LabelOverlay | EmissiveOverlay) {
+  async selectOverlay(overlay: POIOverlay | MarkerOverlay | EmissiveOverlay) {
     this.selectedId = overlay.id;
     const entity = await this._diva.client.getEntityById<Model>(overlay.id);
     entity.focus(1000, -Math.PI / 6);
@@ -310,9 +295,9 @@ export class OverlayComponent implements OnInit {
   async pickup() {
     const handler = (event: DivaMouseEvent) => {
       const wordPosition = event.worldPosition;
-      this.corrdinateX = wordPosition.x;
-      this.corrdinateY = wordPosition.y;
-      this.corrdinateZ = wordPosition.z;
+      this.coordinateX = wordPosition.x;
+      this.coordinateY = wordPosition.y;
+      this.coordinateZ = wordPosition.z;
       this._rd2.setStyle(document.body, 'cursor', 'default');
     };
     await this._diva.client.addEventListener('click', handler, { once: true });
@@ -329,8 +314,9 @@ export class OverlayComponent implements OnInit {
 
   async ngOnInit() {
     this.overlays = this._store.getAllOverlays();
-    await this._diva.client?.applyScene('覆盖物');
-    this._data.changeCode(`client.applyScene('覆盖物')`);
+    this._diva.client?.applyScene('覆盖物').then(() => {
+      this._data.changeCode(`client.applyScene('覆盖物')`);
+    });
     this.overlays.map(async (overlay) => {
       const entity = await this._diva.client.getEntityById<Model>(overlay.id);
       entity.setVisibility(true);

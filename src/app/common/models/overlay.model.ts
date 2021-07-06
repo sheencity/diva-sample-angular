@@ -1,7 +1,7 @@
 import { v4 } from 'uuid';
 export enum OverlayType {
   POI = 'poi',
-  Label = 'label',
+  Marker = 'Marker',
   Emissive = 'emissiveOverlay',
 }
 
@@ -35,9 +35,9 @@ export enum EmissionType {
 
 export class Overlay {
   public readonly id: string;
-  public corrdinateX: number;
-  public corrdinateY: number;
-  public corrdinateZ: number;
+  public coordinateX: number;
+  public coordinateY: number;
+  public coordinateZ: number;
   public content: string;
   public color: string;
   public rotationX: number;
@@ -55,11 +55,11 @@ export class POIOverlay extends Overlay {
   public icon: POIIcon;
 }
 
-export class LabelOverlay extends Overlay {
-  public readonly type = OverlayType.Label;
+export class MarkerOverlay extends Overlay {
+  public readonly type = OverlayType.Marker;
   public title: string;
-  public align: "left" | "start" | "right" | "end" | "center" | "justify";
-  public border: number;
+  public align: 'left' | 'right' | 'center';
+  public borderWidth: number;
   public borderColor: string;
 }
 

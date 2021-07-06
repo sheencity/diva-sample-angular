@@ -15,17 +15,17 @@
         <span>坐标</span>
         <div class="coordinate-items">
           <div class="coordinate-item">
-            <span>X</span><input (keydown)="onKeyDown($event)" [(ngModel)]="corrdinateX" type="number" />
+            <span>X</span><input (keydown)="onKeyDown($event)" [(ngModel)]="coordinateX" type="number" />
           </div>
           <div class="coordinate-item">
-            <span>Y</span><input (keydown)="onKeyDown($event)" [(ngModel)]="corrdinateY" type="number" />
+            <span>Y</span><input (keydown)="onKeyDown($event)" [(ngModel)]="coordinateY" type="number" />
           </div>
           <div class="coordinate-item">
-            <span>Z</span><input (keydown)="onKeyDown($event)" [(ngModel)]="corrdinateZ" type="number" />
+            <span>Z</span><input (keydown)="onKeyDown($event)" [(ngModel)]="coordinateZ" type="number" />
           </div>
         </div>
       </div>
-      <div class="input-item" *ngIf="selectedType.value === 'label'">
+      <div class="input-item" *ngIf="selectedType.value === 'Marker'">
         <span>标题</span>
         <input (keydown)="onKeyDown($event)" type="text" [(ngModel)]="title" placeholder="请输入文字" />
       </div>
@@ -34,7 +34,7 @@
         <span>内容</span>
         <textarea cols="4" (keydown)="onKeyDown($event)" [(ngModel)]="content" placeholder="请输入文字"></textarea>
       </div>
-      <div class="drop-item" style="margin-top: 12px;" *ngIf="selectedType.value === 'label'">
+      <div class="drop-item" style="margin-top: 12px;" *ngIf="selectedType.value === 'Marker'">
         <span>对齐方式</span>
         <div>
           <app-dropdown [options]="alignOptions" [(ngModel)]="selectedAlign"></app-dropdown>
@@ -57,16 +57,19 @@
         <input [(ngModel)]="color" type="color" />
       </div>
       <div class="input-item" *ngIf="selectedType.value === 'emissiveOverlay'">
-        <span>旋转</span>
+        <span>旋转角度</span>
         <div class="coordinate-items">
           <div class="coordinate-item">
-            <span>X</span><input (keydown)="onKeyDown($event)" [(ngModel)]="rotationX" type="number" />
+            <span>X</span>
+            <app-input-number [(ngModel)]="rotationX" [min]="-180" [max]="180"></app-input-number>
           </div>
           <div class="coordinate-item">
-            <span>Y</span><input (keydown)="onKeyDown($event)" [(ngModel)]="rotationY" type="number" />
+            <span>Y</span>
+            <app-input-number [(ngModel)]="rotationY" [min]="-180" [max]="180"></app-input-number>
           </div>
           <div class="coordinate-item">
-            <span>Z</span><input (keydown)="onKeyDown($event)" [(ngModel)]="rotationZ" type="number" />
+            <span>Z</span>
+            <app-input-number [(ngModel)]="rotationZ" [min]="-180" [max]="180"></app-input-number>
           </div>
         </div>
       </div>
@@ -78,11 +81,11 @@
         <span>不透明度</span>
         <app-input-number [(ngModel)]="opacity" [min]="0" [max]="1"></app-input-number>
       </div>
-      <div class="input-item" *ngIf="selectedType.value === 'label'">
+      <div class="input-item" *ngIf="selectedType.value === 'Marker'">
         <span>边框大小</span>
-        <app-input-number [(ngModel)]="border" [min]="0" [max]="1"></app-input-number>
+        <app-input-number [(ngModel)]="borderWidth" [min]="0" [max]="1"></app-input-number>
       </div>
-      <div class="input-item" *ngIf="selectedType.value === 'label'">
+      <div class="input-item" *ngIf="selectedType.value === 'Marker'">
         <span>边框颜色</span>
         <input [(ngModel)]="borderColor" type="color" />
       </div>
@@ -106,9 +109,9 @@
         <ng-container *ngFor="let overlay of overlays; index as i">
           <div class="overlay-list" (click)="selectOverlay(overlay)">
             <div class="overlay-item" [class.selected]="selectedId === overlay.id">
-              <span>{{overlay.type === 'poi' ? overlay.content : overlay.type === 'label' ? overlay.title : overlay.icon}}</span>
+              <span>{{overlay.type === 'poi' ? overlay.content : overlay.type === 'Marker' ? overlay.title : overlay.icon}}</span>
               <div class="overlay-info">
-                <span>{{overlay.type === 'poi' ? 'POI' : overlay.type === 'label' ? '标签' : 'Emissive'}}</span>
+                <span>{{overlay.type === 'poi' ? 'POI' : overlay.type === 'Marker' ? '标签' : 'Emissive'}}</span>
                 <div class="overlay-delete" (click)="delete($event, overlay)">
                   <img src="assets/icon/overlay/delete.png" />
                 </div>
