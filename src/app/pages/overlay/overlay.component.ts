@@ -137,7 +137,7 @@ export class OverlayComponent implements OnInit {
         },
         id: overlay.id,
         name: overlay.content,
-      } as any );
+      });
       await poiOverlay.setClient(this._diva.client);
       poiOverlay.focus(1000, -Math.PI / 6);
       this._store.storeOverlay(overlay);
