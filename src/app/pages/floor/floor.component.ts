@@ -32,8 +32,8 @@ export class FloorComponent implements OnInit, OnDestroy {
       this._data.changeCode(
         `const group = client.getEntityGroupByGroupPath('场景模型/主楼拆分');`,
         val
-          ? 'client.disassemble(group, { spacing: 300, eachHeight: 290, duration: 5 })'
-          : 'client.assemble(group)'
+          ? 'group.disassemble({ spacing: 300, eachHeight: 290, duration: 5 });'
+          : 'group.assemble();'
       );
     });
   }
@@ -147,11 +147,7 @@ export class FloorComponent implements OnInit, OnDestroy {
     await this._setVisibility(modelToHide, false);
     await this._setVisibility(pipeToHide, false);
     await this._setVisibility(pipeToShow, this.pipe ? true : false);
-    this._data.changeCode(
-      `client.setVisibility(${[
-        ...modelToFocus.map((model) => `'${model.id}'`),
-      ]}, true)`
-    );
+    this._data.changeCode(`model.setVisibility(true)`);
   }
 
   // 聚焦方法
@@ -161,13 +157,9 @@ export class FloorComponent implements OnInit, OnDestroy {
   }
   // 显示隐藏方法
   private _setVisibility(models: Model[], visible: boolean, leave = false) {
-    models.map((model) => (model.setVisibility(visible)));
+    models.map((model) => model.setVisibility(visible));
     if (!leave) {
-      this._data.changeCode(
-        `client.setVisibility(${[
-          ...models.map((model) => `'${model.id}'`),
-        ]}, ${visible})`
-      );
+      this._data.changeCode(`model.setVisibility(${visible})`);
     }
   }
   // 获取模型方法
