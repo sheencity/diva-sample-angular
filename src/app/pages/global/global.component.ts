@@ -13,6 +13,7 @@ export class GlobalComponent implements OnInit, OnDestroy {
   // 罗盘
   private _compass: boolean;
   public set compass(v: boolean) {
+    if (typeof v !== 'boolean') return;
     this._compass = v;
     this._data.compass = v;
     this._diva.client.setCompass(v);

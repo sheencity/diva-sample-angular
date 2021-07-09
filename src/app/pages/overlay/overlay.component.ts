@@ -175,7 +175,7 @@ export class OverlayComponent implements OnInit {
           overlay.coordinateZ
         ),
         resource: {
-          name: '连线标签',
+          name: '文字标签',
         },
         id: overlay.id,
         name: overlay.title,
@@ -210,9 +210,9 @@ export class OverlayComponent implements OnInit {
           overlay.coordinateZ
         ),
         rotation: Quaternion.FromEulerAngles(
-          overlay.rotationX * Math.PI / 180,
-          overlay.rotationY * Math.PI / 180,
-          overlay.rotationZ * Math.PI / 180
+          (overlay.rotationX * Math.PI) / 180,
+          (overlay.rotationY * Math.PI) / 180,
+          (overlay.rotationZ * Math.PI) / 180
         ),
         scale: new Vector3(overlay.scale, overlay.scale, overlay.scale),
         resource: {
