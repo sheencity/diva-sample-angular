@@ -53,13 +53,13 @@
         </div>
       </div>
       <div class="drop-item" style="margin-top: 12px;" *ngIf="selectedType.value === 'poi' && selectedIconType.value !== 'POI水滴'">
-        <span>Icon</span>
+        <span>图标</span>
         <div>
           <app-dropdown [options]="iconOptions1" [(ngModel)]="selectedIcon"></app-dropdown>
         </div>
       </div>
       <div class="drop-item" style="margin-top: 12px;" *ngIf="selectedType.value === 'poi' && selectedIconType.value === 'POI水滴'">
-        <span>Icon</span>
+        <span>图标</span>
         <div>
           <app-dropdown [options]="iconOptions2" [(ngModel)]="selectedIcon"></app-dropdown>
         </div>
