@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Diva, DivaClient, WebRtcAdapter } from '@sheencity/diva-sdk';
+import { CefAdapter, Diva, DivaClient } from '@sheencity/diva-sdk';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +19,7 @@ export class DivaService {
     const uri = 'http://127.0.0.1:3000';
     const apiKey = '<replace_your_api_key_here>';
     console.log(uri, apiKey, container);
-    const adapter = new WebRtcAdapter(container, uri);
+    const adapter = new CefAdapter(container);
     const diva = new Diva({ apiKey, adapter });
     console.log('diva is', diva);
     this.client = await diva.init();
