@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, HostListener, OnInit, Renderer2 } from '@angular/core';
 import {
   Emissive,
   Marker,
@@ -21,6 +21,7 @@ import {
   POIType,
 } from 'src/app/common/models/overlay.model';
 import { DivaMouseEvent } from '@sheencity/diva-sdk/lib/events/diva.events';
+import { Color, ColorPickerControl } from '@iplab/ngx-color-picker';
 @Component({
   selector: 'app-overlay',
   templateUrl: './overlay.component.html',
@@ -64,6 +65,16 @@ export class OverlayComponent implements OnInit {
   public selectedId: string = null;
   public emission: number = 1.0;
   public speed: number = 2.0;
+  public isVisible = false;
+  public isBorderCPVisible = false;
+  public colorControl = new ColorPickerControl();
+  public borderColorControl = new ColorPickerControl();
+
+  @HostListener('click', ['$event'])
+  public hideColorPicker(event: MouseEvent) {
+    this.isVisible = false;
+    this.isBorderCPVisible = false;
+  }
 
   typeOptions = [
     { value: OverlayType.POI, placeholder: 'POI' },
@@ -123,6 +134,22 @@ export class OverlayComponent implements OnInit {
     private _data: DataService
   ) {}
 
+  public showColorPicker(event: MouseEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isVisible = !this.isVisible;
+    this.isBorderCPVisible = false;
+  }
+  public showBorderColorPicker(event: MouseEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isBorderCPVisible = !this.isBorderCPVisible;
+    this.isVisible = false;
+  }
+  public prevent(event: MouseEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+  }
   /**
    * 创建覆盖物
    */
@@ -328,7 +355,25 @@ export class OverlayComponent implements OnInit {
     $event.stopPropagation();
   }
 
+  private _setColorControl() {
+    this.colorControl.hideAlphaChannel();
+    this.colorControl.setValueFrom(this.color);
+    this.colorControl.valueChanges.subscribe((value: Color) => {
+      this.color = value.toHexString();
+    });
+  }
+
+  private _setBorderColorControl() {
+    this.borderColorControl.hideAlphaChannel();
+    this.borderColorControl.setValueFrom(this.borderColor);
+    this.borderColorControl.valueChanges.subscribe((value: Color) => {
+      this.borderColor = value.toHexString();
+    });
+  }
+
   async ngOnInit() {
+    this._setColorControl();
+    this._setBorderColorControl();
     this.overlays = this._store.getAllOverlays();
     this._diva.client?.applyScene('覆盖物').then(() => {
       this._data.changeCode(`client.applyScene('覆盖物')`);

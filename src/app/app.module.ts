@@ -25,6 +25,7 @@ import { CustomizeComponent } from './pages/customize/customize.component';
 import { CodeViewComponent } from './common/components/code-view/code-view.component';
 import { AirConditionerComponent } from './pages/air-conditioner/air-conditioner.component';
 import { InputNumberComponent } from './common/components/input-number/input-number.component';
+import { ColorPickerModule } from '@iplab/ngx-color-picker';
 
 const COMPONENTS = [
   AppComponent,
@@ -53,7 +54,7 @@ const PAGES = [
 
 @NgModule({
   declarations: [...COMPONENTS, ...PAGES],
-  imports: [BrowserModule, AppRoutingModule, FormsModule],
+  imports: [BrowserModule, AppRoutingModule, FormsModule, ColorPickerModule],
   providers: [],
   bootstrap: [AppComponent],
 })

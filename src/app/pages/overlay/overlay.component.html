@@ -66,7 +66,10 @@
       </div>
       <div class="input-item">
         <span>颜色</span>
-        <input [(ngModel)]="color" type="color" />
+        <div style="position: relative;">
+            <div class="color" (click)="showColorPicker($event)" [style.background]="color"></div>
+            <chrome-picker (click)="prevent($event)" *ngIf="isVisible" style="position: absolute; top: 30px; right: 0px; z-index: 100;" [control]="colorControl"></chrome-picker>
+        </div>
       </div>
       <div class="input-item" *ngIf="selectedType.value === 'emissiveOverlay'">
         <span>旋转角度</span>
@@ -99,7 +102,10 @@
       </div>
       <div class="input-item" *ngIf="selectedType.value === 'Marker'">
         <span>边框颜色</span>
-        <input [(ngModel)]="borderColor" type="color" />
+        <div style="position: relative;">
+          <div class="color" (click)="showBorderColorPicker($event)" [style.background]="borderColor"></div>
+          <chrome-picker (click)="prevent($event)" *ngIf="isBorderCPVisible" style="position: absolute; top: 30px; right: 0px; z-index: 100;" [control]="borderColorControl"></chrome-picker>
+        </div>
       </div>
       <div class="input-item" *ngIf="selectedType.value === 'emissiveOverlay'">
         <span>自发光强度</span>

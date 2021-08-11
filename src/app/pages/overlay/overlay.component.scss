@@ -83,6 +83,17 @@ main {
           border: none;
         }
       }
+      .color {
+        border: none;
+        outline: none;
+        background: #fff;
+        width: 57px;
+        height: 24px;
+        color: #fff;
+        padding-left: 6px;
+        box-sizing: border-box;
+        border-radius: 2px;
+      }
       textarea {
         width: 194px;
         box-sizing: border-box;

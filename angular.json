@@ -39,7 +39,8 @@
             ],
             "optimization": {
               "styles": {
-                "minify": false
+                "minify": false,
+                "inlineCritical": false
               }
             },
             "scripts": []
