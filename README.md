@@ -9,7 +9,7 @@
 ## 下载
 
 ```shell
-git clone https://github.com/sheencity/diva-sample
+git clone https://github.com/sheencity/diva-sample-angular.git
 ```
 
 ## 安装依赖
