@@ -34,14 +34,12 @@
     position: relative;
     z-index: 99;
     display: flex;
-    .exampleCode {
-      height: 43px;
-      line-height: 43px;
-      // margin-right: 24px;
-      app-switcher {
-        width: 117px;
-        pointer-events: all;
-      }
+    flex-direction: column;
+    align-items: flex-end;
+    .fullScreen, .exampleCode, .joyStick {
+      pointer-events: all;
+      height: 30px;
+      line-height: 30px;
     }
   }
 }

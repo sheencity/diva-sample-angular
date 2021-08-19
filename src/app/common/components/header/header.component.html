@@ -4,6 +4,12 @@
       <div class="en">SHEENCITY DIVA (DATA INTELLIGENCE VISUAL ANALYSIS) API DEMO</div>
     </div>
     <div class="info">
+      <div class="joyStick">
+        <app-switcher (switch)="toggleJoystick($event)" [(ngModel)]="joyStick" [label]="'摇杆'"></app-switcher>
+      </div>
+      <div class="fullScreen">
+        <app-switcher (switch)="toggleFullScreen($event)" [(ngModel)]="fullScreen" [label]="'全屏'"></app-switcher>
+      </div>
       <div class="exampleCode">
         <app-switcher [(ngModel)]="exampleCode" [label]="'显示示例代码'"></app-switcher>
       </div>
