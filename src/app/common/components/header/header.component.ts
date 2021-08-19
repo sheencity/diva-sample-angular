@@ -15,14 +15,6 @@ export class HeaderComponent implements OnInit {
     return this._exampleCode;
   }
 
-  private _joyStick = false;
-  public set joyStick(v: boolean) {
-    this._joyStick = v;
-  }
-  public get joyStick() {
-    return this._joyStick;
-  }
-
   private _fullScreen = false;
   public set fullScreen(v: boolean) {
     this._fullScreen = v;
@@ -32,14 +24,6 @@ export class HeaderComponent implements OnInit {
   }
 
   constructor() { }
-
-  public toggleJoystick(event: boolean): void {
-    this.joyStick = event;
-    const joystickEle = document.getElementById('joyStick');
-    if (joystickEle) {
-      this.joyStick ? joystickEle.style.display = 'block' : joystickEle.style.display = 'none';
-    }
-  }
 
   public toggleFullScreen(event: boolean): void {
     this.fullScreen = event;
