@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
 
@@ -20,7 +20,7 @@ const videos = [
   templateUrl: './video.component.html',
   styleUrls: ['./video.component.scss'],
 })
-export class VideoComponent implements OnInit {
+export class VideoComponent implements OnInit, OnDestroy {
   public videos = videos;
 
   public selectedVideo: string = null;
@@ -42,5 +42,9 @@ export class VideoComponent implements OnInit {
     this._diva.client?.applyScene('半鸟瞰').then(() => {
       this._data.changeCode(`client.applyScene('半鸟瞰')`);
     });
+  }
+
+  ngOnDestroy(): void {
+    this._diva.client.stopCameraTrack();
   }
 }
