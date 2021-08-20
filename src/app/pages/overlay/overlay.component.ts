@@ -136,6 +136,7 @@ export class OverlayComponent implements OnInit {
         title: overlay.content,
         backgroundColor: overlay.color,
         opacity: overlay.opacity,
+        autoSize: false,
         scale: new Vector3(overlay.scale, overlay.scale, overlay.scale),
         coord: new Vector3(
           overlay.coordinateX,
@@ -146,7 +147,7 @@ export class OverlayComponent implements OnInit {
           name: overlay.iconType,
         },
         id: overlay.id,
-        name: overlay.content,
+        name: this._uniqueName('poi'),
       });
       await poiOverlay.setClient(this._diva.client);
       poiOverlay.focus(1000, -Math.PI / 6);
@@ -178,6 +179,7 @@ export class OverlayComponent implements OnInit {
         },
         backgroundColor: overlay.color,
         opacity: overlay.opacity,
+        autoSize: false,
         scale: new Vector3(overlay.scale, overlay.scale, overlay.scale),
         coord: new Vector3(
           overlay.coordinateX,
@@ -188,7 +190,7 @@ export class OverlayComponent implements OnInit {
           name: '文字标签',
         },
         id: overlay.id,
-        name: overlay.title,
+        name: this._uniqueName('marker'),
       });
       await markerOverlay.setClient(this._diva.client);
       markerOverlay.focus(1000, -Math.PI / 6);
@@ -233,7 +235,7 @@ export class OverlayComponent implements OnInit {
           name: overlay.icon,
         },
         id: overlay.id,
-        name: overlay.icon,
+        name: this._uniqueName('effect'),
       });
       await emissiveOverlay.setClient(this._diva.client);
       emissiveOverlay.focus(1000, -Math.PI / 6);
@@ -245,6 +247,10 @@ export class OverlayComponent implements OnInit {
     }
     this.overlays = this._store.getAllOverlays();
     this.reset();
+  }
+
+  private _uniqueName(prefix: string) {
+    return '' + prefix + '_' + new Date().toISOString();
   }
 
   /**
