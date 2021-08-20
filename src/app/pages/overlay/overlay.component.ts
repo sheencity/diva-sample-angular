@@ -1,12 +1,6 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
-import {
-  Emissive,
-  Marker,
-  Model,
-  POI,
-  Quaternion,
-  Vector3,
-} from '@sheencity/diva-sdk';
+import { Emissive, Marker, Model, POI, POIIcon } from '@sheencity/diva-sdk';
+import { Euler, Quaternion, Vector3, deg2rad } from '@sheencity/diva-sdk-math';
 import { DropdownData } from 'src/app/common/models/dropdown-data.interface';
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
@@ -16,8 +10,8 @@ import {
   EmissiveOverlay,
   MarkerOverlay,
   OverlayType,
-  POIIcon,
   POIOverlay,
+  POIType,
 } from 'src/app/common/models/overlay.model';
 import { DivaMouseEvent } from '@sheencity/diva-sdk/lib/events/diva.events';
 @Component({
@@ -27,17 +21,25 @@ import { DivaMouseEvent } from '@sheencity/diva-sdk/lib/events/diva.events';
 })
 export class OverlayComponent implements OnInit {
   public overlays: (POIOverlay | MarkerOverlay | EmissiveOverlay)[] = [];
-  public selectedType: DropdownData = {
+  public selectedType: DropdownData<OverlayType> = {
     value: OverlayType.POI,
     placeholder: 'POI',
   };
-  public selectedIcon: DropdownData = {
+  public selectedIcon: DropdownData<POIIcon> = {
     value: POIIcon.Camera,
     placeholder: '摄像头',
+  };
+  public selectedIconType: DropdownData<POIType> = {
+    value: POIType.type1,
+    placeholder: 'POI文字标签',
   };
   public selectedEmissive: DropdownData<EmissionType> = {
     value: EmissionType.type1,
     placeholder: '悬浮标记01',
+  };
+  public selectedAlign: DropdownData<'center' | 'left' | 'right'> = {
+    value: 'center',
+    placeholder: '居中',
   };
   public coordinateX = 0.0;
   public coordinateY = 0.0;
@@ -55,25 +57,18 @@ export class OverlayComponent implements OnInit {
   public selectedId: string = null;
   public emission: number = 1.0;
   public speed: number = 2.0;
-  public selectedAlign = {
-    value: 'center',
-    placeholder: '居中',
-  } as {
-    value: 'left' | 'right' | 'center';
-    placeholder: string;
-  };
 
   typeOptions = [
     { value: OverlayType.POI, placeholder: 'POI' },
     { value: OverlayType.Marker, placeholder: 'Marker' },
     { value: OverlayType.Emissive, placeholder: 'Effect' },
   ];
-  alignOptions = [
+  alignOptions: Array<DropdownData<'center' | 'left' | 'right'>> = [
     { value: 'center', placeholder: '居中' },
     { value: 'left', placeholder: '左对齐' },
     { value: 'right', placeholder: '右对齐' },
   ];
-  iconOptions = [
+  iconOptions1 = [
     { value: POIIcon.Camera, placeholder: '摄像头' },
     { value: POIIcon.Location, placeholder: '定位' },
     { value: POIIcon.TrafficLight, placeholder: '红路灯' },
@@ -88,6 +83,20 @@ export class OverlayComponent implements OnInit {
     { value: POIIcon.Supermarket, placeholder: '超市' },
     { value: POIIcon.Mall, placeholder: '商场' },
     { value: POIIcon.Toilet, placeholder: '卫生间' },
+    { value: POIIcon.Building, placeholder: '建筑' },
+    { value: POIIcon.ChargingPile, placeholder: '充电桩' },
+    { value: POIIcon.EnergyStorage, placeholder: '储能设备' },
+    { value: POIIcon.SolarEnergy, placeholder: '光伏' },
+  ];
+  iconOptions2 = [
+    ...this.iconOptions1,
+    { value: POIIcon.CO, placeholder: '一氧化碳' },
+    { value: POIIcon.Seat, placeholder: '座椅' },
+  ];
+  iconTypeOption = [
+    { value: POIType.type1, placeholder: 'POI文字标签' },
+    { value: POIType.type2, placeholder: 'POI圆形标签' },
+    { value: POIType.type3, placeholder: 'POI水滴' },
   ];
   emissiveOptions = [
     { value: EmissionType.type1, placeholder: '悬浮标记01' },
@@ -113,7 +122,8 @@ export class OverlayComponent implements OnInit {
   async create() {
     if (this.selectedType.value === OverlayType.POI) {
       const overlay = new POIOverlay();
-      overlay.icon = this.selectedIcon.value as POIIcon;
+      overlay.iconType = this.selectedIconType.value;
+      overlay.icon = this.selectedIcon.value;
       overlay.coordinateX = this.coordinateX;
       overlay.coordinateY = this.coordinateY;
       overlay.coordinateZ = this.coordinateZ;
@@ -126,17 +136,18 @@ export class OverlayComponent implements OnInit {
         title: overlay.content,
         backgroundColor: overlay.color,
         opacity: overlay.opacity,
-        scale: overlay.scale,
+        autoSize: false,
+        scale: new Vector3(overlay.scale, overlay.scale, overlay.scale),
         coord: new Vector3(
           overlay.coordinateX,
           overlay.coordinateY,
           overlay.coordinateZ
         ),
         resource: {
-          name: 'POI文字标签',
+          name: overlay.iconType,
         },
         id: overlay.id,
-        name: overlay.content,
+        name: this._uniqueName('poi'),
       });
       await poiOverlay.setClient(this._diva.client);
       poiOverlay.focus(1000, -Math.PI / 6);
@@ -168,7 +179,8 @@ export class OverlayComponent implements OnInit {
         },
         backgroundColor: overlay.color,
         opacity: overlay.opacity,
-        scale: overlay.scale,
+        autoSize: false,
+        scale: new Vector3(overlay.scale, overlay.scale, overlay.scale),
         coord: new Vector3(
           overlay.coordinateX,
           overlay.coordinateY,
@@ -178,7 +190,7 @@ export class OverlayComponent implements OnInit {
           name: '文字标签',
         },
         id: overlay.id,
-        name: overlay.title,
+        name: this._uniqueName('marker'),
       });
       await markerOverlay.setClient(this._diva.client);
       markerOverlay.focus(1000, -Math.PI / 6);
@@ -209,17 +221,21 @@ export class OverlayComponent implements OnInit {
           overlay.coordinateY,
           overlay.coordinateZ
         ),
-        rotation: Quaternion.FromEulerAngles(
-          (overlay.rotationX * Math.PI) / 180,
-          (overlay.rotationY * Math.PI) / 180,
-          (overlay.rotationZ * Math.PI) / 180
+        rotation: Quaternion.FromEuler(
+          new Euler(
+            ...deg2rad([
+              overlay.rotationX,
+              overlay.rotationY,
+              overlay.rotationZ,
+            ])
+          )
         ),
         scale: new Vector3(overlay.scale, overlay.scale, overlay.scale),
         resource: {
           name: overlay.icon,
         },
         id: overlay.id,
-        name: overlay.icon,
+        name: this._uniqueName('effect'),
       });
       await emissiveOverlay.setClient(this._diva.client);
       emissiveOverlay.focus(1000, -Math.PI / 6);
@@ -231,6 +247,10 @@ export class OverlayComponent implements OnInit {
     }
     this.overlays = this._store.getAllOverlays();
     this.reset();
+  }
+
+  private _uniqueName(prefix: string) {
+    return '' + prefix + '_' + new Date().toISOString();
   }
 
   /**
@@ -248,22 +268,21 @@ export class OverlayComponent implements OnInit {
     this._data.changeCode(`entity.setClient(null)`);
   }
 
+  resetPoiIcon(v: DropdownData<POIType>) {
+    let iconOption: Array<DropdownData<POIIcon>>;
+    iconOption =
+      v.value == POIType.type3 ? this.iconOptions2 : this.iconOptions1;
+    if (iconOption.find((x) => x.value === this.selectedIcon.value)) return;
+    this.selectedIcon = iconOption[0];
+  }
   /**
    * 创建覆盖物之后重置所有配置
    */
   reset() {
-    this.selectedIcon = {
-      value: POIIcon.Camera,
-      placeholder: '摄像头',
-    };
-    this.selectedEmissive = {
-      value: EmissionType.type1,
-      placeholder: '悬浮标记01',
-    };
-    this.selectedAlign = {
-      value: 'center',
-      placeholder: '居中',
-    };
+    this.selectedIconType = this.iconTypeOption[0];
+    this.selectedIcon = this.iconOptions1[0];
+    this.selectedEmissive = this.emissiveOptions[0];
+    this.selectedAlign = this.alignOptions[0];
     this.coordinateX = 0.0;
     this.coordinateY = 0.0;
     this.coordinateZ = 0.0;
@@ -294,7 +313,7 @@ export class OverlayComponent implements OnInit {
    */
   async pickup() {
     const handler = (event: DivaMouseEvent) => {
-      const wordPosition = event.worldPosition;
+      const wordPosition = event.detail.coord;
       this.coordinateX = wordPosition.x;
       this.coordinateY = wordPosition.y;
       this.coordinateZ = wordPosition.z;

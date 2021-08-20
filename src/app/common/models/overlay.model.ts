@@ -1,3 +1,4 @@
+import { POIIcon } from '@sheencity/diva-sdk';
 import { v4 } from 'uuid';
 export enum OverlayType {
   POI = 'poi',
@@ -5,21 +6,10 @@ export enum OverlayType {
   Emissive = 'emissiveOverlay',
 }
 
-export enum POIIcon {
-  Camera = 'camera',
-  Location = 'location',
-  TrafficLight = 'trafficLight',
-  TrashCan = 'trashCan',
-  StreetLamp = 'streetLamp',
-  BusStation = 'busStation',
-  Exit = 'exit',
-  Restaurant = 'restaurant',
-  Parking = 'parking',
-  Dock = 'dock',
-  Subway = 'subway',
-  Supermarket = 'supermarket',
-  Mall = 'mall',
-  Toilet = 'toilet',
+export enum POIType {
+  type1 = 'POI文字标签',
+  type2 = 'POI圆形标签',
+  type3 = 'POI水滴',
 }
 
 export enum EmissionType {
@@ -53,6 +43,7 @@ export class Overlay {
 export class POIOverlay extends Overlay {
   public readonly type = OverlayType.POI;
   public icon: POIIcon;
+  public iconType: POIType;
 }
 
 export class MarkerOverlay extends Overlay {
