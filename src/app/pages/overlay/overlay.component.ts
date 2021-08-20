@@ -1,13 +1,6 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
-import {
-  Emissive,
-  Marker,
-  Model,
-  POI,
-  POIIcon,
-  Quaternion,
-  Vector3,
-} from '@sheencity/diva-sdk';
+import { Emissive, Marker, Model, POI, POIIcon } from '@sheencity/diva-sdk';
+import { Euler, Quaternion, Vector3, deg2rad } from '@sheencity/diva-sdk-math';
 import { DropdownData } from 'src/app/common/models/dropdown-data.interface';
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
@@ -90,10 +83,10 @@ export class OverlayComponent implements OnInit {
     { value: POIIcon.Supermarket, placeholder: '超市' },
     { value: POIIcon.Mall, placeholder: '商场' },
     { value: POIIcon.Toilet, placeholder: '卫生间' },
-    { value: POIIcon.Building, placeholder: '建筑'},
-    { value: POIIcon.ChargingPile, placeholder: '充电桩'},
-    { value: POIIcon.EnergyStorage, placeholder: '储能设备'},
-    { value: POIIcon.SolarEnergy, placeholder: '光伏'},
+    { value: POIIcon.Building, placeholder: '建筑' },
+    { value: POIIcon.ChargingPile, placeholder: '充电桩' },
+    { value: POIIcon.EnergyStorage, placeholder: '储能设备' },
+    { value: POIIcon.SolarEnergy, placeholder: '光伏' },
   ];
   iconOptions2 = [
     ...this.iconOptions1,
@@ -143,7 +136,7 @@ export class OverlayComponent implements OnInit {
         title: overlay.content,
         backgroundColor: overlay.color,
         opacity: overlay.opacity,
-        scale: overlay.scale,
+        scale: new Vector3(overlay.scale, overlay.scale, overlay.scale),
         coord: new Vector3(
           overlay.coordinateX,
           overlay.coordinateY,
@@ -185,7 +178,7 @@ export class OverlayComponent implements OnInit {
         },
         backgroundColor: overlay.color,
         opacity: overlay.opacity,
-        scale: overlay.scale,
+        scale: new Vector3(overlay.scale, overlay.scale, overlay.scale),
         coord: new Vector3(
           overlay.coordinateX,
           overlay.coordinateY,
@@ -226,10 +219,14 @@ export class OverlayComponent implements OnInit {
           overlay.coordinateY,
           overlay.coordinateZ
         ),
-        rotation: Quaternion.FromEulerAngles(
-          (overlay.rotationX * Math.PI) / 180,
-          (overlay.rotationY * Math.PI) / 180,
-          (overlay.rotationZ * Math.PI) / 180
+        rotation: Quaternion.FromEuler(
+          new Euler(
+            ...deg2rad([
+              overlay.rotationX,
+              overlay.rotationY,
+              overlay.rotationZ,
+            ])
+          )
         ),
         scale: new Vector3(overlay.scale, overlay.scale, overlay.scale),
         resource: {
@@ -310,7 +307,7 @@ export class OverlayComponent implements OnInit {
    */
   async pickup() {
     const handler = (event: DivaMouseEvent) => {
-      const wordPosition = event.worldPosition;
+      const wordPosition = event.detail.coord;
       this.coordinateX = wordPosition.x;
       this.coordinateY = wordPosition.y;
       this.coordinateZ = wordPosition.z;
