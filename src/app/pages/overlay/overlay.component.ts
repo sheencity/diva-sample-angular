@@ -143,7 +143,11 @@ export class OverlayComponent implements OnInit {
         title: overlay.content,
         backgroundColor: overlay.color,
         opacity: overlay.opacity,
-        scale: overlay.scale,
+        scale: new Vector3(
+          overlay.scale,
+          overlay.scale,
+          overlay.scale
+        ),
         coord: new Vector3(
           overlay.coordinateX,
           overlay.coordinateY,
@@ -185,7 +189,11 @@ export class OverlayComponent implements OnInit {
         },
         backgroundColor: overlay.color,
         opacity: overlay.opacity,
-        scale: overlay.scale,
+        scale: new Vector3(
+          overlay.scale,
+          overlay.scale,
+          overlay.scale
+        ),
         coord: new Vector3(
           overlay.coordinateX,
           overlay.coordinateY,
@@ -231,7 +239,11 @@ export class OverlayComponent implements OnInit {
           (overlay.rotationY * Math.PI) / 180,
           (overlay.rotationZ * Math.PI) / 180
         ),
-        scale: new Vector3(overlay.scale, overlay.scale, overlay.scale),
+        scale: new Vector3(
+          overlay.scale,
+          overlay.scale,
+          overlay.scale
+        ),
         resource: {
           name: overlay.icon,
         },
