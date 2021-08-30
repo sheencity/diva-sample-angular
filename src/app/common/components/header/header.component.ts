@@ -37,7 +37,7 @@ export class HeaderComponent implements OnInit {
   }
 
   public exitFullScreen(): void {
-    if (document.exitFullscreen) {
+    if (document.fullscreenElement) {
       document.exitFullscreen();
     }
   }
