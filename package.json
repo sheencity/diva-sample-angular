@@ -20,9 +20,7 @@
     "@angular/platform-browser": "~12.0.1",
     "@angular/platform-browser-dynamic": "~12.0.1",
     "@angular/router": "~12.0.1",
-    "jsonrpc-lite": "^2.2.0",
     "rxjs": "~6.6.0",
-    "socket.io-client": "^4.1.2",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.3"
   },
@@ -30,7 +28,7 @@
     "@angular-devkit/build-angular": "~12.0.1",
     "@angular/cli": "~12.0.1",
     "@angular/compiler-cli": "~12.0.1",
-    "@sheencity/diva-sdk": "^0.2.1",
+    "@sheencity/diva-sdk": "^0.2.2",
     "@types/jasmine": "~3.6.0",
     "@types/node": "^12.11.1",
     "tslint": "~6.1.0",
