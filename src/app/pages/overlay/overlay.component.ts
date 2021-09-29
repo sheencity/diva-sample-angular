@@ -263,7 +263,7 @@ export class OverlayComponent implements OnInit {
     $event.stopPropagation();
     this._store.deleteOverlay(overlay);
     this.overlays = this._store.getAllOverlays();
-    const entity = await this._diva.client.getEntityById(overlay.id);
+    const entity = await this._diva.client.getEntityById<Model>(overlay.id);
     await entity.setClient(null);
     this._data.changeCode(`entity.setClient(null)`);
   }

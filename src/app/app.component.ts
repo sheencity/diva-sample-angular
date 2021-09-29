@@ -16,7 +16,7 @@ import { DivaService } from './common/services/diva.service';
 })
 export class AppComponent implements AfterViewInit, OnDestroy {
   @ViewChild('backendContainer', { read: ElementRef })
-  backendContainer?: ElementRef<HTMLElement>;
+  backendContainer?: ElementRef<HTMLDivElement>;
   private _changeResolution$ = new Subject<boolean>();
   private _subs: Subscription;
 
