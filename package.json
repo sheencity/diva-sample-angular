@@ -20,11 +20,11 @@
     "@angular/platform-browser": "~12.2.11",
     "@angular/platform-browser-dynamic": "~12.2.11",
     "@angular/router": "~12.2.11",
-    "@sheencity/diva-sdk": "^0.2.3",
-    "rxjs": "^6.6.7",
+    "@sheencity/diva-sdk": "^1.0.0-alpha.2",
+    "rxjs": "^7.4.0",
     "tslib": "^2.3.1",
-    "zone.js": "~0.11.4",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "zone.js": "~0.11.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~12.2.11",
