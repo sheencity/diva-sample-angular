@@ -275,6 +275,7 @@ export class OverlayComponent implements OnInit {
     this.overlays = this._store.getAllOverlays();
     this.reset();
   }
+
   private _uniqueName(prefix: string) {
     return '' + prefix + '_' + new Date().toISOString();
   }
