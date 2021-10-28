@@ -21,11 +21,11 @@
     "@angular/platform-browser-dynamic": "~12.2.11",
     "@angular/router": "~12.2.11",
     "@iplab/ngx-color-picker": "^2.1.1",
-    "@sheencity/diva-sdk": "^0.2.3",
+    "@sheencity/diva-sdk": "^0.3.0",
     "rxjs": "^6.6.7",
     "tslib": "^2.3.1",
-    "zone.js": "~0.11.4",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "zone.js": "~0.11.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~12.2.11",
