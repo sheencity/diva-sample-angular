@@ -20,7 +20,7 @@ export class DivaService {
     const apiKey = '<replace_your_api_key_here>';
 
     // 使用云渲染模式
-    const uri = new URL('ws://127.0.0.1:80');
+    const uri = new URL('ws://127.0.0.1:3000');
     const adapter = new WebRtcAdapter(container, uri);
 
     // 使用内嵌模式

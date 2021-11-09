@@ -1,5 +1,5 @@
 <main>
-  <app-content-block width="true" caption="创建覆盖物">
+  <app-content-block [width]="true" caption="创建覆盖物">
     <div class="overlay-block">
       <div class="drop-item">
         <span>种类</span>
@@ -116,7 +116,7 @@
     </div>
   </app-content-block>
   <div style="margin-top: 20px;">
-    <app-content-block width="true" caption="覆盖物列表">
+    <app-content-block [width]="true" caption="覆盖物列表">
       <div class="scroll">
         <ng-container *ngFor="let overlay of overlays; index as i">
           <div class="overlay-list" (click)="selectOverlay(overlay)">

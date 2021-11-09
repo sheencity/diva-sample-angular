@@ -47,8 +47,10 @@ export class MonitorComponent implements OnInit, OnDestroy {
       monitor = await this.getModelByName(monitor);
     }
     if (!url) return;
-    await monitor.setWebWidget(new URL(url), 500, 280);
-    this._data.changeCode(`model.setWebWidget(new URL('${url}'), 500, 280)`);
+    await monitor.setWebWidget(new URL(url), { width: 500, height: 280 });
+    this._data.changeCode(
+      `model.setWebWidget(new URL('${url}'), { width: 500, height: 280 })`
+    );
   }
   async refresh(monitorEqui: { title: string; url: string }) {
     try {
