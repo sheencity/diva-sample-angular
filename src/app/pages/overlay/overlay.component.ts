@@ -1,10 +1,8 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { Emissive, Marker, Model, POI, POIIcon } from '@sheencity/diva-sdk';
-import { Euler, Quaternion, Vector3, deg2rad } from '@sheencity/diva-sdk-math';
+import { deg2rad, Euler, Quaternion, Vector3 } from '@sheencity/diva-sdk-math';
+import { DivaMouseEvent } from '@sheencity/diva-sdk/lib/events/diva.events';
 import { DropdownData } from 'src/app/common/models/dropdown-data.interface';
-import { DataService } from 'src/app/common/services/data.service';
-import { DivaService } from 'src/app/common/services/diva.service';
-import { LocalStorageService } from 'src/app/common/services/localStorage.service';
 import {
   EmissionType,
   EmissiveOverlay,
@@ -13,7 +11,9 @@ import {
   POIOverlay,
   POIType,
 } from 'src/app/common/models/overlay.model';
-import { DivaMouseEvent } from '@sheencity/diva-sdk/lib/events/diva.events';
+import { DataService } from 'src/app/common/services/data.service';
+import { DivaService } from 'src/app/common/services/diva.service';
+import { LocalStorageService } from 'src/app/common/services/localStorage.service';
 @Component({
   selector: 'app-overlay',
   templateUrl: './overlay.component.html',
