@@ -1,6 +1,6 @@
 {
   "name": "diva-sample-angular",
-  "version": "0.0.0",
+  "version": "0.3.1",
   "repository": "https://github.com/sheencity/diva-sample-angular",
   "scripts": {
     "ng": "ng",
@@ -21,8 +21,7 @@
     "@angular/platform-browser-dynamic": "~12.2.11",
     "@angular/router": "~12.2.11",
     "@iplab/ngx-color-picker": "^2.1.1",
-    "@sheencity/diva-sdk": "^0.3.0",
-    "rxjs": "^6.6.7",
+    "@sheencity/diva-sdk": "^0.3.1",
     "tslib": "^2.3.1",
     "uuid": "^8.3.2",
     "zone.js": "~0.11.4"
