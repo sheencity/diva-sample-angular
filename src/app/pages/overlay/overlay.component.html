@@ -9,7 +9,7 @@
       </div>
       <div class="btn-item">
         <span>坐标拾取</span>
-        <button (click)="pickup()">拾取</button>
+        <button (click)="pickup()" (mouseup)="mouseupStop($event)">拾取</button>
       </div>
       <div class="input-item">
         <span>坐标</span>

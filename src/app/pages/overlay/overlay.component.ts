@@ -350,6 +350,10 @@ export class OverlayComponent implements OnInit {
     this._rd2.setStyle(document.body, 'cursor', 'crosshair');
   }
 
+  mouseupStop(e) {
+    e.stopPropagation();
+  }
+
   /**
    * 阻止事件冒泡
    * @param $event
