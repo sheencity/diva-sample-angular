@@ -47,7 +47,7 @@ export class OverlayComponent implements OnInit {
   public coordinateZ = 0.0;
   public title = '';
   public content = '';
-  public color = '#000000';
+  public color = '#ff0000';
   public rotationX = 0;
   public rotationY = 0;
   public rotationZ = 0;
@@ -72,7 +72,7 @@ export class OverlayComponent implements OnInit {
   typeOptions = [
     { value: OverlayType.POI, placeholder: 'POI' },
     { value: OverlayType.Marker, placeholder: 'Marker' },
-    { value: OverlayType.Emissive, placeholder: 'Effect' },
+    { value: OverlayType.Emissive, placeholder: 'Emissive' },
   ];
   alignOptions: Array<DropdownData<'center' | 'left' | 'right'>> = [
     { value: 'center', placeholder: '居中' },
@@ -318,7 +318,7 @@ export class OverlayComponent implements OnInit {
     this.rotationZ = 0;
     this.title = '';
     this.content = '';
-    this.color = '#000000';
+    this.color = '#ff0000';
     this.scale = 1.0;
     this.opacity = 1.0;
     this.borderWidth = 0.0;
