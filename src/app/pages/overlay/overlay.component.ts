@@ -1,7 +1,7 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { Emissive, Marker, Model, POI, POIIcon } from '@sheencity/diva-sdk';
+import type { DivaMouseEvent } from '@sheencity/diva-sdk';
 import { deg2rad, Euler, Quaternion, Vector3 } from '@sheencity/diva-sdk-math';
-import { DivaMouseEvent } from '@sheencity/diva-sdk/lib/events/diva.events';
 import { DropdownData } from 'src/app/common/models/dropdown-data.interface';
 import {
   EmissionType,
@@ -313,7 +313,7 @@ export class OverlayComponent implements OnInit {
    */
   async pickup() {
     const handler = (event: DivaMouseEvent) => {
-      const wordPosition = event.detail.coord;
+      const wordPosition = event.worldPosition;
       this.coordinateX = wordPosition.x;
       this.coordinateY = wordPosition.y;
       this.coordinateZ = wordPosition.z;
