@@ -1,5 +1,5 @@
 <main>
-  <app-content-block width="true" caption="创建覆盖物">
+  <app-content-block [width]="true" caption="创建覆盖物">
     <div class="overlay-block">
       <div class="drop-item">
         <span>种类</span>
@@ -116,14 +116,14 @@
     </div>
   </app-content-block>
   <div style="margin-top: 20px;">
-    <app-content-block width="true" caption="覆盖物列表">
+    <app-content-block [width]="true" caption="覆盖物列表">
       <div class="scroll">
         <ng-container *ngFor="let overlay of overlays; index as i">
           <div class="overlay-list" (click)="selectOverlay(overlay)">
             <div class="overlay-item" [class.selected]="selectedId === overlay.id">
               <span>{{overlay.type === 'poi' ? overlay.content : overlay.type === 'Marker' ? overlay.title : overlay.icon}}</span>
               <div class="overlay-info">
-                <span>{{overlay.type === 'poi' ? 'POI' : overlay.type === 'Marker' ? '标签' : 'Emissive'}}</span>
+                <span>{{overlay.type === 'poi' ? 'POI' : overlay.type === 'Marker' ? 'Marker' : 'Emissive'}}</span>
                 <div class="overlay-delete" (click)="delete($event, overlay)">
                   <img src="assets/icon/overlay/delete.png" />
                 </div>
