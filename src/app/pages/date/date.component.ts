@@ -103,13 +103,13 @@ export class DateComponent implements OnInit, OnDestroy {
    * 切换季节
    * @param season
    */
-  async switchSeason(season: { title: string; value: string; name: string }) {
+  switchSeason(season: { title: string; value: string; name: string }) {
     console.log({ season });
-    await this._diva.client.setDate(new Date(season.value));
+    this._diva.client.setDate(new Date(season.value));
     if (season.name === 'winterSnow') {
-      await this._diva.client.setWeather(WeatherName.Snow);
+      this._diva.client.setWeather(WeatherName.Snow);
     } else {
-      await this._diva.client.setWeather(WeatherName.Default);
+      this._diva.client.setWeather(WeatherName.Default);
     }
     if (season.name === 'winterSnow') {
       this._data.changeCode(
