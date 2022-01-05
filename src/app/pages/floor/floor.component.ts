@@ -1,7 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Model, TypedGroup } from '@sheencity/diva-sdk';
-import { defer, from, Observable } from 'rxjs';
-import { shareReplay } from 'rxjs/operators';
 import { DropdownData } from 'src/app/common/models/dropdown-data.interface';
 import { DataService } from 'src/app/common/services/data.service';
 import { DivaService } from 'src/app/common/services/diva.service';
@@ -16,26 +14,24 @@ export class FloorComponent implements OnInit, OnDestroy {
   models: Model[] = [];
   // 所有管道模型
   pipeModels: Model[] = [];
-  group$: Observable<TypedGroup<Model>>;
+  // 包含所有楼层的模型组
+  floorGroup: TypedGroup<Model>;
+  // 楼层炸开配置项
+  explodeOpts = { spacing: 300, eachHeight: 290, duration: 1 };
 
   // 炸开
   private _explode = false;
   public set explode(val: boolean) {
-    if (!this.group$) return;
-    this.group$.subscribe((group) => {
-      const options = { spacing: 300, eachHeight: 290, duration: 5 };
-
-      if (val) group.disassemble(options);
-      else group.assemble();
-
-      this._explode = val;
-      this._data.changeCode(
-        `const group = client.getEntityGroupByGroupPath('场景模型/主楼拆分');`,
-        val
-          ? 'group.disassemble({ spacing: 300, eachHeight: 290, duration: 5 });'
-          : 'group.assemble();'
-      );
-    });
+    if (!this.floorGroup) return;
+    if (val) this._disAssemble();
+    else this._assemble();
+    this._explode = val;
+    this._data.changeCode(
+      `const group = client.getEntityGroupByGroupPath('场景模型/主楼拆分');`,
+      val
+        ? 'group.disassemble({ spacing: 300, eachHeight: 290, duration: 1 });'
+        : 'group.assemble();'
+    );
   }
   public get explode() {
     return this._explode;
@@ -178,26 +174,123 @@ export class FloorComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * 楼层炸开
+   */
+  private async _disAssemble() {
+    const reqRemove = [];
+    const reqSet = [];
+    const floors = Array.from(await this._getFloorGroup());
+    this.floorGroup.forEach((model) => {
+      const reqRemoveParams = {
+        method: 'RemoveTransformAnimation',
+        params: { id: model.id },
+      };
+      const level = this._getModelLevel(model);
+      const currentCoord = floors.find((m) => m.id === model.id)?.coord ?? model.coord;
+      const total = this.explodeOpts.spacing * (level - 1);
+      const rest = total + model.coord.z - currentCoord.z;
+      const reqSetParams = {
+        method: 'SetTransformAnimation',
+        params: {
+          id: model.id,
+          duration: (rest / total) * this.explodeOpts.duration,
+          coord: [model.coord.x, model.coord.y, model.coord.z + total],
+          rotation: model.rotation.tuple,
+          scale: model.scale.tuple,
+        },
+      };
+      reqRemove.push(reqRemoveParams);
+      reqSet.push(reqSetParams);
+    });
+    await this._batchRequest(reqRemove);
+    await this._batchRequest(reqSet);
+  }
+
+  /**
+   * 楼层聚合
+   */
+  private async _assemble(mode: 'normal' | 'fast' = 'normal') {
+    const reqRemove = [];
+    const reqSet = [];
+    const floors = Array.from(await this._getFloorGroup());
+    this.floorGroup.forEach((model) => {
+      const reqRemoveParams = {
+        method: 'RemoveTransformAnimation',
+        params: { id: model.id },
+      };
+      const level = this._getModelLevel(model);
+      const currentCoord = floors.find((m) => m.id === model.id)?.coord ?? model.coord;
+      const total = this.explodeOpts.spacing * (level - 1);
+      const rest = currentCoord.z - model.coord.z;
+      const reqSetParams = {
+        method: 'SetTransformAnimation',
+        params: {
+          id: model.id,
+          duration: mode === 'normal' ? (rest / total) * this.explodeOpts.duration : 0.5,
+          coord: [model.coord.x, model.coord.y, model.coord.z],
+          rotation: model.rotation.tuple,
+          scale: model.scale.tuple,
+        },
+      };
+      reqRemove.push(reqRemoveParams);
+      reqSet.push(reqSetParams);
+    });
+    await this._batchRequest(reqRemove);
+    await this._batchRequest(reqSet);
+  }
+
+  async _batchRequest(requests) {
+    const chuck = <T>(array: T[], size: number): T[][] => {
+      if (!array.length) return [];
+      return [array.slice(0, size), ...chuck(array.slice(size), size)];
+    };
+
+    const reqArr = chuck<any>(requests, 50);
+    await Promise.all(reqArr.map((req) => this._diva.client.batchRequest(req)));
+  }
+
+  async _getFloorGroup(): Promise<TypedGroup<Model>> {
+    return this._diva.client.getModelGroupByGroupPath('/场景模型/主楼拆分');
+  }
+
+  /**
+   * 判断当前模型属于第几层
+   */
+  private _getModelLevel(model: Model): number {
+    // 这里是通过模型在资源大纲里的目录结构名称来判断楼层的。
+    // 因为现在的管线模型获取不到包围盒消息，不能确定准确的位置，所以无法通过计算判断模型的楼层。
+    // FIXME: 之后需要改成通过计算判断模型楼层。
+
+    let floor: string | number = model.group
+      .split('主楼拆分/', 2)[1]
+      .split('层', 1)[0];
+    if (floor === '顶') floor = 13;
+
+    return +floor;
+  }
+
   async ngOnInit() {
     await this._diva.client?.applyScene('楼层展示');
     this._data.changeCode(`client.applyScene('楼层展示')`);
-    this.options.forEach(async (option) => {
-      const model = await this._getModel(option.value);
-      const pipeModel = await this._getModel(option.pipeLineName);
-      // 获取所有楼层模型以及管道模型
-      this.models.push(model);
-      this.pipeModels.push(pipeModel);
-    });
-    console.log(this.models);
+
+    // 获取所有楼层模型以及管道模型
+    const [models, pipeModels] = await Promise.all([
+      Promise.all(this.options.map((opt) => this._getModel(opt.value))),
+      Promise.all(this.options.map((opt) => this._getModel(opt.pipeLineName))),
+    ]);
+    this.models = models;
+    this.pipeModels = pipeModels;
+
     this.SetPathVisibility(false);
-    const getGroup = () =>
-      from(this._diva.client.getModelGroupByGroupPath('场景模型/主楼拆分'));
-    this.group$ = defer(getGroup).pipe(shareReplay(1));
+
+    // 保存所有楼层的原始位置
+    this.floorGroup = await this._getFloorGroup();
   }
   // 销毁钩子
-  async ngOnDestroy() {
-    if (this.group$) {
-      this.group$.subscribe((group) => group.assemble());
+  ngOnDestroy() {
+    if (this.floorGroup && this.explode) {
+      this._assemble('fast');
     }
     // 显示所有楼层，隐藏所有管道，并且不显示示例代码
     this._setVisibility(this.models, true, true);
