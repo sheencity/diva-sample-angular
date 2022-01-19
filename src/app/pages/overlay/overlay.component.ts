@@ -313,10 +313,7 @@ export class OverlayComponent implements OnInit {
    */
   async pickup() {
     const handler = (event: DivaMouseEvent) => {
-      const wordPosition = event.worldPosition;
-      this.coordinateX = wordPosition.x;
-      this.coordinateY = wordPosition.y;
-      this.coordinateZ = wordPosition.z;
+      [this.coordinateX, this.coordinateY, this.coordinateZ] = event.detail.coord;
       this._rd2.setStyle(document.body, 'cursor', 'default');
     };
     await this._diva.client.addEventListener('click', handler, { once: true });
@@ -327,7 +324,7 @@ export class OverlayComponent implements OnInit {
    * 阻止事件冒泡
    * @param $event
    */
-  onKeyDown($event) {
+  eventStop($event: Event) {
     $event.stopPropagation();
   }
 
