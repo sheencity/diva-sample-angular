@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import type { DivaClient } from '@sheencity/diva-sdk';
 import { Diva } from '@sheencity/diva-sdk';
-import type { Adapter } from '@sheencity/diva-sdk-adapter';
-import { CefAdapter, WebRtcAdapter } from '@sheencity/diva-sdk-adapter';
+import type { Adapter } from '@sheencity/diva-sdk-core';
+import { CefAdapter, WebRtcAdapter } from '@sheencity/diva-sdk-core';
 
 @Injectable({
   providedIn: 'root',
