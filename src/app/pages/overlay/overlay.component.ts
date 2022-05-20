@@ -1,10 +1,8 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { Emissive, Marker, Model, POI, POIIcon } from '@sheencity/diva-sdk';
-import { Euler, Quaternion, Vector3, deg2rad } from '@sheencity/diva-sdk-math';
+import type { DivaMouseEvent } from '@sheencity/diva-sdk';
+import { deg2rad, Euler, Quaternion, Vector3 } from '@sheencity/diva-sdk-math';
 import { DropdownData } from 'src/app/common/models/dropdown-data.interface';
-import { DataService } from 'src/app/common/services/data.service';
-import { DivaService } from 'src/app/common/services/diva.service';
-import { LocalStorageService } from 'src/app/common/services/localStorage.service';
 import {
   EmissionType,
   EmissiveOverlay,
@@ -13,7 +11,9 @@ import {
   POIOverlay,
   POIType,
 } from 'src/app/common/models/overlay.model';
-import { DivaMouseEvent } from '@sheencity/diva-sdk/lib/events/diva.events';
+import { DataService } from 'src/app/common/services/data.service';
+import { DivaService } from 'src/app/common/services/diva.service';
+import { LocalStorageService } from 'src/app/common/services/localStorage.service';
 @Component({
   selector: 'app-overlay',
   templateUrl: './overlay.component.html',
@@ -263,7 +263,7 @@ export class OverlayComponent implements OnInit {
     $event.stopPropagation();
     this._store.deleteOverlay(overlay);
     this.overlays = this._store.getAllOverlays();
-    const entity = await this._diva.client.getEntityById(overlay.id);
+    const entity = await this._diva.client.getEntityById<Model>(overlay.id);
     await entity.setClient(null);
     this._data.changeCode(`entity.setClient(null)`);
   }
@@ -313,10 +313,7 @@ export class OverlayComponent implements OnInit {
    */
   async pickup() {
     const handler = (event: DivaMouseEvent) => {
-      const wordPosition = event.detail.coord;
-      this.coordinateX = wordPosition.x;
-      this.coordinateY = wordPosition.y;
-      this.coordinateZ = wordPosition.z;
+      [this.coordinateX, this.coordinateY, this.coordinateZ] = event.detail.coord;
       this._rd2.setStyle(document.body, 'cursor', 'default');
     };
     await this._diva.client.addEventListener('click', handler, { once: true });
@@ -327,7 +324,7 @@ export class OverlayComponent implements OnInit {
    * 阻止事件冒泡
    * @param $event
    */
-  onKeyDown($event) {
+  eventStop($event: Event) {
     $event.stopPropagation();
   }
 
