@@ -71,7 +71,7 @@ export class OverlayComponent implements OnInit {
   iconOptions1 = [
     { value: POIIcon.Camera, placeholder: '摄像头' },
     { value: POIIcon.Location, placeholder: '定位' },
-    { value: POIIcon.TrafficLight, placeholder: '红路灯' },
+    { value: POIIcon.TrafficLight, placeholder: '红绿灯' },
     { value: POIIcon.TrashCan, placeholder: '垃圾桶' },
     { value: POIIcon.StreetLamp, placeholder: '路灯' },
     { value: POIIcon.BusStation, placeholder: '公交站' },
