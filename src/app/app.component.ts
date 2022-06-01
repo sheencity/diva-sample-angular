@@ -5,7 +5,6 @@ import {
   OnDestroy,
   ViewChild,
 } from '@angular/core';
-import { WebRtcAdapter } from '@sheencity/diva-sdk-core';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { DivaService } from './common/services/diva.service';
@@ -24,7 +23,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   constructor(private _divaSer: DivaService) {}
 
   private _updateResolution = () => {
-    if (this._divaSer.adapter instanceof WebRtcAdapter) {
+    if (!this._divaSer.isEmbeddedMode()) {
       const height = this.backendContainer.nativeElement.clientHeight;
       const width = this.backendContainer.nativeElement.clientWidth;
       this._divaSer.client.setResolution({ width, height });
